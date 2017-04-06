@@ -6,11 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Phone extends Model
 {
-    //
-    protected $fillable = ['number', 'active'];
+  //
+  protected $fillable = ['number', 'active'];
 
-    public function phone_type()
-    {
-      return $this->hasOne('App\PhoneType');
-    }
+  public function phone_type()
+  {
+    return $this->belongsTo('App\PhoneType');
+  }
+
+  public function ip_phone()
+  {
+    $this->hasOne('App\IpPhone');
+  }
+
+  public function employees()
+  {
+    $this->belongsToMany('App\Employee', 'phone_owners');
+  }
+
+  public function workplaces()
+  {
+    return $this->morphToMany('App\Workplace', 'workplaceable');
+  }
 }

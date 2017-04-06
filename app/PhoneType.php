@@ -11,6 +11,6 @@ class PhoneType extends Model
 
     public function phones()
     {
-      return $this->belongsTo('App\Phone');
+      return $this->hasMany('App\Phone');
     }
 }
