@@ -22,7 +22,8 @@ class SpravochnikController extends Controller
   {
     //
     $pageSruture = [
-      ['tabName' => 'Employee', 'tabHref' => 'org-structure'],
+      ['tabName' => 'Department', 'tabHref' => 'department'],
+      ['tabName' => 'Employee', 'tabHref' => 'employee'],
       ['tabName' => 'Equip', 'tabHref' => 'equip'],
       ['tabName' => 'Phone', 'tabHref' => 'phone'],
       ['tabName' => 'Mobile phone', 'tabHref' => 'mobile'],

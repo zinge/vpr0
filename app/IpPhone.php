@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class IpPhone extends Model
 {
-    //
-    protected $fillable = ['macaddr'];
+  //
+  protected $fillable = ['macaddr'];
 
-    public function phone()
-    {
-      return $this->belongsTo('App\Phone');
-    }
+  public function phone()
+  {
+    return $this->belongsTo('App\Phone');
+  }
 }
