@@ -15,6 +15,30 @@ class EquipController extends Controller
     public function index()
     {
         //
+        $pageSruture = [
+            ['type' => 'text', 'desc' => 'name'],
+            ['type' => 'list', 'desc' => 'manufacturer_id'],
+            ['type' => 'list', 'desc' => 'equip_type_id'],
+            ['type' => 'list', 'desc' => 'equip_model_id'],
+            ['type' => 'list', 'desc' => 'employee_id'],
+            ['type' => 'date', 'desc' => 'initial_date'],
+            ['type' => 'text', 'desc' => 'initial_cost'],
+            ['type' => 'text', 'desc' => 'serial_number'],
+            ['type' => 'text', 'desc' => 'sap_number'],
+            ['type' => 'text', 'desc' => 'manufacturer_number'],
+            ['type' => 'checkbox', 'desc' => 'active']
+          ];
+
+          return [
+            'pageParams' => Equip::get([
+              'id', 'name', 'manufacturer_id', 'active', 'equip_type_id',
+              'equip_model_id', 'employee_id', 'initial_date', 'initial_cost',
+              'serial_number', 'sap_number', 'manufacturer_number', 'active'
+            ]),
+            'pageSruture' => $pageSruture
+          ];
+
+
     }
 
     /**

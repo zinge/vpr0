@@ -26,7 +26,7 @@ class SpravochnikController extends Controller
       ['tabName' => 'Employee', 'tabHref' => 'employee'],
       ['tabName' => 'Equip', 'tabHref' => 'equip'],
       ['tabName' => 'Phone', 'tabHref' => 'phone'],
-      ['tabName' => 'Mobile phone', 'tabHref' => 'mobile'],
+      ['tabName' => 'Mobile phone', 'tabHref' => 'mobile-phone'],
       ['tabName' => 'Workplace', 'tabHref' => 'workplace'],
     ];
 

@@ -15,6 +15,18 @@ class EmployeeController extends Controller
     public function index()
     {
         //
+        $pageSruture = [
+          ['type' => 'text', 'desc' => 'firstname'],
+          ['type' => 'text', 'desc' => 'patronymic'],
+          ['type' => 'text', 'desc' => 'surname'],
+          ['type' => 'list', 'desc' => 'department'],
+          ['type' => 'checkbox', 'desc' => 'active']
+        ];
+
+        return [
+          'pageParams' => Employee::get(['id','firstname','patronymic','surname','department_id', 'active']),
+          'pageSruture' => $pageSruture
+        ];
     }
 
     /**

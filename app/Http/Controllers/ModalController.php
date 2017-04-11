@@ -2,36 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Address;
+use App\Modal;
 use Illuminate\Http\Request;
 
-class AddressController extends Controller
+class ModalController extends Controller
 {
-
-
-  public function __construct()
-  {
-    $this->middleware('auth');
-  }
   /**
   * Display a listing of the resource.
   *
+  * @param  \Illuminate\Http\Request  $request
   * @return \Illuminate\Http\Response
   */
   public function index(Request $request)
   {
     //
-    $pageSruture = [
-      ['type' => 'text', 'desc' => 'city'],
-      ['type' => 'text', 'desc' => 'street'],
-      ['type' => 'text', 'desc' => 'house'],
-      ['type' => 'checkbox', 'desc' => 'active']
-    ];
 
-    return [
-      'pageParams' => Address::get(['id','city','street','house','active']),
-      'pageSruture' => $pageSruture
-    ];
+    if (isset($request['m'])) {
+      return view('modal.index');
+    }else{
+      return redirect('/modal?m=');
+    }
+
   }
 
   /**
@@ -58,10 +49,10 @@ class AddressController extends Controller
   /**
   * Display the specified resource.
   *
-  * @param  \App\Address  $address
+  * @param  \App\Modal  $modal
   * @return \Illuminate\Http\Response
   */
-  public function show(Address $address)
+  public function show(Modal $modal)
   {
     //
   }
@@ -69,10 +60,10 @@ class AddressController extends Controller
   /**
   * Show the form for editing the specified resource.
   *
-  * @param  \App\Address  $address
+  * @param  \App\Modal  $modal
   * @return \Illuminate\Http\Response
   */
-  public function edit(Address $address)
+  public function edit(Modal $modal)
   {
     //
   }
@@ -81,10 +72,10 @@ class AddressController extends Controller
   * Update the specified resource in storage.
   *
   * @param  \Illuminate\Http\Request  $request
-  * @param  \App\Address  $address
+  * @param  \App\Modal  $modal
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, Address $address)
+  public function update(Request $request, Modal $modal)
   {
     //
   }
@@ -92,10 +83,10 @@ class AddressController extends Controller
   /**
   * Remove the specified resource from storage.
   *
-  * @param  \App\Address  $address
+  * @param  \App\Modal  $modal
   * @return \Illuminate\Http\Response
   */
-  public function destroy(Address $address)
+  public function destroy(Modal $modal)
   {
     //
   }

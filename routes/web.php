@@ -35,3 +35,9 @@ Route::resource('/mobile-type', 'MobileTypeController');
 Route::resource('/phone', 'PhoneController');
 Route::resource('/phone-type', 'PhoneTypeController');
 Route::resource('/workplace', 'WorkplaceController');
+
+Route::resource('/modal', 'ModalController');
+
+route::get('/p1', function (){
+  return view('p1');
+});
