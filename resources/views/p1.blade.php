@@ -26,6 +26,7 @@
         </table>
       </div>
     </div>
+
   </div>
 
   {{--<script src="{{ asset('js/p2.js') }}"></script>--}}

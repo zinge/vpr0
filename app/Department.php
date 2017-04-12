@@ -11,11 +11,11 @@ class Department extends Model
 
   public function address()
   {
-    $this->belongsTo('App\Address');
+    return $this->belongsTo('App\Address');
   }
 
   public function employees()
   {
-    $this->hasMany('App\Employee');
+    return $this->hasMany('App\Employee');
   }
 }

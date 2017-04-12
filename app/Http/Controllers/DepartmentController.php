@@ -16,80 +16,93 @@ class DepartmentController extends Controller
   {
     //
     $pageSruture = [
-        ['type' => 'text', 'desc' => 'name'],
-        ['type' => 'list', 'desc' => 'address_id'],
-        ['type' => 'checkbox', 'desc' => 'active']
-      ];
+      ['type' => 'text', 'desc' => 'name'],
+      ['type' => 'list', 'desc' => 'address'],
+      ['type' => 'checkbox', 'desc' => 'active']
+    ];
 
-      return [
-        'pageParams' => Department::get(['id', 'name', 'address_id', 'active']),
-        'pageSruture' => $pageSruture
-      ];
+    $pageParams = [];
+
+    foreach (Department::get() as $department) {
+      array_push($pageParams, [
+        'id' => $department->id,
+        'name' => $department->name,
+        'active' => $department->active,
+        'address' => $department->address->city.", ".$department->address->street.", ".$department->address->house ]);
     }
 
-    /**
-    * Show the form for creating a new resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
-    public function create()
-    {
-      //
-    }
+    return [
+      'pageParams' => $pageParams,
+      'pageSruture' => $pageSruture
+    ];
 
-    /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @return \Illuminate\Http\Response
-    */
-    public function store(Request $request)
-    {
-      //
-    }
-
-    /**
-    * Display the specified resource.
-    *
-    * @param  \App\Department  $department
-    * @return \Illuminate\Http\Response
-    */
-    public function show(Department $department)
-    {
-      //
-    }
-
-    /**
-    * Show the form for editing the specified resource.
-    *
-    * @param  \App\Department  $department
-    * @return \Illuminate\Http\Response
-    */
-    public function edit(Department $department)
-    {
-      //
-    }
-
-    /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  \App\Department  $department
-    * @return \Illuminate\Http\Response
-    */
-    public function update(Request $request, Department $department)
-    {
-      //
-    }
-
-    /**
-    * Remove the specified resource from storage.
-    *
-    * @param  \App\Department  $department
-    * @return \Illuminate\Http\Response
-    */
-    public function destroy(Department $department)
-    {
-      //
-    }
   }
+
+
+
+  /**
+  * Show the form for creating a new resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function create()
+  {
+    //
+  }
+
+  /**
+  * Store a newly created resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\Response
+  */
+  public function store(Request $request)
+  {
+    //
+  }
+
+  /**
+  * Display the specified resource.
+  *
+  * @param  \App\Department  $department
+  * @return \Illuminate\Http\Response
+  */
+  public function show(Department $department)
+  {
+    //
+  }
+
+  /**
+  * Show the form for editing the specified resource.
+  *
+  * @param  \App\Department  $department
+  * @return \Illuminate\Http\Response
+  */
+  public function edit(Department $department)
+  {
+    //
+  }
+
+  /**
+  * Update the specified resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @param  \App\Department  $department
+  * @return \Illuminate\Http\Response
+  */
+  public function update(Request $request, Department $department)
+  {
+    //
+  }
+
+  /**
+  * Remove the specified resource from storage.
+  *
+  * @param  \App\Department  $department
+  * @return \Illuminate\Http\Response
+  */
+  public function destroy(Department $department)
+  {
+    //
+  }
+}
