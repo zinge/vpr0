@@ -16,15 +16,27 @@ class EmployeeController extends Controller
     {
         //
         $pageSruture = [
-          ['type' => 'text', 'desc' => 'firstname'],
-          ['type' => 'text', 'desc' => 'patronymic'],
-          ['type' => 'text', 'desc' => 'surname'],
-          ['type' => 'list', 'desc' => 'department'],
-          ['type' => 'checkbox', 'desc' => 'active']
+          ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
+          ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
+          ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
+          ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение'],
+          ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
         ];
 
+        $pageParams = [];
+
+        foreach (Employee::get() as $employee) {
+          array_push($pageParams, [
+            'id' => $employee->id,
+            'firstname' => $employee->firstname,
+            'patronymic' => $employee->patronymic,
+            'surname' => $employee->surname,
+            'department' => $employee->department->name,
+            'active' => $employee->active]);
+        }
+
         return [
-          'pageParams' => Employee::get(['id','firstname','patronymic','surname','department_id', 'active']),
+          'pageParams' => $pageParams,
           'pageSruture' => $pageSruture
         ];
     }

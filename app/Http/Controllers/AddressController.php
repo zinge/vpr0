@@ -22,14 +22,14 @@ class AddressController extends Controller
   {
     //
     $pageSruture = [
-      ['type' => 'text', 'desc' => 'city'],
-      ['type' => 'text', 'desc' => 'street'],
-      ['type' => 'text', 'desc' => 'house'],
-      ['type' => 'checkbox', 'desc' => 'active']
+      ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
+      ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
+      ['type' => 'text', 'field' => 'house', 'desc' => 'дом'],
+      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
     ];
 
     return [
-      'pageParams' => Address::get(['id','city','street','house','active']),
+      'pageParams' => Address::get(['id','city','street','house', 'active']),
       'pageSruture' => $pageSruture
     ];
   }

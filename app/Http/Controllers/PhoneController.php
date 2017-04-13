@@ -20,7 +20,28 @@ class PhoneController extends Controller
   public function index()
   {
     //
-    return 0;
+
+    $pageSruture = [
+      ['type' => 'text', 'field' => 'number', 'desc' => 'номер'],
+      ['type' => 'list', 'field' => 'phone_type', 'desc' => 'тип'],
+      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+    ];
+
+    $pageParams = [];
+
+    foreach (Phone::get() as $phone) {
+      array_push($pageParams, [
+        'id' => $phone->id,
+        'number' => $phone->number,
+        'phone_type' => $phone->phone_type,
+        'active' => $phone->active,
+      ]);
+    }
+
+    return [
+      'pageParams' => $pageParams,
+      'pageSruture' => $pageSruture
+    ];
   }
 
   /**

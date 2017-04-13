@@ -16,9 +16,9 @@ class DepartmentController extends Controller
   {
     //
     $pageSruture = [
-      ['type' => 'text', 'desc' => 'name'],
-      ['type' => 'list', 'desc' => 'address'],
-      ['type' => 'checkbox', 'desc' => 'active']
+      ['type' => 'text', 'field' => 'name', 'desc' => 'наименование' ],
+      ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес'],
+      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
     ];
 
     $pageParams = [];
@@ -28,7 +28,8 @@ class DepartmentController extends Controller
         'id' => $department->id,
         'name' => $department->name,
         'active' => $department->active,
-        'address' => $department->address->city.", ".$department->address->street.", ".$department->address->house ]);
+        'address' => $department->address->city.", ".$department->address->street.", ".$department->address->house
+      ]);
     }
 
     return [

@@ -8,19 +8,19 @@ class MobilePhone extends Model
 {
   //
   protected $fillable = ['number'];
-  
+
   public function mobile_type()
   {
-    $this->belongsTo('App\MobileType');
+    return $this->belongsTo('App\MobileType');
   }
 
   public function mobile_limit()
   {
-    $this->belongsTo('App\MobileLimit');
+    return $this->belongsTo('App\MobileLimit');
   }
 
   public function employee()
   {
-    $this->belongsTo('App\Employee');
+    return $this->belongsTo('App\Employee');
   }
 }

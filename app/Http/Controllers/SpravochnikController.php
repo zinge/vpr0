@@ -22,12 +22,13 @@ class SpravochnikController extends Controller
   {
     //
     $pageSruture = [
-      ['tabName' => 'Подразделение', 'tabHref' => 'department'],
-      ['tabName' => 'Сотрудник', 'tabHref' => 'employee'],
-      ['tabName' => 'Оборудование', 'tabHref' => 'equip'],
-      ['tabName' => 'Телефон(городской)', 'tabHref' => 'phone'],
-      ['tabName' => 'Телефон(мобильный)', 'tabHref' => 'mobile-phone'],
-      ['tabName' => 'Рабочее место', 'tabHref' => 'workplace'],
+      ['tabName' => 'адрес', 'tabHref' => 'address'],
+      ['tabName' => 'подразделение', 'tabHref' => 'department'],
+      ['tabName' => 'сотрудник', 'tabHref' => 'employee'],
+      ['tabName' => 'оборудование', 'tabHref' => 'equip'],
+      ['tabName' => 'телефон(городской)', 'tabHref' => 'phone'],
+      ['tabName' => 'телефон(мобильный)', 'tabHref' => 'mobile-phone'],
+      ['tabName' => 'рабочее место', 'tabHref' => 'workplace'],
     ];
 
     return view('spravochnik.index')

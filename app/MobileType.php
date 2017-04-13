@@ -11,16 +11,16 @@ class MobileType extends Model
 
   public function mobile_phones()
   {
-    $this->hasMany('App\MobilePhone');
+    return $this->hasMany('App\MobilePhone');
   }
 
   public function mobile_limits()
   {
-    $this->belongsToMany('App\MobileLimit', 'mobile_phones');
+    return $this->belongsToMany('App\MobileLimit', 'mobile_phones');
   }
 
   public function employees()
   {
-    $this->belongsToMany('App\Employee', 'mobile_phones');
+    return $this->belongsToMany('App\Employee', 'mobile_phones');
   }
 }

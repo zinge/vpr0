@@ -16,12 +16,12 @@ class Phone extends Model
 
   public function ip_phone()
   {
-    $this->hasOne('App\IpPhone');
+    return $this->hasOne('App\IpPhone');
   }
 
   public function employees()
   {
-    $this->belongsToMany('App\Employee', 'phone_owners');
+    return $this->belongsToMany('App\Employee', 'phone_owners');
   }
 
   public function workplaces()

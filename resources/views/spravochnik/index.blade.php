@@ -12,7 +12,7 @@
                 <tab name="{{$pageElement['tabName']}}" :selected="{{$loop->first ? 'true' : 'false'}}">
                   &nbsp;
                   <a href="{{url('/modal' . "?m=" . $pageElement['tabHref'])}}" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#{{$pageElement['tabHref']}}Modal">
-                    Add new {{$pageElement['tabName']}}
+                    добавить {{$pageElement['tabName']}}
                   </a>
                   {{--start modal--}}
                   <div class="modal fade" id="{{$pageElement['tabHref']}}Modal" tabindex="-1" role="dialog" aria-labelledby="{{$pageElement['tabHref']}}ModalLabel">
@@ -33,5 +33,5 @@
   </div>
 
 
-<script src="js/spravochnik.js" charset="utf-8"></script>
+<script src="js/spravochnik1.js" charset="utf-8"></script>
 @endsection

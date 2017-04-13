@@ -11,7 +11,7 @@ class Address extends Model
 
   public function departments()
   {
-    $this->hasMany('App\Department');
+    return $this->hasMany('App\Department');
   }
 
   public function employees()

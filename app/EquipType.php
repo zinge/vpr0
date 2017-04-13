@@ -11,6 +11,6 @@ class EquipType extends Model
 
   public function equips()
   {
-    $this->hasMany('App\Equip');
+    return $this->hasMany('App\Equip');
   }
 }

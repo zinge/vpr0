@@ -14,22 +14,22 @@ class Equip extends Model
 
   public function manufacturer()
   {
-    $this->belongsTo('App\Manufacturer');
+    return $this->belongsTo('App\Manufacturer');
   }
 
   public function equip_model()
   {
-    $this->belongsTo('App\EquipModel');
+    return $this->belongsTo('App\EquipModel');
   }
 
   public function equip_type()
   {
-    $this->belongsTo('App\EquipType');
+    return $this->belongsTo('App\EquipType');
   }
 
   public function employee()
   {
-    $this->belongsTo('App\Employee');
+    return $this->belongsTo('App\Employee');
   }
 
   public function workplaces()
