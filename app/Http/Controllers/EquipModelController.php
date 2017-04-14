@@ -7,79 +7,91 @@ use Illuminate\Http\Request;
 
 class EquipModelController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
+  /**
+  * Display a listing of the resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function index()
+  {
+    //
+    $pageSruture = [
+      ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
+    ];
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    return [
+      'pageParams' => EquipModel::get(['id','name']),
+      'pageSruture' => $pageSruture
+    ];
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+  /**
+  * Show the form for creating a new resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function create()
+  {
+    //
+  }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\EquipModel  $equipModel
-     * @return \Illuminate\Http\Response
-     */
-    public function show(EquipModel $equipModel)
-    {
-        //
-    }
+  /**
+  * Store a newly created resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\Response
+  */
+  public function store(Request $request)
+  {
+    //
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\EquipModel  $equipModel
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(EquipModel $equipModel)
-    {
-        //
-    }
+  /**
+  * Display the specified resource.
+  *
+  * @param  \App\EquipModel  $equipModel
+  * @return \Illuminate\Http\Response
+  */
+  public function show(EquipModel $equipModel)
+  {
+    //
+  }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EquipModel  $equipModel
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, EquipModel $equipModel)
-    {
-        //
-    }
+  /**
+  * Show the form for editing the specified resource.
+  *
+  * @param  \App\EquipModel  $equipModel
+  * @return \Illuminate\Http\Response
+  */
+  public function edit(EquipModel $equipModel)
+  {
+    //
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\EquipModel  $equipModel
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(EquipModel $equipModel)
-    {
-        //
-    }
+  /**
+  * Update the specified resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @param  \App\EquipModel  $equipModel
+  * @return \Illuminate\Http\Response
+  */
+  public function update(Request $request, EquipModel $equipModel)
+  {
+    //
+  }
+
+  /**
+  * Remove the specified resource from storage.
+  *
+  * @param  \App\EquipModel  $equipModel
+  * @return \Illuminate\Http\Response
+  */
+  public function destroy(EquipModel $equipModel)
+  {
+    //
+  }
 }

@@ -7,79 +7,91 @@ use Illuminate\Http\Request;
 
 class ManufacturerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
+  /**
+  * Display a listing of the resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function index()
+  {
+    //
+    $pageSruture = [
+      ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
+    ];
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    return [
+      'pageParams' => Manufacturer::get(['id','name']),
+      'pageSruture' => $pageSruture
+    ];
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+  /**
+  * Show the form for creating a new resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function create()
+  {
+    //
+  }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Manufacturer  $manufacturer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Manufacturer $manufacturer)
-    {
-        //
-    }
+  /**
+  * Store a newly created resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\Response
+  */
+  public function store(Request $request)
+  {
+    //
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Manufacturer  $manufacturer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Manufacturer $manufacturer)
-    {
-        //
-    }
+  /**
+  * Display the specified resource.
+  *
+  * @param  \App\Manufacturer  $manufacturer
+  * @return \Illuminate\Http\Response
+  */
+  public function show(Manufacturer $manufacturer)
+  {
+    //
+  }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Manufacturer  $manufacturer
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Manufacturer $manufacturer)
-    {
-        //
-    }
+  /**
+  * Show the form for editing the specified resource.
+  *
+  * @param  \App\Manufacturer  $manufacturer
+  * @return \Illuminate\Http\Response
+  */
+  public function edit(Manufacturer $manufacturer)
+  {
+    //
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Manufacturer  $manufacturer
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Manufacturer $manufacturer)
-    {
-        //
-    }
+  /**
+  * Update the specified resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @param  \App\Manufacturer  $manufacturer
+  * @return \Illuminate\Http\Response
+  */
+  public function update(Request $request, Manufacturer $manufacturer)
+  {
+    //
+  }
+
+  /**
+  * Remove the specified resource from storage.
+  *
+  * @param  \App\Manufacturer  $manufacturer
+  * @return \Illuminate\Http\Response
+  */
+  public function destroy(Manufacturer $manufacturer)
+  {
+    //
+  }
 }

@@ -11,29 +11,61 @@ class SpravochnikController extends Controller
 
   public function __construct()
   {
-      $this->middleware('auth');
+    $this->middleware('auth');
   }
   /**
   * Display a listing of the resource.
   *
   * @return \Illuminate\Http\Response
   */
-  public function index()
+  public function index(Request $request)
   {
     //
-    $pageSruture = [
-      ['tabName' => 'адрес', 'tabHref' => 'address'],
-      ['tabName' => 'подразделение', 'tabHref' => 'department'],
-      ['tabName' => 'сотрудник', 'tabHref' => 'employee'],
-      ['tabName' => 'оборудование', 'tabHref' => 'equip'],
-      ['tabName' => 'телефон(городской)', 'tabHref' => 'phone'],
-      ['tabName' => 'MAC адреса', 'tabHref' => 'ip-phone'],
-      ['tabName' => 'телефон(мобильный)', 'tabHref' => 'mobile-phone'],
-      ['tabName' => 'рабочее место', 'tabHref' => 'workplace'],
-    ];
+    if (isset($request['q'])) {
+      switch ($request->q) {
+        case 'ostr':
+          $pageSruture = [
+            ['tabName' => 'адрес', 'tabHref' => 'address'],
+            ['tabName' => 'подразделение', 'tabHref' => 'department'],
+            ['tabName' => 'сотрудник', 'tabHref' => 'employee'],
+          ];
+        break;
+        case 'equip':
+          $pageSruture = [
+            ['tabName' => 'тип', 'tabHref' => 'equip-type'],
+            ['tabName' => 'производитель', 'tabHref' => 'manufacturer'],
+            ['tabName' => 'модель', 'tabHref' => 'equip-model'],
+            ['tabName' => 'оборудование', 'tabHref' => 'equip'],
+          ];
+        break;
+        case 'tg':
+          $pageSruture = [
+            ['tabName' => 'телефон(городской)', 'tabHref' => 'phone'],
+            ['tabName' => 'MAC адреса', 'tabHref' => 'ip-phone'],
+          ];
+        break;
+        case 'tm':
+          $pageSruture = [
+            ['tabName' => 'лимит', 'tabHref' => 'mobile-limit'],
+            ['tabName' => 'тип', 'tabHref' => 'mobile-type'],
+            ['tabName' => 'телефон(мобильный)', 'tabHref' => 'mobile-phone'],
+          ];
+        break;
+        case 'wpls':
+          $pageSruture = [
+            ['tabName' => 'рабочее место', 'tabHref' => 'workplace']
+          ];
+        break;
+        default:
+          $pageSruture = [];
+        break;
+      }
+    }else{
+      return redirect('/spravochnik?q=');
+    }
 
     return view('spravochnik.index')
-      ->with('pageSruture', $pageSruture);
+    ->with('pageSruture', $pageSruture);
   }
 
   /**

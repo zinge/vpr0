@@ -28,7 +28,7 @@ Route::resource('/equip', 'EquipController');
 Route::resource('/equip-model', 'EquipModelController');
 Route::resource('/equip-type', 'EquipTypeController');
 Route::resource('/ip-phone', 'IpPhoneController');
-Route::resource('/manufacturer', 'MannufacturerController');
+Route::resource('/manufacturer', 'ManufacturerController');
 Route::resource('/mobile-limit', 'MobileLimitController');
 Route::resource('/mobile-phone', 'MobilePhoneController');
 Route::resource('/mobile-type', 'MobileTypeController');
@@ -37,7 +37,3 @@ Route::resource('/phone-type', 'PhoneTypeController');
 Route::resource('/workplace', 'WorkplaceController');
 
 Route::resource('/modal', 'ModalController');
-
-route::get('/p1', function (){
-  return view('p1');
-});
