@@ -41,7 +41,7 @@ class SpravochnikController extends Controller
         case 'tg':
           $pageSruture = [
             ['tabName' => 'телефон(городской)', 'tabHref' => 'phone'],
-            ['tabName' => 'MAC адреса', 'tabHref' => 'ip-phone'],
+            ['tabName' => 'MAC адрес', 'tabHref' => 'ip-phone'],
           ];
         break;
         case 'tm':

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Modal;
 use Illuminate\Http\Request;
 
+use App\Department;
+
 class ModalController extends Controller
 {
   /**
@@ -18,7 +20,35 @@ class ModalController extends Controller
     //
 
     if (isset($request['m'])) {
-      return view('modal.index');
+      switch ($request->m) {
+        case 'address':
+        $department_data = [];
+
+        foreach (Department::get() as $department) {
+          array_push($department_data, [
+            'id' => $department->id,
+            'val' => $department->name
+          ]);
+        }
+        $pageSruture = [
+          ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
+          ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
+          ['type' => 'text', 'field' => 'house', 'desc' => 'дом'],
+          //['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $department_data],
+          ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+        ];
+        $pageTitle = 'адрес';
+        break;
+
+        default:
+        $pageSruture = [];
+        break;
+      }
+
+      return view('modal.index')
+      ->with('pageSruture', $pageSruture)
+      ->with('pageTitle', $pageTitle);
+
     }else{
       return redirect('/modal?m=');
     }
