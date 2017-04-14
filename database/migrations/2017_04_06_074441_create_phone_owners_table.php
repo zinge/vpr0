@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProneOwnersTable extends Migration
+class CreatePhoneOwnersTable extends Migration
 {
   /**
   * Run the migrations.
@@ -13,7 +13,7 @@ class CreateProneOwnersTable extends Migration
   */
   public function up()
   {
-    Schema::create('prone_owners', function (Blueprint $table) {
+    Schema::create('phone_owners', function (Blueprint $table) {
       $table->increments('id');
 
       if (Schema::hasColumn('phones', 'id')) {
@@ -22,13 +22,14 @@ class CreateProneOwnersTable extends Migration
         ->references('id')
         ->on('phones');
       }
+      
       if (Schema::hasColumn('employees', 'id')) {
         $table->integer('employee_id');
         $table->foreign('employee_id')
         ->references('id')
         ->on('employees');
       }
-      
+
       $table->timestamps();
     });
   }

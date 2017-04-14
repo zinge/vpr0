@@ -26,6 +26,13 @@ class CreateEmployeesTable extends Migration
         ->references('id')
         ->on('departments');
       }
+      
+      if (Schema::hasColumn('addresses', 'id')) {
+        $table->integer('address_id');
+        $table->foreign('address_id')
+        ->references('id')
+        ->on('addresses');
+      }
 
       $table->enum('active', ['1', '0'])->default('1');
 

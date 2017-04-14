@@ -27,6 +27,7 @@ class SpravochnikController extends Controller
       ['tabName' => 'сотрудник', 'tabHref' => 'employee'],
       ['tabName' => 'оборудование', 'tabHref' => 'equip'],
       ['tabName' => 'телефон(городской)', 'tabHref' => 'phone'],
+      ['tabName' => 'MAC адреса', 'tabHref' => 'ip-phone'],
       ['tabName' => 'телефон(мобильный)', 'tabHref' => 'mobile-phone'],
       ['tabName' => 'рабочее место', 'tabHref' => 'workplace'],
     ];

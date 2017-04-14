@@ -16,13 +16,6 @@ class CreateDepartmentsTable extends Migration
     Schema::create('departments', function (Blueprint $table) {
       $table->increments('id');
 
-      if (Schema::hasColumn('addresses', 'id')) {
-        $table->integer('address_id');
-        $table->foreign('address_id')
-        ->references('id')
-        ->on('addresses');
-      }
-
       $table->string('name', 100);
 
       //по умолчанию отдел активный

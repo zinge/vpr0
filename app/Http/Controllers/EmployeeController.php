@@ -20,6 +20,7 @@ class EmployeeController extends Controller
           ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
           ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
           ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение'],
+          ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес'],
           ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
         ];
 
@@ -32,6 +33,7 @@ class EmployeeController extends Controller
             'patronymic' => $employee->patronymic,
             'surname' => $employee->surname,
             'department' => $employee->department->name,
+            'address' => $department->address->city.", ".$department->address->street.", ".$department->address->house,
             'active' => $employee->active]);
         }
 

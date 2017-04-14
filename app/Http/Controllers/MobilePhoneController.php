@@ -22,7 +22,9 @@ class MobilePhoneController extends Controller
     //
     $pageSruture = [
       ['type' => 'text', 'field' => 'number', 'desc' => 'номер'],
-      ['type' => 'list', 'field' => 'employee_id', 'desc' => 'сотрудник'],
+      ['type' => 'list', 'field' => 'mobile_type', 'desc' => 'тип'],
+      ['type' => 'list', 'field' => 'mobile_limit', 'desc' => 'лимит'],
+      ['type' => 'list', 'field' => 'employee', 'desc' => 'сотрудник'],
       ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
     ];
 
@@ -32,7 +34,9 @@ class MobilePhoneController extends Controller
       array_push($pageParams, [
         'id' => $phone->id,
         'number' => $phone->number,
-        'employee_id' => $phone->employee_id,
+        'mobile_type' => $phone->name,
+        'mobile_limit' => $phone->mobile_limit->limit_cost,
+        'employee' => $equip->employee->firstname." ".$equip->employee->patronymic." ".$equip->employee->surname,
         'active' => $phone->active,
       ]);
     }

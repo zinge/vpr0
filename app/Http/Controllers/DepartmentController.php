@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
+
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
   /**
   * Display a listing of the resource.
   *
@@ -17,23 +22,11 @@ class DepartmentController extends Controller
     //
     $pageSruture = [
       ['type' => 'text', 'field' => 'name', 'desc' => 'наименование' ],
-      ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес'],
       ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
     ];
 
-    $pageParams = [];
-
-    foreach (Department::get() as $department) {
-      array_push($pageParams, [
-        'id' => $department->id,
-        'name' => $department->name,
-        'active' => $department->active,
-        'address' => $department->address->city.", ".$department->address->street.", ".$department->address->house
-      ]);
-    }
-
     return [
-      'pageParams' => $pageParams,
+      'pageParams' => Department::get(['id','name','active']),
       'pageSruture' => $pageSruture
     ];
 
