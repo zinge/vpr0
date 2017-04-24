@@ -17,4 +17,7 @@
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    <RequireAll>
+        Require ip 127.0.0.1 10.221.4.5
+    </RequireAll>
 </IfModule>
