@@ -6,6 +6,7 @@ use App\Modal;
 use Illuminate\Http\Request;
 
 use App\Department;
+use App\Address;
 
 class ModalController extends Controller
 {
@@ -15,21 +16,32 @@ class ModalController extends Controller
   * @param  \Illuminate\Http\Request  $request
   * @return \Illuminate\Http\Response
   */
+  private function getList($class, $element_key)
+  {
+
+    $element_data = [];
+
+    $class = 'App\\'.$class;
+    $class = new $class();
+
+    foreach ($class->get() as $element) {
+      array_push($element_data, [
+        'id' => $element->id,
+        'val' => $element->$element_key
+      ]);
+    }
+
+    return $element_data;
+  }
+
   public function index(Request $request)
   {
     //
 
     if (isset($request['m'])) {
       switch ($request->m) {
-        case 'address':
-        $department_data = [];
 
-        foreach (Department::get() as $department) {
-          array_push($department_data, [
-            'id' => $department->id,
-            'val' => $department->name
-          ]);
-        }
+        case 'address':
         $pageSruture = [
           ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
           ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
@@ -40,14 +52,45 @@ class ModalController extends Controller
         $pageTitle = 'адрес';
         break;
 
+        case 'department':
+        $pageSruture = [
+          ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
+          ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+        ];
+        $pageTitle = 'подразделение';
+        break;
+
+        //Employee case
+        case 'employee':
+        $pageSruture = [
+          ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
+          ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
+          ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
+          //['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', 'name')],
+          //['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', 'city')],
+          ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+        ];
+        $pageTitle = 'сотрудник';
+        break;
+
         default:
         $pageSruture = [];
         break;
       }
 
+      /*
       return view('modal.index')
       ->with('pageSruture', $pageSruture)
       ->with('pageTitle', $pageTitle);
+      */
+
+      return dd($this->getList('Address', 'name'));
+      //$cName = new Department();
+
+
+
+      //$objName = new $cName();
+      //return dd($this->factory('Department')->get());
 
     }else{
       return redirect('/modal?m=');
