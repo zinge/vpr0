@@ -16,18 +16,24 @@ class ModalController extends Controller
   * @param  \Illuminate\Http\Request  $request
   * @return \Illuminate\Http\Response
   */
-  private function getList($class, $element_key)
+  private function getList($class, $element_keys)
   {
 
     $element_data = [];
+    $element_val = '';
 
     $class = 'App\\'.$class;
     $class = new $class();
 
     foreach ($class->get() as $element) {
+
+      foreach ($element_keys as $key => $value) {
+        $element_val = ($key ? $element_val = $element_val . ", " . $element->$value : $element_val = $element->$value);
+      }
+
       array_push($element_data, [
         'id' => $element->id,
-        'val' => $element->$element_key
+        'val' => $element_val
       ]);
     }
 
@@ -46,7 +52,6 @@ class ModalController extends Controller
           ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
           ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
           ['type' => 'text', 'field' => 'house', 'desc' => 'дом'],
-          //['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $department_data],
           ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
         ];
         $pageTitle = 'адрес';
@@ -66,8 +71,8 @@ class ModalController extends Controller
           ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
           ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
           ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
-          //['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', 'name')],
-          //['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', 'city')],
+          ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', ['name'])],
+          ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', ['city', 'street', 'house'])],
           ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
         ];
         $pageTitle = 'сотрудник';
@@ -78,19 +83,9 @@ class ModalController extends Controller
         break;
       }
 
-      /*
       return view('modal.index')
       ->with('pageSruture', $pageSruture)
       ->with('pageTitle', $pageTitle);
-      */
-
-      return dd($this->getList('Address', 'name'));
-      //$cName = new Department();
-
-
-
-      //$objName = new $cName();
-      //return dd($this->factory('Department')->get());
 
     }else{
       return redirect('/modal?m=');
