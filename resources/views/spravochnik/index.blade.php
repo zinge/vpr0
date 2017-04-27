@@ -9,7 +9,7 @@
           <div id="root" class="panel-body">
             <tabs>
               @foreach ($pageSruture as $pageElement)
-                <tab name="{{$pageElement['tabName']}}" :selected="{{$loop->first ? 'true' : 'false'}}">
+                <tab name="{{$pageElement['tabHref']}}" desc="{{$pageElement['tabName']}}" :selected="{{$loop->first ? 'true' : 'false'}}">
                   &nbsp;
                   <a href="{{url('/modal' . "?m=" . $pageElement['tabHref'])}}" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#{{$pageElement['tabHref']}}Modal">
                     добавить {{$pageElement['tabName']}}

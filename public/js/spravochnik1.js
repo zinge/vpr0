@@ -4,7 +4,7 @@ Vue.component('tabs', {
       <div class="tabs">
       <ul class="nav nav-tabs">
         <li role="presentation" v-for="tab in tabs" :class="{ 'active': tab.isActive }">
-          <a :href="tab.href" @click="selectTab(tab)" v-text="tab.name"></a>
+          <a :href="tab.href" @click="selectTab(tab)" v-text="tab.desc"></a>
         </li>
       </ul>
       </div>
@@ -39,6 +39,7 @@ Vue.component('tab', {
 
   props: {
     name: { required: true },
+    desc: { required: true },
     selected: { default: false }
   },
 
