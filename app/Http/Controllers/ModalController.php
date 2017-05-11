@@ -16,28 +16,28 @@ class ModalController extends Controller
   * @param  \Illuminate\Http\Request  $request
   * @return \Illuminate\Http\Response
   */
-  private function getList($class, $element_keys)
+  private function getList($className, $elementKeys)
   {
 
-    $element_data = [];
-    $element_val = '';
+    $elementData = [];
+    $elementValues = '';
 
-    $class = 'App\\'.$class;
-    $class = new $class();
+    $className = 'App\\'.$className;
+    $className = new $className();
 
-    foreach ($class->get() as $element) {
+    foreach ($className->get() as $element) {
 
-      foreach ($element_keys as $key => $value) {
-        $element_val = ($key ? $element_val = $element_val . ", " . $element->$value : $element_val = $element->$value);
+      foreach ($elementKeys as $key => $value) {
+        $elementValues = ($key ? $elementValues = $elementValues . ", " . $element->$value : $elementValues = $element->$value);
       }
 
-      array_push($element_data, [
+      array_push($elementData, [
         'id' => $element->id,
-        'val' => $element_val
+        'val' => $elementValues
       ]);
     }
 
-    return $element_data;
+    return $elementData;
   }
 
   public function index(Request $request)
@@ -55,6 +55,7 @@ class ModalController extends Controller
           ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
         ];
         $pageTitle = 'адрес';
+        $formHref = 'address';
         break;
 
         case 'department':
@@ -63,6 +64,7 @@ class ModalController extends Controller
           ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
         ];
         $pageTitle = 'подразделение';
+        $formHref = 'department';
         break;
 
         //Employee case
@@ -76,16 +78,20 @@ class ModalController extends Controller
           ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
         ];
         $pageTitle = 'сотрудник';
+        $formHref = 'employee';
         break;
 
         default:
         $pageSruture = [];
+        $pageTitle = '';
+        $formHref = '';
         break;
       }
 
       return view('modal.index')
       ->with('pageSruture', $pageSruture)
-      ->with('pageTitle', $pageTitle);
+      ->with('pageTitle', $pageTitle)
+      ->with('formHref', $formHref);
 
     }else{
       return redirect('/modal?m=');

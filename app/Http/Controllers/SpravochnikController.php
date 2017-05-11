@@ -25,9 +25,10 @@ class SpravochnikController extends Controller
       switch ($request->q) {
         case 'ostr':
           $pageSruture = [
-            ['tabName' => 'адрес', 'tabHref' => 'address'],
-            ['tabName' => 'подразделение', 'tabHref' => 'department'],
-            ['tabName' => 'сотрудник', 'tabHref' => 'employee'],
+            ['tabName' => 'адрес', 'tabHref' => 'address', 'formFields' => ['city', 'street', 'house', 'active']],
+            ['tabName' => 'подразделение', 'tabHref' => 'department', 'formFields' => ['name', 'active']],
+            ['tabName' => 'сотрудник', 'tabHref' => 'employee', 'formFields' => [
+                                          'firstname', 'patronymic', 'surname', 'department', 'address' , 'active']],
           ];
         break;
         case 'equip':
