@@ -28,7 +28,7 @@ class SpravochnikController extends Controller
             ['tabName' => 'адрес', 'tabHref' => 'address', 'formFields' => ['city', 'street', 'house', 'active']],
             ['tabName' => 'подразделение', 'tabHref' => 'department', 'formFields' => ['name', 'active']],
             ['tabName' => 'сотрудник', 'tabHref' => 'employee', 'formFields' => [
-                                          'firstname', 'patronymic', 'surname', 'department', 'address' , 'active']],
+                                          'firstname', 'patronymic', 'surname', 'department', 'address', 'active']],
           ];
         break;
         case 'equip':

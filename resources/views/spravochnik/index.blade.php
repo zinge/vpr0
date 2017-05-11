@@ -33,8 +33,8 @@
   </div>
   <script src="js/spravochnik1.js" charset="utf-8"></script>
 
+  <script>
   @foreach ($pageSruture as $pageElement)
-    <script>
 
     new Vue({
       el: '#{{$pageElement['tabHref']}}Modal',
@@ -54,6 +54,6 @@
         }
       }
     });
-    </script>
   @endforeach
+  </script>
 @endsection
