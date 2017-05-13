@@ -53,6 +53,21 @@ class AddressController extends Controller
   public function store(Request $request)
   {
     //
+    $this->validate($request, [
+      'city' => 'required|max:30',
+      'street' => 'required|max:100',
+      'house' => 'required|max:10',
+      'active' => 'bool'
+    ]);
+    //if ($request->user()->hasRole(['address_rw','root'])) {
+      Address::create([
+        'city' => $request->city,
+        'street' => $request->street,
+        'house' => $request->house,
+        'active' => $request->active
+      ]);
+    // };
+    //return redirect('/address');
   }
 
   /**
