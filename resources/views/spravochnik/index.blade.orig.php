@@ -11,9 +11,10 @@
             @foreach ($pageSruture as $pageElement)
               <tab name="{{$pageElement['tabHref']}}" desc="{{$pageElement['tabName']}}" :selected="{{$loop->first ? 'true' : 'false'}}">
                 &nbsp;
-                <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#{{$pageElement['tabHref']}}Modal">
+                <a href="{{url('/modal?m=' . $pageElement['tabHref'])}}" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#{{$pageElement['tabHref']}}Modal">
                   добавить {{$pageElement['tabName']}}
-                </button>
+                </a>
+
 
                 <tab-table name="{{$pageElement['tabHref']}}"></tab-table>
               </tab>
@@ -32,7 +33,6 @@
       <div class="modal fade" id="{{$pageElement['tabHref']}}Modal" tabindex="-1" role="dialog" aria-labelledby="{{$pageElement['tabHref']}}ModalLabel">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            @include('modal.index', $pageElement)
           </div>
         </div>
       </div>
@@ -50,15 +50,15 @@
 
         data: {
           form: new Form({
-            @foreach ($pageElement['tabStruture'] as $value)
-              {{$value['field']}}: ''{{$loop->last ? '' : ','}}
+            @foreach ($pageElement['formFields'] as $value)
+              {{$value}}: ''{{$loop->last ? '' : ','}}
             @endforeach
           })
         },
 
         methods: {
           onSubmit() {
-              this.form.post('{{url($pageElement['tabHref'])}}')
+              this.form.post('/{{$pageElement['tabHref']}}')
                 .then(response => alert('+++'));
           }
         }

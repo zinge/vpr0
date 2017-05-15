@@ -13,6 +13,30 @@ class SpravochnikController extends Controller
   {
     $this->middleware('auth');
   }
+
+  private function getList($className, $elementKeys)
+  {
+
+    $elementData = [];
+    $elementValues = '';
+
+    $className = 'App\\'.$className;
+    $className = new $className();
+
+    foreach ($className->get() as $element) {
+
+      foreach ($elementKeys as $key => $value) {
+        $elementValues = ($key ? $elementValues = $elementValues . ", " . $element->$value : $elementValues = $element->$value);
+      }
+
+      array_push($elementData, [
+        'id' => $element->id,
+        'val' => $elementValues
+      ]);
+    }
+
+    return $elementData;
+  }
   /**
   * Display a listing of the resource.
   *
@@ -25,10 +49,24 @@ class SpravochnikController extends Controller
       switch ($request->q) {
         case 'ostr':
           $pageSruture = [
-            ['tabName' => 'адрес', 'tabHref' => 'address', 'formFields' => ['city', 'street', 'house', 'active']],
-            ['tabName' => 'подразделение', 'tabHref' => 'department', 'formFields' => ['name', 'active']],
-            ['tabName' => 'сотрудник', 'tabHref' => 'employee', 'formFields' => [
-                                          'firstname', 'patronymic', 'surname', 'department', 'address', 'active']],
+            ['tabName' => 'адрес', 'tabHref' => 'address', 'tabStruture' => [
+              ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
+              ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
+              ['type' => 'text', 'field' => 'house', 'desc' => 'дом'],
+              ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+            ]],
+            ['tabName' => 'подразделение', 'tabHref' => 'department', 'tabStruture' => [
+              ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
+              ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+            ]],
+            ['tabName' => 'сотрудник', 'tabHref' => 'employee', 'tabStruture' => [
+              ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
+              ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
+              ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
+              ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', ['name'])],
+              ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', ['city', 'street', 'house'])],
+              ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+            ]],
           ];
         break;
         case 'equip':

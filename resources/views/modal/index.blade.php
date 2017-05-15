@@ -1,12 +1,13 @@
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<h4 class="modal-title">добавить {{$pageTitle}}</h4>
+<h4 class="modal-title">добавить {{$pageElement['tabName']}}</h4>
 </div>
 <div class="modal-body">
 
-  <form method="post" action="/{{$formHref}}" class="form-horizontal" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
+  <form method="post" action="{{url($tabHref)}}" class="form-horizontal" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
+  {{ csrf_field() }}
 
-  @foreach ($pageSruture as $pageElement)
+  @foreach ($tabStruture as $pageElement)
     {{--
       ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
     --}}
