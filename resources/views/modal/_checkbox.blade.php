@@ -1,9 +1,9 @@
 <div class="form-group">
   <div class="col-sm-offset-4 col-sm-8">
     <div class="checkbox">
-      <label><input type="checkbox" name="{{$pageElement['field']}}" id="{{$pageElement['field']}}" v-model="form.{{$pageElement['field']}}">{{$pageElement['desc']}}</label>
+      <label><input type="checkbox" name="{{$field}}" id="{{$field}}" v-model="form.{{$field}}">{{$desc}}</label>
 
-      <span class="help is-danger" v-if="form.errors.has('{{$pageElement['field']}}')" v-text="form.errors.get('{{$pageElement['field']}}')"></span>
+      <span class="help is-danger" v-if="form.errors.has('{{$field}}')" v-text="form.errors.get('{{$field}}')"></span>
     </div>
   </div>
 </div>
