@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
   //
-  protected $fillable = ['firstname', 'patronymic', 'surname', 'active'];
+  protected $fillable = ['firstname', 'patronymic', 'surname', 'department_id', 'address_id', 'active'];
 
   public function department()
   {
     return $this->belongsTo('App\Department');
+  }
+
+  public function address()
+  {
+    return $this->belongsTo('App\Address');
   }
 
   public function equips()

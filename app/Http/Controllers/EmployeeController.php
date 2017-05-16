@@ -33,7 +33,7 @@ class EmployeeController extends Controller
             'patronymic' => $employee->patronymic,
             'surname' => $employee->surname,
             'department' => $employee->department->name,
-            'address' => $department->address->city.", ".$department->address->street.", ".$department->address->house,
+            'address' => $employee->address->city.", ".$employee->address->street.", ".$employee->address->house,
             'active' => $employee->active]);
         }
 
@@ -62,6 +62,25 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request, [
+          'firstname' => 'required|max:30',
+          'patronymic' => 'required|max:30',
+          'surname' => 'required|max:30',
+          // department_id
+          'department' => 'required|numeric',
+          // address_id
+          'address' => 'required|numeric',
+          'active' => 'bool'
+        ]);
+
+        Employee::create([
+          'firstname' => $request->firstname,
+          'patronymic' => $request->patronymic,
+          'surname' => $request->surname,
+          'department_id' => $request->department,
+          'address_id' => $request->address,
+          'active' => $request->active
+        ]);
     }
 
     /**
