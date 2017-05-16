@@ -14,12 +14,14 @@
     @include("modal._".$pageElement['type'], $pageElement)
   @endforeach
 
+    <div class="form-group">
+      <div class="col-sm-offset-4 col-sm-8">
+        <button type="submit" class="btn btn-primary" :disabled="form.errors.any()">Сохранить</button>
+      </div>
+    </div>
   </form>
 
 
 </div>
 <div class="modal-footer">
-  <div class="form-group">
-    <button type="submit" class="btn btn-primary" :disabled="form.errors.any()">Сохранить</button>
-  </div>
 </div>

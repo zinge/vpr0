@@ -53,6 +53,15 @@ class DepartmentController extends Controller
   public function store(Request $request)
   {
     //
+    $this->validate($request, [
+      'name' => 'required|max:100',
+      'active' => 'bool'
+    ]);
+
+    Department::create([
+      'name' => $request->name,
+      'active' => $request->active
+    ]);
   }
 
   /**
