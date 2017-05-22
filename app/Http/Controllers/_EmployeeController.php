@@ -14,7 +14,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        /*
+        //
         $pageSruture = [
           ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
           ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
@@ -41,9 +41,6 @@ class EmployeeController extends Controller
           'pageParams' => $pageParams,
           'pageSruture' => $pageSruture
         ];
-        */
-
-        return view('employee.index');
     }
 
     /**

@@ -53,11 +53,14 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Справочники <span class="caret"></span></a>
                 <ul class="dropdown-menu">
+                  {{--
                   <li><a href="{{ url('/spravochnik/?q=ostr') }}">Орг. структура</a></li>
                   <li><a href="{{ url('/spravochnik/?q=equip') }}">Оборудование</a></li>
                   <li><a href="{{ url('/spravochnik/?q=tg') }}">Телефоны(городские)</a></li>
                   <li><a href="{{ url('/spravochnik/?q=tm') }}">Телефоны(сотовые)</a></li>
                   <li><a href="{{ url('/spravochnik/?q=wpls') }}">Рабочие места</a></li>
+                  --}}
+                  <li><a href="{{url('/employee')}}">Сотрудники</a></li>
                 </ul>
               </li>
 

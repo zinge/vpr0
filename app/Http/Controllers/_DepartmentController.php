@@ -58,12 +58,10 @@ class DepartmentController extends Controller
       'active' => 'bool'
     ]);
 
-    $department = new Department([
+    Department::create([
       'name' => $request->name,
       'active' => $request->active
     ]);
-
-    $department->save();
   }
 
   /**

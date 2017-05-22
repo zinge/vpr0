@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Department;
+use App\Address;
 use Illuminate\Http\Request;
 
-class DepartmentController extends Controller
+class AddressController extends Controller
 {
+
 
   public function __construct()
   {
@@ -21,18 +22,17 @@ class DepartmentController extends Controller
   {
     //
     $pageSruture = [
-      ['type' => 'text', 'field' => 'name', 'desc' => 'наименование' ],
-      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
+      ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
+      ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
+      ['type' => 'text', 'field' => 'house', 'desc' => 'дом'],
+      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
     ];
 
     return [
-      'pageParams' => Department::get(['id','name','active']),
+      'pageParams' => Address::get(['id','city','street','house', 'active']),
       'pageSruture' => $pageSruture
     ];
-
   }
-
-
 
   /**
   * Show the form for creating a new resource.
@@ -54,25 +54,29 @@ class DepartmentController extends Controller
   {
     //
     $this->validate($request, [
-      'name' => 'required|max:100',
+      'city' => 'required|max:30',
+      'street' => 'required|max:100',
+      'house' => 'required|max:10',
       'active' => 'bool'
     ]);
-
-    $department = new Department([
-      'name' => $request->name,
-      'active' => $request->active
-    ]);
-
-    $department->save();
+    //if ($request->user()->hasRole(['address_rw','root'])) {
+      Address::create([
+        'city' => $request->city,
+        'street' => $request->street,
+        'house' => $request->house,
+        'active' => $request->active
+      ]);
+    // };
+    //return redirect('/address');
   }
 
   /**
   * Display the specified resource.
   *
-  * @param  \App\Department  $department
+  * @param  \App\Address  $address
   * @return \Illuminate\Http\Response
   */
-  public function show(Department $department)
+  public function show(Address $address)
   {
     //
   }
@@ -80,10 +84,10 @@ class DepartmentController extends Controller
   /**
   * Show the form for editing the specified resource.
   *
-  * @param  \App\Department  $department
+  * @param  \App\Address  $address
   * @return \Illuminate\Http\Response
   */
-  public function edit(Department $department)
+  public function edit(Address $address)
   {
     //
   }
@@ -92,10 +96,10 @@ class DepartmentController extends Controller
   * Update the specified resource in storage.
   *
   * @param  \Illuminate\Http\Request  $request
-  * @param  \App\Department  $department
+  * @param  \App\Address  $address
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, Department $department)
+  public function update(Request $request, Address $address)
   {
     //
   }
@@ -103,10 +107,10 @@ class DepartmentController extends Controller
   /**
   * Remove the specified resource from storage.
   *
-  * @param  \App\Department  $department
+  * @param  \App\Address  $address
   * @return \Illuminate\Http\Response
   */
-  public function destroy(Department $department)
+  public function destroy(Address $address)
   {
     //
   }

@@ -60,12 +60,14 @@ class AddressController extends Controller
       'active' => 'bool'
     ]);
     //if ($request->user()->hasRole(['address_rw','root'])) {
-      Address::create([
+      $address = new Address([
         'city' => $request->city,
         'street' => $request->street,
         'house' => $request->house,
         'active' => $request->active
       ]);
+
+      $address->save();
     // };
     //return redirect('/address');
   }
