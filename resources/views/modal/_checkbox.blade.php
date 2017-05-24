@@ -3,7 +3,7 @@
     <div class="checkbox">
       <label><input type="checkbox" name="{{$field}}" id="{{$field}}" v-model="form.{{$field}}">{{$desc}}</label>
 
-      <span class="help is-danger" v-if="form.errors.has('{{$field}}')" v-text="form.errors.get('{{$field}}')"></span>
+      <div class="alert alert-danger" v-if="form.errors.has('{{$field}}')" v-text="form.errors.get('{{$field}}')"></div>
     </div>
   </div>
 </div>

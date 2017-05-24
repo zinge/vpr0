@@ -8,6 +8,6 @@
       @endforeach
     </select>
 
-    <span class="help is-danger" v-if="form.errors.has('{{$field}}')" v-text="form.errors.get('{{$field}}')"></span>
+    <div class="alert alert-danger" v-if="form.errors.has('{{$field}}')" v-text="form.errors.get('{{$field}}')"></div>
   </div>
 </div>
