@@ -14,8 +14,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        /*
-        $pageSruture = [
+        $pageStructure = [
           ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
           ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
           ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
@@ -34,16 +33,13 @@ class EmployeeController extends Controller
             'surname' => $employee->surname,
             'department' => $employee->department->name,
             'address' => $employee->address->city.", ".$employee->address->street.", ".$employee->address->house,
-            'active' => $employee->active]);
+            'active' => $employee->active
+          ]);
         }
 
-        return [
-          'pageParams' => $pageParams,
-          'pageSruture' => $pageSruture
-        ];
-        */
-
-        return view('employee.index');
+        return view('employee.index')
+        ->with('pageStructure', $pageStructure)
+        ->with('pageParams', $pageParams);
     }
 
     /**
