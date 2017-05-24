@@ -7,126 +7,153 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $pageStructure = [
-          ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
-          ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
-          ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
-          ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение'],
-          ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес'],
-          ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
-        ];
+  private function getList($className, $elementKeys)
+  {
 
-        $pageParams = [];
+    $elementData = [];
+    $elementValues = '';
 
-        foreach (Employee::get() as $employee) {
-          array_push($pageParams, [
-            'id' => $employee->id,
-            'firstname' => $employee->firstname,
-            'patronymic' => $employee->patronymic,
-            'surname' => $employee->surname,
-            'department' => $employee->department->name,
-            'address' => $employee->address->city.", ".$employee->address->street.", ".$employee->address->house,
-            'active' => $employee->active
-          ]);
-        }
+    $className = 'App\\'.$className;
+    $className = new $className();
 
-        return view('employee.index')
-        ->with('pageStructure', $pageStructure)
-        ->with('pageParams', $pageParams);
+    foreach ($className->get() as $element) {
+
+      foreach ($elementKeys as $key => $value) {
+        $elementValues = ($key ? $elementValues = $elementValues . ", " . $element->$value : $elementValues = $element->$value);
+      }
+
+      array_push($elementData, [
+        'id' => $element->id,
+        'val' => $elementValues
+      ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    return $elementData;
+  }
+  /**
+  * Display a listing of the resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function index()
+  {
+    $pageStructure = [
+      ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
+      ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
+      ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
+      ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', ['name'])],
+      ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', ['city', 'street', 'house'])],
+      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+    ];
+
+    $pageParams = [];
+
+    foreach (Employee::get() as $employee) {
+      array_push($pageParams, [
+        'id' => $employee->id,
+        'firstname' => $employee->firstname,
+        'patronymic' => $employee->patronymic,
+        'surname' => $employee->surname,
+        'department' => $employee->department->name,
+        'address' => $employee->address->city.", ".$employee->address->street.", ".$employee->address->house,
+        'active' => $employee->active
+      ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-        $this->validate($request, [
-          'firstname' => 'required|max:30',
-          'patronymic' => 'required|max:30',
-          'surname' => 'required|max:30',
-          // department_id
-          'department' => 'required|numeric',
-          // address_id
-          'address' => 'required|numeric',
-          'active' => 'bool'
-        ]);
+    return view('employee.index')
+    ->with('pageStructure', $pageStructure)
+    ->with('pageParams', $pageParams)
+    ->with('pageTitle', 'сотрудник')
+    ->with('pageHref', 'employee');
+  }
 
-        $employee = new Employee([
-          'firstname' => $request->firstname,
-          'patronymic' => $request->patronymic,
-          'surname' => $request->surname,
-          'active' => $request->active
-        ]);
+  /**
+  * Show the form for creating a new resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function create()
+  {
+    //
+  }
 
-        $employee->department()->associate($request->department);
-        $employee->address()->associate($request->address);
+  /**
+  * Store a newly created resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\Response
+  */
+  public function store(Request $request)
+  {
+    //
+    $this->validate($request, [
+      'firstname' => 'required|max:30',
+      'patronymic' => 'required|max:30',
+      'surname' => 'required|max:30',
+      // department_id
+      'department' => 'required|numeric',
+      // address_id
+      'address' => 'required|numeric',
+      'active' => 'bool'
+    ]);
 
-        $employee->save();
-    }
+    $employee = new Employee([
+      'firstname' => $request->firstname,
+      'patronymic' => $request->patronymic,
+      'surname' => $request->surname,
+      'active' => $request->active
+    ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Employee $employee)
-    {
-        //
-    }
+    $employee->department()->associate($request->department);
+    $employee->address()->associate($request->address);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Employee $employee)
-    {
-        //
-    }
+    $employee->save();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Employee $employee)
-    {
-        //
-    }
+    return [true];
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Employee $employee)
-    {
-        //
-    }
+  /**
+  * Display the specified resource.
+  *
+  * @param  \App\Employee  $employee
+  * @return \Illuminate\Http\Response
+  */
+  public function show(Employee $employee)
+  {
+    //
+  }
+
+  /**
+  * Show the form for editing the specified resource.
+  *
+  * @param  \App\Employee  $employee
+  * @return \Illuminate\Http\Response
+  */
+  public function edit(Employee $employee)
+  {
+    //
+  }
+
+  /**
+  * Update the specified resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @param  \App\Employee  $employee
+  * @return \Illuminate\Http\Response
+  */
+  public function update(Request $request, Employee $employee)
+  {
+    //
+  }
+
+  /**
+  * Remove the specified resource from storage.
+  *
+  * @param  \App\Employee  $employee
+  * @return \Illuminate\Http\Response
+  */
+  public function destroy(Employee $employee)
+  {
+    //
+  }
 }
