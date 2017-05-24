@@ -109,7 +109,7 @@ class EmployeeController extends Controller
 
     $employee->save();
 
-    return [true];
+    return [0];
   }
 
   /**
