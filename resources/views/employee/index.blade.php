@@ -138,8 +138,10 @@
         {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
         @endforeach
 
-      })
+      }),
+
     },
+
 
     methods: {
       onSubmit() {
