@@ -41,119 +41,119 @@ class EmployeeController extends Controller
       ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
       ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
       ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
-      ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', ['name'])],
-      ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', ['city', 'street', 'house'])],
+      ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', ['name']), 'modal'=>[['type'=>'text', 'field' => 'name', 'desc' => 'подразделение'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']]],
+      ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', ['city', 'street', 'house']), 'modal' => [['type' => 'text', 'field' => 'city', 'desc' => 'город'], ['type' => 'text', 'field' => 'street', 'desc' => 'улица'], ['type' => 'text', 'field' => 'house', 'desc' => 'дом'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']]],
       ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
-    ];
+      ];
 
-    $pageParams = [];
+      $pageParams = [];
 
-    foreach (Employee::get() as $employee) {
-      array_push($pageParams, [
-        'id' => $employee->id,
-        'firstname' => $employee->firstname,
-        'patronymic' => $employee->patronymic,
-        'surname' => $employee->surname,
-        'department' => $employee->department->name,
-        'address' => $employee->address->city.", ".$employee->address->street.", ".$employee->address->house,
-        'active' => $employee->active
-      ]);
+      foreach (Employee::get() as $employee) {
+        array_push($pageParams, [
+          'id' => $employee->id,
+          'firstname' => $employee->firstname,
+          'patronymic' => $employee->patronymic,
+          'surname' => $employee->surname,
+          'department' => $employee->department->name,
+          'address' => $employee->address->city.", ".$employee->address->street.", ".$employee->address->house,
+          'active' => $employee->active
+        ]);
+      }
+
+      return view('employee.index')
+      ->with('pageStructure', $pageStructure)
+      ->with('pageParams', $pageParams)
+      ->with('pageTitle', 'сотрудник')
+      ->with('pageHref', 'employee');
     }
 
-    return view('employee.index')
-    ->with('pageStructure', $pageStructure)
-    ->with('pageParams', $pageParams)
-    ->with('pageTitle', 'сотрудник')
-    ->with('pageHref', 'employee');
+    /**
+    * Show the form for creating a new resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
+    public function create()
+    {
+      //
+    }
+
+    /**
+    * Store a newly created resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
+    public function store(Request $request)
+    {
+      //
+      $this->validate($request, [
+        'firstname' => 'required|max:30',
+        'patronymic' => 'required|max:30',
+        'surname' => 'required|max:30',
+        // department_id
+        'department' => 'required|numeric',
+        // address_id
+        'address' => 'required|numeric',
+        'active' => 'bool'
+      ]);
+
+      $employee = new Employee([
+        'firstname' => $request->firstname,
+        'patronymic' => $request->patronymic,
+        'surname' => $request->surname,
+        'active' => $request->active
+      ]);
+
+      $employee->department()->associate($request->department);
+      $employee->address()->associate($request->address);
+
+      $employee->save();
+
+      return [0];
+    }
+
+    /**
+    * Display the specified resource.
+    *
+    * @param  \App\Employee  $employee
+    * @return \Illuminate\Http\Response
+    */
+    public function show(Employee $employee)
+    {
+      //
+    }
+
+    /**
+    * Show the form for editing the specified resource.
+    *
+    * @param  \App\Employee  $employee
+    * @return \Illuminate\Http\Response
+    */
+    public function edit(Employee $employee)
+    {
+      //
+    }
+
+    /**
+    * Update the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  \App\Employee  $employee
+    * @return \Illuminate\Http\Response
+    */
+    public function update(Request $request, Employee $employee)
+    {
+      //
+    }
+
+    /**
+    * Remove the specified resource from storage.
+    *
+    * @param  \App\Employee  $employee
+    * @return \Illuminate\Http\Response
+    */
+    public function destroy(Employee $employee)
+    {
+      //
+    }
   }
-
-  /**
-  * Show the form for creating a new resource.
-  *
-  * @return \Illuminate\Http\Response
-  */
-  public function create()
-  {
-    //
-  }
-
-  /**
-  * Store a newly created resource in storage.
-  *
-  * @param  \Illuminate\Http\Request  $request
-  * @return \Illuminate\Http\Response
-  */
-  public function store(Request $request)
-  {
-    //
-    $this->validate($request, [
-      'firstname' => 'required|max:30',
-      'patronymic' => 'required|max:30',
-      'surname' => 'required|max:30',
-      // department_id
-      'department' => 'required|numeric',
-      // address_id
-      'address' => 'required|numeric',
-      'active' => 'bool'
-    ]);
-
-    $employee = new Employee([
-      'firstname' => $request->firstname,
-      'patronymic' => $request->patronymic,
-      'surname' => $request->surname,
-      'active' => $request->active
-    ]);
-
-    $employee->department()->associate($request->department);
-    $employee->address()->associate($request->address);
-
-    $employee->save();
-
-    return [0];
-  }
-
-  /**
-  * Display the specified resource.
-  *
-  * @param  \App\Employee  $employee
-  * @return \Illuminate\Http\Response
-  */
-  public function show(Employee $employee)
-  {
-    //
-  }
-
-  /**
-  * Show the form for editing the specified resource.
-  *
-  * @param  \App\Employee  $employee
-  * @return \Illuminate\Http\Response
-  */
-  public function edit(Employee $employee)
-  {
-    //
-  }
-
-  /**
-  * Update the specified resource in storage.
-  *
-  * @param  \Illuminate\Http\Request  $request
-  * @param  \App\Employee  $employee
-  * @return \Illuminate\Http\Response
-  */
-  public function update(Request $request, Employee $employee)
-  {
-    //
-  }
-
-  /**
-  * Remove the specified resource from storage.
-  *
-  * @param  \App\Employee  $employee
-  * @return \Illuminate\Http\Response
-  */
-  public function destroy(Employee $employee)
-  {
-    //
-  }
-}

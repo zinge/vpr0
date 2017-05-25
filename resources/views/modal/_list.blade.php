@@ -14,30 +14,5 @@
 
     <button type="button" class="btn btn-primary" name="button" data-toggle="modal" data-target="#{{$field}}Modal">+</button>
 
-  {{--start modal--}}
-  <div class="modal fade" id="{{$field}}Modal" tabindex="-1" role="dialog" aria-labelledby="{{$field}}ModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        {{-- @include('modal.index', $pageElement)--}}
-        <div class="modal-header">
-          {{----}}
-        </div>
-        <div class="modal-body">
-{{--
-          <form class="form-horizontal" action="#" method="post">
-            {{ csrf_field() }}
-
-
-          </form>
---}}
-        </div>
-        <div class="modal-footer">
-
-        </div>
-      </div>
-    </div>
-  </div>
-  {{--end modal--}}
-
   </div>
 </div>

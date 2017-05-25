@@ -54,7 +54,7 @@
                       <td>{{ $value['surname'] }}</td>
                       <td>{{ $value['department'] }}</td>
                       <td>{{ $value['address'] }}</td>
-                      <td>{{ $value['active'] }}</td>
+                      <td>{{ $value['active'] ? 'активный' : 'отключен' }}</td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -65,6 +65,44 @@
       </div>
     </div>
   </div>
+
+  @foreach ($pageStructure as $value)
+    @if ($value['type'] == 'list')
+
+      {{--start modal--}}
+      <div class="modal fade" id="{{$value['field']}}Modal" tabindex="-1" role="dialog" aria-labelledby="{{$value['field']}}ModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            {{-- @include('modal.index', $pageElement)--}}
+            <div class="modal-header">
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">добавить {{$value['desc']}}</h4>
+
+            </div>
+            <div class="modal-body">
+
+              <form class="form-horizontal" action="{{url($value['field'])}}" method="post" class="form-horizontal" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
+                {{ csrf_field() }}
+
+                @foreach ($value['modal'] as $pageElement)
+                  @include("modal._".$pageElement['type'], $pageElement)
+                @endforeach
+
+                <div class="form-group">
+                  <div class="col-sm-offset-4 col-sm-8">
+                    <button type="submit" class="btn btn-primary" :disabled="form.errors.any()">Сохранить</button>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      {{--end modal--}}
+    @endif
+  @endforeach
 
 
   <script src="js/spravochnik1.js" charset="utf-8"></script>
@@ -88,6 +126,30 @@
       }
     }
   });
+
+  @foreach ($pageStructure as $value)
+  @if ($value['type'] == 'list')
+  new Vue({
+    el: '#{{$value['field']}}Modal',
+
+    data: {
+      form: new Form({
+        @foreach ($value['modal'] as $pageElement)
+        {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
+        @endforeach
+
+      })
+    },
+
+    methods: {
+      onSubmit() {
+        this.form.post('{{url($value['field'])}}')
+        .then(response => location.reload());
+      }
+    }
+  });
+  @endif
+  @endforeach
 
   </script>
 
