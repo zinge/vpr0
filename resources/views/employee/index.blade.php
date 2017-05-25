@@ -43,6 +43,7 @@
                     @foreach ($pageStructure as $value)
                       <th>{{ $value['desc'] }}</th>
                     @endforeach
+                    <th>&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -55,6 +56,12 @@
                       <td>{{ $value['department'] }}</td>
                       <td>{{ $value['address'] }}</td>
                       <td>{{ $value['active'] ? 'активный' : 'отключен' }}</td>
+                      <td>
+                        <form action="{{url($pageHref."/".$value['id']."/edit")}}" method="get">
+                          {{ csrf_field() }}
+                          <button type="submit" class="btn btn-sm btn-warning" name="edit">Edit</button>
+                        </form>
+                      </td>
                     </tr>
                   @endforeach
                 </tbody>

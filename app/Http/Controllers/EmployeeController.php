@@ -43,7 +43,7 @@ class EmployeeController extends Controller
       ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
       ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', ['name']), 'modal'=>[['type'=>'text', 'field' => 'name', 'desc' => 'подразделение'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']]],
       ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', ['city', 'street', 'house']), 'modal' => [['type' => 'text', 'field' => 'city', 'desc' => 'город'], ['type' => 'text', 'field' => 'street', 'desc' => 'улица'], ['type' => 'text', 'field' => 'house', 'desc' => 'дом'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']]],
-      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'статус']
       ];
 
       $pageParams = [];
