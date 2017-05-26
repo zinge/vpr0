@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
+
   private function getList($className, $elementKeys)
   {
 
@@ -76,7 +81,6 @@ class EmployeeController extends Controller
   */
   public function index()
   {
-
     return view('employee.index')
     ->with('pageStructure', $this->createPageStructure())
     ->with('pageParams', $this->createPageParams(''))

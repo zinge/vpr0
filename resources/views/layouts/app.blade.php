@@ -61,6 +61,7 @@
                   <li><a href="{{ url('/spravochnik/?q=wpls') }}">Рабочие места</a></li>
                   --}}
                   <li><a href="{{url('/employee')}}">Сотрудники</a></li>
+                  <li><a href="{{url('/equip')}}">Оборудование</a></li>
                 </ul>
               </li>
 
