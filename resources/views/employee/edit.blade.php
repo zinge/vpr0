@@ -5,7 +5,7 @@
     <div class="row">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <form action="{{url('employee/' . $pageParams[0]['id'])}}" method="post">
+          <form action="{{url($pageHref).'/'.$pageParams[0]['id'])}}" method="post">
             {{ csrf_field() }}
             {{ method_field('delete') }}
             <button type="submit" class="btn btn-xs btn-block btn-danger">Удалить {{$pageTitle}}а </button>
