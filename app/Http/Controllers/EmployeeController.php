@@ -41,7 +41,7 @@ class EmployeeController extends Controller
       ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
       ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', ['name']), 'modal'=>[['type'=>'text', 'field' => 'name', 'desc' => 'подразделение'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']]],
       ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', ['city', 'street', 'house']), 'modal' => [['type' => 'text', 'field' => 'city', 'desc' => 'город'], ['type' => 'text', 'field' => 'street', 'desc' => 'улица'], ['type' => 'text', 'field' => 'house', 'desc' => 'дом'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']]],
-      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'статус']
+      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
     ];
 
     return $pageStructure;
@@ -52,7 +52,7 @@ class EmployeeController extends Controller
     # code...
     $pageParams = [];
 
-    $employees = $id ? Employee::find($id) : Employee::get();
+    $employees = $id ? Employee::find([$id]) : Employee::get();
 
     foreach ($employees as $employee) {
       array_push($pageParams, [
@@ -60,11 +60,12 @@ class EmployeeController extends Controller
         'firstname' => $employee->firstname,
         'patronymic' => $employee->patronymic,
         'surname' => $employee->surname,
-        'department' => $employee->department->name,
-        'address' => $employee->address->city.", ".$employee->address->street.", ".$employee->address->house,
+        'department' => $id ? $employee->department_id : $employee->department->name,
+        'address' => $id ? $employee->address_id : $employee->address->city.", ".$employee->address->street.", ".$employee->address->house,
         'active' => $employee->active
       ]);
     }
+
 
     return $pageParams;
   }
@@ -147,12 +148,15 @@ class EmployeeController extends Controller
   */
   public function edit(Employee $employee)
   {
-    //
+    /**/
     return view('employee.edit')
     ->with('pageStructure', $this->createPageStructure())
-    ->with('pageParams', $this->createPageParams($employee[0]))
+    ->with('pageParams', $this->createPageParams($employee->id))
     ->with('pageTitle', 'сотрудник')
     ->with('pageHref', 'employee');
+
+
+    //return(dd($this->createPageParams($employee->id)));
   }
 
   /**
@@ -165,6 +169,29 @@ class EmployeeController extends Controller
   public function update(Request $request, Employee $employee)
   {
     //
+    $this->validate($request, [
+      'firstname' => 'required|max:30',
+      'patronymic' => 'required|max:30',
+      'surname' => 'required|max:30',
+      // department_id
+      'department' => 'required|numeric',
+      // address_id
+      'address' => 'required|numeric',
+      'active' => 'bool'
+    ]);
+
+    $employee = Employee::find($employee->id);
+
+    $employee->firstname = $request->firstname;
+    $employee->patronymic = $request->patronymic;
+    $employee->surname = $request->surname;
+    $employee->active = $request->active;
+    $employee->department()->associate($request->department);
+    $employee->address()->associate($request->address);
+
+    $employee->save();
+
+    return [0];
   }
 
   /**
@@ -176,5 +203,9 @@ class EmployeeController extends Controller
   public function destroy(Employee $employee)
   {
     //
+
+    $employee->delete();
+
+    return redirect('/employee');
   }
 }

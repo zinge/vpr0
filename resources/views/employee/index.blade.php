@@ -144,11 +144,8 @@
         @foreach ($value['modal'] as $pageElement)
         {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
         @endforeach
-
       }),
-
     },
-
 
     methods: {
       onSubmit() {
