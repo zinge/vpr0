@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\EquipType;
+use App\Manufacturer;
 use Illuminate\Http\Request;
 
-class EquipTypeController extends Controller
+class ManufacturerController extends Controller
 {
-
   public function __construct()
   {
     $this->middleware('auth');
@@ -25,7 +24,7 @@ class EquipTypeController extends Controller
     ];
 
     return [
-      'pageParams' => EquipType::get(['id','name']),
+      'pageParams' => Manufacturer::get(['id','name']),
       'pageSruture' => $pageSruture
     ];
   }
@@ -49,15 +48,25 @@ class EquipTypeController extends Controller
   public function store(Request $request)
   {
     //
+    $this->validate($request, [
+      'name' => 'required|max:100',
+    ]);
+
+    $manufacturer = new Manufacturer([
+      'name' => $request->name,
+    ]);
+
+    $manufacturer->save();
+
   }
 
   /**
   * Display the specified resource.
   *
-  * @param  \App\EquipType  $equipType
+  * @param  \App\Manufacturer  $manufacturer
   * @return \Illuminate\Http\Response
   */
-  public function show(EquipType $equipType)
+  public function show(Manufacturer $manufacturer)
   {
     //
   }
@@ -65,10 +74,10 @@ class EquipTypeController extends Controller
   /**
   * Show the form for editing the specified resource.
   *
-  * @param  \App\EquipType  $equipType
+  * @param  \App\Manufacturer  $manufacturer
   * @return \Illuminate\Http\Response
   */
-  public function edit(EquipType $equipType)
+  public function edit(Manufacturer $manufacturer)
   {
     //
   }
@@ -77,10 +86,10 @@ class EquipTypeController extends Controller
   * Update the specified resource in storage.
   *
   * @param  \Illuminate\Http\Request  $request
-  * @param  \App\EquipType  $equipType
+  * @param  \App\Manufacturer  $manufacturer
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, EquipType $equipType)
+  public function update(Request $request, Manufacturer $manufacturer)
   {
     //
   }
@@ -88,10 +97,10 @@ class EquipTypeController extends Controller
   /**
   * Remove the specified resource from storage.
   *
-  * @param  \App\EquipType  $equipType
+  * @param  \App\Manufacturer  $manufacturer
   * @return \Illuminate\Http\Response
   */
-  public function destroy(EquipType $equipType)
+  public function destroy(Manufacturer $manufacturer)
   {
     //
   }

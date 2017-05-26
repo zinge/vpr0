@@ -43,8 +43,8 @@ class EquipController extends Controller
     $pageStructure = [
       ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
       ['type' => 'list', 'field' => 'manufacturer', 'desc' => 'производитель', 'data' => $this->getList('Manufacturer', ['name']), 'modal' => [['type'=>'text', 'field'=>'name', 'desc'=>'производитель']]],
-      ['type' => 'list', 'field' => 'equip_type', 'desc' => 'тип', 'data' => $this->getList('EquipType', ['name']), 'modal' => [['type'=>'text', 'field'=>'name', 'desc'=>'тип']]],
-      ['type' => 'list', 'field' => 'equip_model', 'desc' => 'модель', 'data' => $this->getList('EquipModel', ['name']), 'modal' => [['type'=>'text', 'field'=>'name', 'desc'=>'модель']]],
+      ['type' => 'list', 'field' => 'equiptype', 'desc' => 'тип', 'data' => $this->getList('EquipType', ['name']), 'modal' => [['type'=>'text', 'field'=>'name', 'desc'=>'тип']]],
+      ['type' => 'list', 'field' => 'equipmodel', 'desc' => 'модель', 'data' => $this->getList('EquipModel', ['name']), 'modal' => [['type'=>'text', 'field'=>'name', 'desc'=>'модель']]],
       ['type' => 'list', 'field' => 'employee', 'desc' => 'сотрудник', 'data' => $this->getList('Employee', ['firstname', 'patronymic', 'surname', 'department_id', 'address_id']), 'modal'=>[
           ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
           ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],

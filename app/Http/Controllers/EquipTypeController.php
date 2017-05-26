@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Manufacturer;
+use App\EquipType;
 use Illuminate\Http\Request;
 
-class ManufacturerController extends Controller
+class EquipTypeController extends Controller
 {
+
   public function __construct()
   {
     $this->middleware('auth');
@@ -24,7 +25,7 @@ class ManufacturerController extends Controller
     ];
 
     return [
-      'pageParams' => Manufacturer::get(['id','name']),
+      'pageParams' => EquipType::get(['id','name']),
       'pageSruture' => $pageSruture
     ];
   }
@@ -48,15 +49,26 @@ class ManufacturerController extends Controller
   public function store(Request $request)
   {
     //
+
+    $this->validate($request, [
+      'name' => 'required|max:100',
+    ]);
+
+    $equip_type = new EquipType([
+      'name' => $request->name,
+    ]);
+
+    $equip_type->save();
+
   }
 
   /**
   * Display the specified resource.
   *
-  * @param  \App\Manufacturer  $manufacturer
+  * @param  \App\EquipType  $equipType
   * @return \Illuminate\Http\Response
   */
-  public function show(Manufacturer $manufacturer)
+  public function show(EquipType $equipType)
   {
     //
   }
@@ -64,10 +76,10 @@ class ManufacturerController extends Controller
   /**
   * Show the form for editing the specified resource.
   *
-  * @param  \App\Manufacturer  $manufacturer
+  * @param  \App\EquipType  $equipType
   * @return \Illuminate\Http\Response
   */
-  public function edit(Manufacturer $manufacturer)
+  public function edit(EquipType $equipType)
   {
     //
   }
@@ -76,10 +88,10 @@ class ManufacturerController extends Controller
   * Update the specified resource in storage.
   *
   * @param  \Illuminate\Http\Request  $request
-  * @param  \App\Manufacturer  $manufacturer
+  * @param  \App\EquipType  $equipType
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, Manufacturer $manufacturer)
+  public function update(Request $request, EquipType $equipType)
   {
     //
   }
@@ -87,10 +99,10 @@ class ManufacturerController extends Controller
   /**
   * Remove the specified resource from storage.
   *
-  * @param  \App\Manufacturer  $manufacturer
+  * @param  \App\EquipType  $equipType
   * @return \Illuminate\Http\Response
   */
-  public function destroy(Manufacturer $manufacturer)
+  public function destroy(EquipType $equipType)
   {
     //
   }
