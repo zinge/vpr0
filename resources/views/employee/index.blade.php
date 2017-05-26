@@ -59,7 +59,7 @@
                       <td>
                         <form action="{{url($pageHref."/".$value['id']."/edit")}}" method="get">
                           {{ csrf_field() }}
-                          <button type="submit" class="btn btn-sm btn-warning" name="edit">Edit</button>
+                          <button type="submit" class="btn btn-xs btn-warning" name="edit">Edit</button>
                         </form>
                       </td>
                     </tr>
@@ -112,7 +112,7 @@
   @endforeach
 
 
-  <script src="js/spravochnik1.js" charset="utf-8"></script>
+  <script src="js/form.js" charset="utf-8"></script>
   <script>
 
   new Vue({
