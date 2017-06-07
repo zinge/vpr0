@@ -12,7 +12,7 @@ class EmployeeController extends Controller
     $this->middleware('auth');
   }
 
-  private function getList($className, $elementKeys)
+  private function createListData($className, $elementKeys)
   {
 
     $elementData = [];
@@ -38,26 +38,41 @@ class EmployeeController extends Controller
 
   private function createPageStructure()
   {
-    # code...
-    $pageStructure = [];
     $pageStructure = [
       ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
       ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
       ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
-      ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', ['name']), 'modal'=>[['type'=>'text', 'field' => 'name', 'desc' => 'подразделение'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']]],
-      ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', ['city', 'street', 'house']), 'modal' => [['type' => 'text', 'field' => 'city', 'desc' => 'город'], ['type' => 'text', 'field' => 'street', 'desc' => 'улица'], ['type' => 'text', 'field' => 'house', 'desc' => 'дом'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']]],
+      ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->createListData('Department', ['name'])],
+      ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->createListData('Address', ['city', 'street', 'house'])],
       ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
     ];
 
     return $pageStructure;
   }
 
+  private function createListModalParams()
+  {
+    $modalParams = [
+      'name' => 'department', 'modal' => [
+        ['type'=>'text', 'field' => 'name', 'desc' => 'подразделение'],
+        ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+      ],
+      'name' => 'address', 'modal' => [
+        ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
+        ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
+        ['type' => 'text', 'field' => 'house', 'desc' => 'дом'],
+        ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
+      ]
+    ];
+
+    return $modalParams;
+  }
+
   private function createPageParams($id)
   {
-    # code...
     $pageParams = [];
 
-    $employees = $id ? Employee::find([$id]) : Employee::get();
+    $employees = $id ? Employee::find($id) : Employee::get();
 
     foreach ($employees as $employee) {
       array_push($pageParams, [
@@ -71,7 +86,6 @@ class EmployeeController extends Controller
       ]);
     }
 
-
     return $pageParams;
   }
   /**
@@ -83,9 +97,11 @@ class EmployeeController extends Controller
   {
     return view('employee.index')
     ->with('pageStructure', $this->createPageStructure())
-    ->with('pageParams', $this->createPageParams(''))
+    ->with('pageParams', $this->createPageParams())
+    ->with('modalParams', $this->createListModalParams())
     ->with('pageTitle', 'сотрудник')
     ->with('pageHref', 'employee');
+    // dd($this->createListData());
   }
 
   /**
@@ -130,7 +146,7 @@ class EmployeeController extends Controller
 
     $employee->save();
 
-    return [0];
+    return 0;
   }
 
   /**
@@ -156,6 +172,7 @@ class EmployeeController extends Controller
     return view('employee.edit')
     ->with('pageStructure', $this->createPageStructure())
     ->with('pageParams', $this->createPageParams($employee->id))
+    ->with('modalParams', $this->createListModalParams())
     ->with('pageTitle', 'сотрудник')
     ->with('pageHref', 'employee');
 
@@ -184,18 +201,27 @@ class EmployeeController extends Controller
       'active' => 'bool'
     ]);
 
-    $employee = Employee::find($employee->id);
+    // $employee = Employee::find($employee->id);
+    //
+    // $employee->firstname = $request->firstname;
+    // $employee->patronymic = $request->patronymic;
+    // $employee->surname = $request->surname;
+    // $employee->active = $request->active;
+    // $employee->department()->associate($request->department);
+    // $employee->address()->associate($request->address);
+    //
+    // $employee->save();
 
-    $employee->firstname = $request->firstname;
-    $employee->patronymic = $request->patronymic;
-    $employee->surname = $request->surname;
-    $employee->active = $request->active;
-    $employee->department()->associate($request->department);
-    $employee->address()->associate($request->address);
+    $employee->update([
+      $this->firstname = $request->firstname,
+      $this->patronymic = $request->patronymic,
+      $this->surname = $request->surname,
+      $this->active = $request->active,
+      $this->department()->associate($request->department),
+      $this->address()->associate($request->address)
+    ]);
 
-    $employee->save();
-
-    return [0];
+    return 0;
   }
 
   /**
