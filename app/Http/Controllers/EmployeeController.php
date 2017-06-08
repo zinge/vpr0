@@ -72,7 +72,7 @@ class EmployeeController extends Controller
   {
     $pageParams = [];
 
-    $employees = $id ? Employee::find($id) : Employee::get();
+    $employees = $id ? Employee::find([$id]) : Employee::get();
 
     foreach ($employees as $employee) {
       array_push($pageParams, [
@@ -97,11 +97,11 @@ class EmployeeController extends Controller
   {
     return view('employee.index')
     ->with('pageStructure', $this->createPageStructure())
-    ->with('pageParams', $this->createPageParams())
+    ->with('pageParams', $this->createPageParams(''))
     ->with('modalParams', $this->createListModalParams())
     ->with('pageTitle', 'сотрудник')
     ->with('pageHref', 'employee');
-    // dd($this->createListData());
+    //dd($this->createListData());
   }
 
   /**
@@ -201,25 +201,16 @@ class EmployeeController extends Controller
       'active' => 'bool'
     ]);
 
-    // $employee = Employee::find($employee->id);
-    //
-    // $employee->firstname = $request->firstname;
-    // $employee->patronymic = $request->patronymic;
-    // $employee->surname = $request->surname;
-    // $employee->active = $request->active;
-    // $employee->department()->associate($request->department);
-    // $employee->address()->associate($request->address);
-    //
-    // $employee->save();
+    $employee = Employee::find($employee->id);
 
-    $employee->update([
-      $this->firstname = $request->firstname,
-      $this->patronymic = $request->patronymic,
-      $this->surname = $request->surname,
-      $this->active = $request->active,
-      $this->department()->associate($request->department),
-      $this->address()->associate($request->address)
-    ]);
+    $employee->firstname = $request->firstname;
+    $employee->patronymic = $request->patronymic;
+    $employee->surname = $request->surname;
+    $employee->active = $request->active;
+    $employee->department()->associate($request->department);
+    $employee->address()->associate($request->address);
+
+    $employee->save();
 
     return 0;
   }
