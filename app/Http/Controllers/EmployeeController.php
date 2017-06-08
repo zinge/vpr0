@@ -101,7 +101,6 @@ class EmployeeController extends Controller
     ->with('modalParams', $this->createListModalParams())
     ->with('pageTitle', 'сотрудник')
     ->with('pageHref', 'employee');
-    //dd($this->createListData());
   }
 
   /**
@@ -201,8 +200,6 @@ class EmployeeController extends Controller
       'active' => 'bool'
     ]);
 
-    $employee = Employee::find($employee->id);
-
     $employee->firstname = $request->firstname;
     $employee->patronymic = $request->patronymic;
     $employee->surname = $request->surname;
@@ -210,7 +207,7 @@ class EmployeeController extends Controller
     $employee->department()->associate($request->department);
     $employee->address()->associate($request->address);
 
-    $employee->save();
+    $employee->update();
 
     return 0;
   }
