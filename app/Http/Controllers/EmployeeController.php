@@ -53,11 +53,11 @@ class EmployeeController extends Controller
   private function createListModalParams()
   {
     $modalParams = [
-      'name' => 'department', 'modal' => [
+      'department' => [
         ['type'=>'text', 'field' => 'name', 'desc' => 'подразделение'],
         ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
       ],
-      'name' => 'address', 'modal' => [
+      'address' => [
         ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
         ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
         ['type' => 'text', 'field' => 'house', 'desc' => 'дом'],
@@ -101,6 +101,8 @@ class EmployeeController extends Controller
     ->with('modalParams', $this->createListModalParams())
     ->with('pageTitle', 'сотрудник')
     ->with('pageHref', 'employee');
+
+  //  return dd($this->createListModalParams());
   }
 
   /**
@@ -126,6 +128,7 @@ class EmployeeController extends Controller
       'firstname' => 'required|max:30',
       'patronymic' => 'required|max:30',
       'surname' => 'required|max:30',
+
       'department' => 'required|numeric', // department_id
       'address' => 'required|numeric', // address_id
       'active' => 'bool'

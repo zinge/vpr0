@@ -13,7 +13,7 @@ class EquipController extends Controller
     $this->middleware('auth');
   }
 
-  private function getList($className, $elementKeys)
+  private function createListData($className, $elementKeys)
   {
     $elementData = [];
     $elementValues = '';
@@ -42,17 +42,10 @@ class EquipController extends Controller
 
     $pageStructure = [
       ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
-      ['type' => 'list', 'field' => 'manufacturer', 'desc' => 'производитель', 'data' => $this->getList('Manufacturer', ['name']), 'modal' => [['type'=>'text', 'field'=>'name', 'desc'=>'производитель']]],
-      ['type' => 'list', 'field' => 'equiptype', 'desc' => 'тип', 'data' => $this->getList('EquipType', ['name']), 'modal' => [['type'=>'text', 'field'=>'name', 'desc'=>'тип']]],
-      ['type' => 'list', 'field' => 'equipmodel', 'desc' => 'модель', 'data' => $this->getList('EquipModel', ['name']), 'modal' => [['type'=>'text', 'field'=>'name', 'desc'=>'модель']]],
-      ['type' => 'list', 'field' => 'employee', 'desc' => 'сотрудник', 'data' => $this->getList('Employee', ['firstname', 'patronymic', 'surname', 'department_id', 'address_id']), 'modal'=>[
-          ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
-          ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
-          ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
-          ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->getList('Department', ['name']), 'modal'=>[['type'=>'text', 'field' => 'name', 'desc' => 'подразделение'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']]],
-          ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->getList('Address', ['city', 'street', 'house']), 'modal' => [['type' => 'text', 'field' => 'city', 'desc' => 'город'], ['type' => 'text', 'field' => 'street', 'desc' => 'улица'], ['type' => 'text', 'field' => 'house', 'desc' => 'дом'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']]],
-          ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
-        ]],
+      ['type' => 'list', 'field' => 'manufacturer', 'desc' => 'производитель', 'data' => $this->createListData('Manufacturer', ['name'])],
+      ['type' => 'list', 'field' => 'equiptype', 'desc' => 'тип', 'data' => $this->createListData('EquipType', ['name'])],
+      ['type' => 'list', 'field' => 'equipmodel', 'desc' => 'модель', 'data' => $this->createListData('EquipModel', ['name'])],
+      //['type' => 'list', 'field' => 'employee', 'desc' => 'сотрудник', 'data' => $this->createListData('Employee', ['firstname', 'patronymic', 'surname', 'department_id', 'address_id'])],
       ['type' => 'date', 'field' => 'initial_date', 'desc' => 'дата ввода'],
       ['type' => 'text', 'field' => 'initial_cost', 'desc' => 'балансовая стоимость'],
       ['type' => 'text', 'field' => 'serial_number', 'desc' => 'серийный'],
@@ -62,6 +55,31 @@ class EquipController extends Controller
     ];
 
     return $pageStructure;
+  }
+
+  private function createListModalParams()
+  {
+    $modalParams = [
+      'manufacturer' => [
+        ['type'=>'text', 'field'=>'name', 'desc'=>'производитель']
+      ],
+      'equiptype' => [
+        ['type'=>'text', 'field'=>'name', 'desc'=>'тип']
+      ],
+      'equipmodel' => [
+        ['type'=>'text', 'field'=>'name', 'desc'=>'модель']
+      ],
+      // 'employee' => [
+      //   ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
+      //   ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
+      //   ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
+      //   ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->createListData('Department', ['name']), 'modal'=>[['type'=>'text', 'field' => 'name', 'desc' => 'подразделение'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']]],
+      //   ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->createListData('Address', ['city', 'street', 'house']), 'modal' => [['type' => 'text', 'field' => 'city', 'desc' => 'город'], ['type' => 'text', 'field' => 'street', 'desc' => 'улица'], ['type' => 'text', 'field' => 'house', 'desc' => 'дом'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']]],
+      //   ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
+      // ]
+    ];
+
+    return $modalParams;
   }
 
 
@@ -102,8 +120,11 @@ class EquipController extends Controller
     return view('equip.index')
     ->with('pageStructure', $this->createPageStructure())
     ->with('pageParams', $this->createPageParams(''))
+    ->with('modalParams', $this->createListModalParams())
     ->with('pageTitle', 'оборудование')
     ->with('pageHref', 'equip');
+
+    //return dd($this->createListModalParams());
   }
 
   /**
