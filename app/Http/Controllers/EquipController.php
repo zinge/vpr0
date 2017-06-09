@@ -13,7 +13,7 @@ class EquipController extends Controller
     $this->middleware('auth');
   }
 
-  private function createListData($className, $elementKeys)
+  private function createListData($className, $elementKeys, $separator)
   {
     $elementData = [];
     $elementValues = '';
@@ -24,7 +24,7 @@ class EquipController extends Controller
     foreach ($className->get() as $element) {
 
       foreach ($elementKeys as $key => $value) {
-        $elementValues = $key ? $elementValues = $elementValues . ", " . $element->$value : $elementValues = $element->$value;
+        $elementValues = $key ? $elementValues = $elementValues . $separator . " " . $element->$value : $elementValues = $element->$value;
       }
 
       array_push($elementData, [
@@ -39,13 +39,13 @@ class EquipController extends Controller
   private function createPageStructure()
   {
     $pageStructure = [];
-
+    $employeeShortName =
     $pageStructure = [
       ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
-      ['type' => 'list', 'field' => 'manufacturer', 'desc' => 'производитель', 'data' => $this->createListData('Manufacturer', ['name'])],
-      ['type' => 'list', 'field' => 'equiptype', 'desc' => 'тип', 'data' => $this->createListData('EquipType', ['name'])],
-      ['type' => 'list', 'field' => 'equipmodel', 'desc' => 'модель', 'data' => $this->createListData('EquipModel', ['name'])],
-      //['type' => 'list', 'field' => 'employee', 'desc' => 'сотрудник', 'data' => $this->createListData('Employee', ['firstname', 'patronymic', 'surname', 'department_id', 'address_id'])],
+      ['type' => 'list', 'field' => 'manufacturer', 'desc' => 'производитель', 'data' => $this->createListData('Manufacturer', ['name'],',')],
+      ['type' => 'list', 'field' => 'equiptype', 'desc' => 'тип', 'data' => $this->createListData('EquipType', ['name'], ',')],
+      ['type' => 'list', 'field' => 'equipmodel', 'desc' => 'модель', 'data' => $this->createListData('EquipModel', ['name'], ',')],
+      ['type' => 'endlist', 'field' => 'employee', 'desc' => 'сотрудник', 'data' => $this->createListData('Employee', ['firstname', 'patronymic', 'surname'], '')],
       ['type' => 'date', 'field' => 'initial_date', 'desc' => 'дата ввода'],
       ['type' => 'text', 'field' => 'initial_cost', 'desc' => 'балансовая стоимость'],
       ['type' => 'text', 'field' => 'serial_number', 'desc' => 'серийный'],
@@ -69,14 +69,14 @@ class EquipController extends Controller
       'equipmodel' => [
         ['type'=>'text', 'field'=>'name', 'desc'=>'модель']
       ],
-      // 'employee' => [
-      //   ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
-      //   ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
-      //   ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
-      //   ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->createListData('Department', ['name']), 'modal'=>[['type'=>'text', 'field' => 'name', 'desc' => 'подразделение'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']]],
-      //   ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->createListData('Address', ['city', 'street', 'house']), 'modal' => [['type' => 'text', 'field' => 'city', 'desc' => 'город'], ['type' => 'text', 'field' => 'street', 'desc' => 'улица'], ['type' => 'text', 'field' => 'house', 'desc' => 'дом'], ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']]],
-      //   ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
-      // ]
+      'employee' => [
+        ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
+        ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
+        ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
+        ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->createListData('Department', ['name'], ',')],
+        ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->createListData('Address', ['city', 'street', 'house'], ',')],
+        ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
+      ]
     ];
 
     return $modalParams;
