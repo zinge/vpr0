@@ -15,6 +15,7 @@ class EquipController extends Controller
 
   private function createListData($className, $elementKeys, $separator)
   {
+
     $elementData = [];
     $elementValues = '';
 
@@ -39,7 +40,6 @@ class EquipController extends Controller
   private function createPageStructure()
   {
     $pageStructure = [];
-    $employeeShortName =
     $pageStructure = [
       ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
       ['type' => 'list', 'field' => 'manufacturer', 'desc' => 'производитель', 'data' => $this->createListData('Manufacturer', ['name'],',')],
@@ -69,14 +69,6 @@ class EquipController extends Controller
       'equipmodel' => [
         ['type'=>'text', 'field'=>'name', 'desc'=>'модель']
       ],
-      'employee' => [
-        ['type' => 'text', 'field' => 'firstname', 'desc' => 'имя'],
-        ['type' => 'text', 'field' => 'patronymic', 'desc' => 'отчество'],
-        ['type' => 'text', 'field' => 'surname', 'desc' => 'фамилия'],
-        ['type' => 'list', 'field' => 'department', 'desc' => 'подразделение', 'data' => $this->createListData('Department', ['name'], ',')],
-        ['type' => 'list', 'field' => 'address' , 'desc' => 'адрес', 'data' => $this->createListData('Address', ['city', 'street', 'house'], ',')],
-        ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
-      ]
     ];
 
     return $modalParams;
