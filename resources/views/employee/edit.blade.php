@@ -54,7 +54,7 @@
               <form class="form-horizontal" action="{{url($value['field'])}}" method="post" class="form-horizontal" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
                 {{ csrf_field() }}
 
-                @foreach ($modalParams['modal'] as $pageElement)
+                @foreach ($modalParams[$value['field']] as $pageElement)
                   @include("modal._".$pageElement['type'], $pageElement)
                 @endforeach
 
@@ -103,7 +103,7 @@
 
     data: {
       form: new Form({
-        @foreach ($modalParams['modal'] as $pageElement)
+        @foreach ($modalParams[$value['field']] as $pageElement)
         {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
         @endforeach
       }),
