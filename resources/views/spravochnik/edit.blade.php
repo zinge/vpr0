@@ -18,9 +18,6 @@
             {{ method_field('put') }}
 
             @foreach ($pageStructure as $pageElement)
-              {{--
-              ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
-              --}}
               @include("modal._".$pageElement['type'], $pageElement)
             @endforeach
 

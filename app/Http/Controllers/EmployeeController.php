@@ -95,7 +95,7 @@ class EmployeeController extends Controller
   */
   public function index()
   {
-    return view('employee.index')
+    return view('spravochnik.index')
     ->with('pageStructure', $this->createPageStructure())
     ->with('pageParams', $this->createPageParams(''))
     ->with('modalParams', $this->createListModalParams())
@@ -169,7 +169,7 @@ class EmployeeController extends Controller
   public function edit(Employee $employee)
   {
     /**/
-    return view('employee.edit')
+    return view('spravochnik.edit')
     ->with('pageStructure', $this->createPageStructure())
     ->with('pageParams', $this->createPageParams($employee->id))
     ->with('modalParams', $this->createListModalParams())

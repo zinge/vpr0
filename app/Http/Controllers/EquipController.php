@@ -85,10 +85,10 @@ class EquipController extends Controller
       array_push($pageParams, [
         'id' => $equip->id,
         'name' => $equip->name,
-        'manufacturer' => $equip->manufacturer->name,
-        'equip_type' => $equip->equip_type->name,
-        'equip_model' => $equip->equip_model->name,
-        'employee' => $equip->employee->firstname." ".$equip->employee->patronymic." ".$equip->employee->surname,
+        'manufacturer' => $id ? $equip->manufacturer_id : $equip->manufacturer->name,
+        'equiptype' => $id ? $equip->equip_type_id : $equip->equip_type->name,
+        'equipmodel' => $id ? $equip->equip_model_id : $equip->equip_model->name,
+        'employee' => $id ? $equip->employee_id : $equip->employee->firstname." ".$equip->employee->patronymic." ".$equip->employee->surname,
         'initial_date' => $equip->initial_date,
         'initial_cost' => $equip->initial_cost,
         'serial_number' => $equip->serial_number,
@@ -122,7 +122,7 @@ class EquipController extends Controller
   */
   public function index()
   {
-    return view('equip.index')
+    return view('spravochnik.index')
     ->with('pageStructure', $this->createPageStructure())
     ->with('pageParams', $this->createPageParams(''))
     ->with('modalParams', $this->createListModalParams())
@@ -205,6 +205,13 @@ class EquipController extends Controller
   public function edit(Equip $equip)
   {
     //
+    return view('spravochnik.edit')
+    ->with('pageStructure', $this->createPageStructure())
+    ->with('pageParams', $this->createPageParams($equip->id))
+    ->with('modalParams', $this->createListModalParams())
+    ->with('pageTitle', 'оборудование')
+    ->with('pageHref', 'equip');
+    // return dd($this->createPageParams($equip->id));
   }
 
   /**
@@ -217,6 +224,36 @@ class EquipController extends Controller
   public function update(Request $request, Equip $equip)
   {
     //
+    $this->validate($request, [
+      'name' => 'max:256',
+      'initial_date' => 'date',
+      'initial_cost' => array('regex:/^\d{1,10}((,|.)\d{2})?$/'),
+      'serial_number' => 'max:50',
+      'sap_number' => 'max:50',
+      'manufacturer_number' => 'max:50',
+      'active' => 'bool',
+      'manufacturer' => 'required|numeric',
+      'equiptype' => 'required|numeric',
+      'equipmodel' => 'required|numeric',
+      'employee' => 'required|numeric'
+    ]);
+
+    $equip->manufacturer()->associate($request->manufacturer);
+    $equip->equip_type()->associate($request->equiptype);
+    $equip->equip_model()->associate($request->equipmodel);
+    $equip->employee()->associate($request->employee);
+
+    $equip->update([
+      'name' => $request->name,
+      'initial_date' => $request->initial_date,
+      'initial_cost' => $this->replCommas($request->initial_cost),
+      'serial_number' => $request->serial_number,
+      'sap_number' => $request->sap_number,
+      'manufacturer_number' => $request->manufacturer_number,
+      'active' => $request->active
+    ]);
+
+    return 0;
   }
 
   /**
