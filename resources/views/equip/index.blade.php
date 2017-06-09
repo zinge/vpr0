@@ -47,22 +47,19 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($pageParams as $value)
+                  @foreach ($pageParams as $tableContent)
                     <tr>
-                      {{--
 
-                      <td>{{ $value['id'] }}</td>
-                      <td>{{ $value['firstname'] }}</td>
-                      <td>{{ $value['patronymic'] }}</td>
-                      <td>{{ $value['surname'] }}</td>
-                      <td>{{ $value['department'] }}</td>
-                      <td>{{ $value['address'] }}</td>
+                      @foreach ($tableContent as $key => $value)
+                        @if ($key != 'active')
+                          <td>{{ $value }}</td>
+                        @else
+                          <td>{{ $value ? 'активный' : 'отключен' }}</td>
+                        @endif
+                      @endforeach
 
-
-                      --}}
-                      <td>{{ $value['active'] ? 'активный' : 'отключен' }}</td>
                       <td>
-                        <form action="{{url($pageHref."/".$value['id']."/edit")}}" method="get">
+                        <form action="{{url($pageHref."/".$tableContent['id']."/edit")}}" method="get">
                           {{ csrf_field() }}
                           <button type="submit" class="btn btn-xs btn-warning" name="edit">Edit</button>
                         </form>

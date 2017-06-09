@@ -101,6 +101,19 @@ class EquipController extends Controller
     return $pageParams;
   }
 
+  private function replCommas($decimalValue)
+  {
+    $pattern='/(^\d+)(?:,(\d{2}))$/';
+    $pattern_empt='/(^\d+)$/';
+    if (preg_match($pattern, $decimalValue)) {
+      return preg_replace($pattern, '$1.$2', $decimalValue);
+    } else {
+      if (preg_match($pattern_empt, $decimalValue)) {
+        return preg_replace($pattern, '$1.00', $decimalValue);
+      }
+      return $decimalValue;
+    }
+  }
 
   /**
   * Display a listing of the resource.
@@ -116,7 +129,7 @@ class EquipController extends Controller
     ->with('pageTitle', 'оборудование')
     ->with('pageHref', 'equip');
 
-    //return dd($this->createListModalParams());
+    // return dd($this->createPageParams(''));
   }
 
   /**
@@ -138,6 +151,38 @@ class EquipController extends Controller
   public function store(Request $request)
   {
     //
+    $this->validate($request, [
+      'name' => 'max:256',
+      'initial_date' => 'date',
+      'initial_cost' => array('regex:/^\d{1,10}((,|.)\d{2})?$/'),
+      'serial_number' => 'max:50',
+      'sap_number' => 'max:50',
+      'manufacturer_number' => 'max:50',
+      'active' => 'bool',
+      'manufacturer' => 'required|numeric',
+      'equiptype' => 'required|numeric',
+      'equipmodel' => 'required|numeric',
+      'employee' => 'required|numeric'
+    ]);
+
+    $equip = new Equip([
+      'name' => $request->name,
+      'initial_date' => $request->initial_date,
+      'initial_cost' => $this->replCommas($request->initial_cost),
+      'serial_number' => $request->serial_number,
+      'sap_number' => $request->sap_number,
+      'manufacturer_number' => $request->manufacturer_number,
+      'active' => $request->active
+    ]);
+
+    $equip->manufacturer()->associate($request->manufacturer);
+    $equip->equip_type()->associate($request->equiptype);
+    $equip->equip_model()->associate($request->equipmodel);
+    $equip->employee()->associate($request->employee);
+
+    $equip->save();
+
+    return 0;
   }
 
   /**

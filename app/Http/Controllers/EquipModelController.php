@@ -20,7 +20,7 @@ class EquipModelController extends Controller
   {
     //
     $pageSruture = [
-      ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
+      ['model' => 'text', 'field' => 'name', 'desc' => 'наименование'],
     ];
 
     return [
@@ -48,6 +48,16 @@ class EquipModelController extends Controller
   public function store(Request $request)
   {
     //
+    $this->validate($request, [
+      'name' => 'required|max:100',
+    ]);
+
+    $equip_model = new EquipModel([
+      'name' => $request->name,
+    ]);
+
+    $equip_model->save();
+
   }
 
   /**
