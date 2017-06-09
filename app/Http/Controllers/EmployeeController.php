@@ -126,10 +126,8 @@ class EmployeeController extends Controller
       'firstname' => 'required|max:30',
       'patronymic' => 'required|max:30',
       'surname' => 'required|max:30',
-      // department_id
-      'department' => 'required|numeric',
-      // address_id
-      'address' => 'required|numeric',
+      'department' => 'required|numeric', // department_id
+      'address' => 'required|numeric', // address_id
       'active' => 'bool'
     ]);
 
@@ -174,9 +172,6 @@ class EmployeeController extends Controller
     ->with('modalParams', $this->createListModalParams())
     ->with('pageTitle', 'сотрудник')
     ->with('pageHref', 'employee');
-
-
-    //return(dd($this->createPageParams($employee->id)));
   }
 
   /**
@@ -193,21 +188,20 @@ class EmployeeController extends Controller
       'firstname' => 'required|max:30',
       'patronymic' => 'required|max:30',
       'surname' => 'required|max:30',
-      // department_id
-      'department' => 'required|numeric',
-      // address_id
-      'address' => 'required|numeric',
+      'department' => 'required|numeric', // department_id
+      'address' => 'required|numeric', // address_id
       'active' => 'bool'
     ]);
 
-    $employee->firstname = $request->firstname;
-    $employee->patronymic = $request->patronymic;
-    $employee->surname = $request->surname;
-    $employee->active = $request->active;
     $employee->department()->associate($request->department);
     $employee->address()->associate($request->address);
 
-    $employee->update();
+    $employee->update([
+      'firstname' => $request->firstname,
+      'patronymic' => $request->patronymic,
+      'surname' => $request->surname,
+      'active' => $request->active,
+    ]);
 
     return 0;
   }
