@@ -147,6 +147,12 @@ class PhoneController extends Controller
   public function edit(Phone $phone)
   {
     //
+    return view('spravochnik.edit')
+    ->with('pageStructure', $this->createPageStructure())
+    ->with('pageParams', $this->createPageParams($phone->id))
+    ->with('modalParams', $this->createListModalParams())
+    ->with('pageTitle', 'телефон')
+    ->with('pageHref', 'phone');
   }
 
   /**
@@ -159,6 +165,20 @@ class PhoneController extends Controller
   public function update(Request $request, Phone $phone)
   {
     //
+    $this->validate($request, [
+      'number' => 'required|max:30',
+      'active' => 'bool',
+      'phonetype' => 'required|numeric'
+    ]);
+
+    $phone->phone_type()->associate($request->phonetype);
+
+    $phone->update([
+      'number' => $request->number,
+      'active' => $request->active
+    ]);
+
+    return 0;
   }
 
   /**
@@ -170,5 +190,8 @@ class PhoneController extends Controller
   public function destroy(Phone $phone)
   {
     //
+    $phone->delete();
+
+    return redirect('/phone');
   }
 }
