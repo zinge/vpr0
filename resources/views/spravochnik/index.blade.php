@@ -150,7 +150,9 @@
     methods: {
       onSubmit() {
         this.form.post('{{url($value['field'])}}')
-        .then(response => location.reload());
+        .then(response =>
+          location.reload()
+        );
       }
     }
   });

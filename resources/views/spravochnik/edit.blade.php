@@ -88,7 +88,9 @@
     methods: {
       onSubmit() {
         this.form.put('{{url($pageHref)."/".$pageParams[0]['id']}}')
-        .then(response => location.reload());
+        .then(response => {
+          location.replace('{{url($pageHref)}}')
+        });
       }
     }
   });
@@ -110,7 +112,9 @@
       onSubmit() {
 
         this.form.post('{{url($value['field'])}}')
-        .then(response => location.href = "{{url($pageHref)}}");
+        .then(response => {
+          location.reload()
+        });
       }
     }
   });
