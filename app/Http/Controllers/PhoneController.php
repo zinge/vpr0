@@ -114,7 +114,7 @@ class PhoneController extends Controller
     $this->validate($request, [
       'number' => 'required|max:30',
       'active' => 'bool',
-      'phonetype' => 'required|numeric'
+      'phonetype' => 'required|numeric',
     ]);
 
     $phone = new Phone([

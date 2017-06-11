@@ -22,7 +22,7 @@ class CreatePhoneOwnersTable extends Migration
         ->references('id')
         ->on('phones');
       }
-      
+
       if (Schema::hasColumn('employees', 'id')) {
         $table->integer('employee_id');
         $table->foreign('employee_id')
@@ -41,6 +41,6 @@ class CreatePhoneOwnersTable extends Migration
   */
   public function down()
   {
-    Schema::dropIfExists('prone_owners');
+    Schema::dropIfExists('phone_owners');
   }
 }
