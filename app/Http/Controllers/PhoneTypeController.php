@@ -20,7 +20,9 @@ class PhoneTypeController extends Controller
   public function index()
   {
     //
-    return PhoneType::get();
+    return [
+      'pageParams' => PhoneType::get(['id', 'name'])
+    ];
   }
 
   /**
@@ -42,6 +44,15 @@ class PhoneTypeController extends Controller
   public function store(Request $request)
   {
     //
+    $this->validate($request, [
+      'name' => 'required|max:100',
+    ]);
+
+    $phone_type = new PhoneType([
+      'name' => $request->name,
+    ]);
+
+    $phone_type->save();
   }
 
   /**
