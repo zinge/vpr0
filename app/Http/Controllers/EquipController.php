@@ -265,5 +265,8 @@ class EquipController extends Controller
   public function destroy(Equip $equip)
   {
     //
+    $equip->delete();
+
+    return redirect('/equip');
   }
 }

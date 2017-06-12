@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\PhoneOwner;
 use Illuminate\Http\Request;
 
+use App\Phone;
+
 class PhoneOwnerController extends Controller
 {
   public function __construct()
@@ -108,6 +110,16 @@ class PhoneOwnerController extends Controller
   public function store(Request $request)
   {
     //
+    $this->validate($request, [
+      'employee' => 'numeric',
+      'phone' => 'numeric'
+    ]);
+
+    $phone = Phone::find($request->phone);
+
+    $phone->employees()->attach($request->employee);
+
+    return 0;
   }
 
   /**
@@ -130,6 +142,11 @@ class PhoneOwnerController extends Controller
   public function edit(PhoneOwner $phoneOwner)
   {
     //
+    return view('spravochnik.edit')
+    ->with('pageStructure', $this->createPageStructure())
+    ->with('pageParams', $this->createPageParams($phoneOwner->id))
+    ->with('pageTitle', 'телефон/владелец')
+    ->with('pageHref', 'phoneowner');
   }
 
   /**
@@ -142,6 +159,17 @@ class PhoneOwnerController extends Controller
   public function update(Request $request, PhoneOwner $phoneOwner)
   {
     //
+    $this->validate($request, [
+      'employee' => 'numeric',
+      'phone' => 'numeric'
+    ]);
+
+    $phoneOwner->phone()->associate($request->phone);
+    $phoneOwner->employee()->associate($phoneOwner->employee);
+
+    $phoneOwner->update();
+
+    return 0;
   }
 
   /**
@@ -153,5 +181,10 @@ class PhoneOwnerController extends Controller
   public function destroy(PhoneOwner $phoneOwner)
   {
     //
+    $phone = Phone::find($phoneOwner->phone_id);
+
+    $phone->employees()->detach($phoneOwner->employee_id);
+
+    return redirect('/phoneowner');
   }
 }
