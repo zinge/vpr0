@@ -16,7 +16,7 @@ class PhoneOwnerController extends Controller
 
   private function createListData($className, $elementKeys)
   {
-  $elementData = [];
+    $elementData = [];
     $elementValues = '';
 
     $className = 'App\\'.$className;
@@ -142,11 +142,12 @@ class PhoneOwnerController extends Controller
   public function edit(PhoneOwner $phoneOwner)
   {
     //
-    return view('spravochnik.edit')
-    ->with('pageStructure', $this->createPageStructure())
-    ->with('pageParams', $this->createPageParams($phoneOwner->id))
-    ->with('pageTitle', 'телефон/владелец')
-    ->with('pageHref', 'phoneowner');
+    // return view('spravochnik.edit')
+    // ->with('pageStructure', $this->createPageStructure())
+    // ->with('pageParams', $this->createpageparams($phoneowner->id))
+    // ->with('pageTitle', 'телефон/владелец')
+    // ->with('pageHref', 'phoneowner');
+    return dd($this->createPageParams($phoneOwner->id));
   }
 
   /**
