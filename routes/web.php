@@ -34,6 +34,7 @@ Route::resource('/mobilephone', 'MobilePhoneController');
 Route::resource('/mobiletype', 'MobileTypeController');
 Route::resource('/phone', 'PhoneController');
 Route::resource('/phonetype', 'PhoneTypeController');
+Route::resource('/phoneowner', 'PhoneOwnerController');
 Route::resource('/workplace', 'WorkplaceController');
 
 Route::resource('/modal', 'ModalController');

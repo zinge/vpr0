@@ -63,6 +63,7 @@
                   <li><a href="{{url('/employee')}}">Сотрудники</a></li>
                   <li><a href="{{url('/equip')}}">Оборудование</a></li>
                   <li><a href="{{url('/phone')}}">Телефоны</a></li>
+                  <li><a href="{{url('/phoneowner')}}">Телефон/владелец</a></li>
                 </ul>
               </li>
 
