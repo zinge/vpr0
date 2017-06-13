@@ -65,6 +65,7 @@
                   <li><a href="{{url('/phone')}}">Телефоны</a></li>
                   <li><a href="{{url('/phoneowner')}}">Телефон/владелец</a></li>
                   <li><a href="{{url('/ipphone')}}">МАКи</a></li>
+                  <li><a href="{{url('/mobilephone')}}">Моб. телефоны</a></li>
                 </ul>
               </li>
 
