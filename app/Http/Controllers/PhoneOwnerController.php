@@ -14,8 +14,9 @@ class PhoneOwnerController extends Controller
     $this->middleware('auth');
   }
 
-  private function createListData($className, $elementKeys)
+  private function createListData($className, $elementKeys, $separator)
   {
+
     $elementData = [];
     $elementValues = '';
 
@@ -25,7 +26,7 @@ class PhoneOwnerController extends Controller
     foreach ($className->get() as $element) {
 
       foreach ($elementKeys as $key => $value) {
-        $elementValues = ($key ? $elementValues = $elementValues . ", " . $element->$value : $elementValues = $element->$value);
+        $elementValues = $key ? $elementValues = $elementValues . $separator . " " . $element->$value : $elementValues = $element->$value;
       }
 
       array_push($elementData, [
@@ -36,11 +37,10 @@ class PhoneOwnerController extends Controller
 
     return $elementData;
   }
-
   private function createPageStructure()
   {
     $pageStructure = [
-      ['type' => 'endlist', 'field' => 'number', 'desc' => 'номер', 'data' => $this->createListData('Phone', ['number'], '')],
+      ['type' => 'endlist', 'field' => 'phone', 'desc' => 'номер', 'data' => $this->createListData('Phone', ['number'], '')],
       ['type' => 'endlist', 'field' => 'employee', 'desc' => 'сотрудник', 'data' => $this->createListData('Employee', ['firstname', 'patronymic', 'surname'], '')],
     ];
 
@@ -67,7 +67,7 @@ class PhoneOwnerController extends Controller
     foreach ($pageItems as $item) {
       array_push($pageParams, [
         'id' => $item->id,
-        'number' => $id ? $item->phone_id : $item->phone->number,
+        'phone' => $id ? $item->phone_id : $item->phone->number,
         'employee' => $id ? $item->employee_id : $item->employee->firstname." ".$item->employee->patronymic." ".$item->employee->surname,
       ]);
     }
@@ -112,10 +112,10 @@ class PhoneOwnerController extends Controller
     //
     $this->validate($request, [
       'employee' => 'numeric',
-      'number' => 'numeric'
+      'phone' => 'numeric'
     ]);
 
-    $phone = Phone::find($request->number);
+    $phone = Phone::find($request->phone);
 
     $phone->employees()->attach($request->employee);
 
