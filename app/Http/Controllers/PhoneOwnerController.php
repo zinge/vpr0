@@ -112,10 +112,10 @@ class PhoneOwnerController extends Controller
     //
     $this->validate($request, [
       'employee' => 'numeric',
-      'phone' => 'numeric'
+      'number' => 'numeric'
     ]);
 
-    $phone = Phone::find($request->phone);
+    $phone = Phone::find($request->number);
 
     $phone->employees()->attach($request->employee);
 
