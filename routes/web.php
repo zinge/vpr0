@@ -38,3 +38,5 @@ Route::resource('/phoneowner', 'PhoneOwnerController');
 Route::resource('/workplace', 'WorkplaceController');
 
 // Route::resource('/modal', 'ModalController');
+Route::resource('/finposition', 'FinpositionController');
+Route::resource('/service', 'ServiceController');

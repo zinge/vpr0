@@ -7,79 +7,95 @@ use Illuminate\Http\Request;
 
 class FinpositionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+  /**
+  * Display a listing of the resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function index()
+  {
+    //
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+  /**
+  * Show the form for creating a new resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function create()
+  {
+    //
+  }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Finposition  $finposition
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Finposition $finposition)
-    {
-        //
-    }
+  /**
+  * Store a newly created resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\Response
+  */
+  public function store(Request $request)
+  {
+    //
+    $this->validate($request, [
+      'name' => 'required|max:15',
+      'code' => 'required|max:30'
+    ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Finposition  $finposition
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Finposition $finposition)
-    {
-        //
-    }
+    $finposition = new Finposition([
+      'name' => $request->name,
+      'code' => $request->code
+    ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Finposition  $finposition
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Finposition $finposition)
-    {
-        //
-    }
+    $finposition->save();
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Finposition  $finposition
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Finposition $finposition)
-    {
-        //
-    }
+  /**
+  * Display the specified resource.
+  *
+  * @param  \App\Finposition  $finposition
+  * @return \Illuminate\Http\Response
+  */
+  public function show(Finposition $finposition)
+  {
+    //
+  }
+
+  /**
+  * Show the form for editing the specified resource.
+  *
+  * @param  \App\Finposition  $finposition
+  * @return \Illuminate\Http\Response
+  */
+  public function edit(Finposition $finposition)
+  {
+    //
+  }
+
+  /**
+  * Update the specified resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @param  \App\Finposition  $finposition
+  * @return \Illuminate\Http\Response
+  */
+  public function update(Request $request, Finposition $finposition)
+  {
+    //
+  }
+
+  /**
+  * Remove the specified resource from storage.
+  *
+  * @param  \App\Finposition  $finposition
+  * @return \Illuminate\Http\Response
+  */
+  public function destroy(Finposition $finposition)
+  {
+    //
+  }
 }
