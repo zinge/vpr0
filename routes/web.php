@@ -19,7 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-Route::resource('/spravochnik', 'SpravochnikController');
+// Route::resource('/spravochnik', 'SpravochnikController');
 
 Route::resource('/address', 'AddressController');
 Route::resource('/department', 'DepartmentController');
@@ -28,13 +28,13 @@ Route::resource('/equip', 'EquipController');
 Route::resource('/equipmodel', 'EquipModelController');
 Route::resource('/equiptype', 'EquipTypeController');
 Route::resource('/manufacturer', 'ManufacturerController');
-Route::resource('/ipphone', 'IpPhoneController');
-Route::resource('/mobilelimit', 'MobileLimitController');
-Route::resource('/mobilephone', 'MobilePhoneController');
-Route::resource('/mobiletype', 'MobileTypeController');
+// Route::resource('/ipphone', 'IpPhoneController');
+// Route::resource('/mobilelimit', 'MobileLimitController');
+// Route::resource('/mobilephone', 'MobilePhoneController');
+// Route::resource('/mobiletype', 'MobileTypeController');
 Route::resource('/phone', 'PhoneController');
 Route::resource('/phonetype', 'PhoneTypeController');
 Route::resource('/phoneowner', 'PhoneOwnerController');
 Route::resource('/workplace', 'WorkplaceController');
 
-Route::resource('/modal', 'ModalController');
+// Route::resource('/modal', 'ModalController');

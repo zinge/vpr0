@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Phone;
 use App\PhoneOwner;
 use Illuminate\Http\Request;
-
-use App\Phone;
 
 class PhoneOwnerController extends Controller
 {
@@ -112,10 +111,10 @@ class PhoneOwnerController extends Controller
   /**
   * Display the specified resource.
   *
-  * @param  \App\PhoneOwner  $phoneOwner
+  * @param  \App\PhoneOwner  $phoneowner
   * @return \Illuminate\Http\Response
   */
-  public function show(PhoneOwner $phoneOwner)
+  public function show(PhoneOwner $phoneowner)
   {
     //
   }
@@ -123,28 +122,28 @@ class PhoneOwnerController extends Controller
   /**
   * Show the form for editing the specified resource.
   *
-  * @param  \App\PhoneOwner  $phoneOwner
+  * @param  \App\PhoneOwner  $phoneowner
   * @return \Illuminate\Http\Response
   */
-  public function edit(PhoneOwner $phoneOwner)
+  public function edit(PhoneOwner $phoneowner)
   {
     //
-    // return view('spravochnik.edit')
-    // ->with('pageStructure', $this->createPageStructure())
-    // ->with('pageParams', $this->createpageparams($phoneowner->id))
-    // ->with('pageTitle', 'телефон/владелец')
-    // ->with('pageHref', 'phoneowner');
-    return dd($this->createPageParams($phoneOwner->id));
+    return view('spravochnik.edit')
+    ->with('pageStructure', $this->createPageStructure())
+    ->with('pageParams', $this->createpageparams($phoneowner->id))
+    ->with('pageTitle', 'телефон/владелец')
+    ->with('pageHref', 'phoneowner');
+    // return dd($this->createPageParams($phoneowner->id));
   }
 
   /**
   * Update the specified resource in storage.
   *
   * @param  \Illuminate\Http\Request  $request
-  * @param  \App\PhoneOwner  $phoneOwner
+  * @param  \App\PhoneOwner  $phoneowner
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, PhoneOwner $phoneOwner)
+  public function update(Request $request, PhoneOwner $phoneowner)
   {
     //
     $this->validate($request, [
@@ -152,10 +151,10 @@ class PhoneOwnerController extends Controller
       'phone' => 'numeric'
     ]);
 
-    $phoneOwner->phone()->associate($request->phone);
-    $phoneOwner->employee()->associate($phoneOwner->employee);
+    $phoneowner->phone()->associate($request->phone);
+    $phoneowner->employee()->associate($phoneowner->employee);
 
-    $phoneOwner->update();
+    $phoneowner->update();
 
     return 0;
   }
@@ -163,15 +162,15 @@ class PhoneOwnerController extends Controller
   /**
   * Remove the specified resource from storagePhoneOwner
   *
-  * @param  \App\PhoneOwner  $phoneOwner
+  * @param  \App\PhoneOwner  $phoneowner
   * @return \Illuminate\Http\Response
   */
-  public function destroy(PhoneOwner $phoneOwner)
+  public function destroy(PhoneOwner $phoneowner)
   {
     //
-    $phone = Phone::find($phoneOwner->phone_id);
+    $phone = Phone::find($phoneowner->phone_id);
 
-    $phone->employees()->detach($phoneOwner->employee_id);
+    $phone->employees()->detach($phoneowner->employee_id);
 
     return redirect('/phoneowner');
   }
