@@ -73,7 +73,7 @@ class IpPhoneController extends Controller
     return view('spravochnik.index')
     ->with('pageStructure', $this->createPageStructure())
     ->with('pageParams', $this->createPageParams(''))
-    ->with('pageTitle', 'МАС адрес')
+    ->with('pageTitle', 'МАС адресс')
     ->with('pageHref', 'ipphone');
   }
 
@@ -135,7 +135,7 @@ class IpPhoneController extends Controller
     return view('spravochnik.edit')
     ->with('pageStructure', $this->createPageStructure())
     ->with('pageParams', $this->createpageparams($ipphone->id))
-    ->with('pageTitle', 'МАС адрес')
+    ->with('pageTitle', 'МАС адресс')
     ->with('pageHref', 'ipphone');
   }
 
@@ -156,11 +156,11 @@ class IpPhoneController extends Controller
 
     $ipphone->phone()->associate($request->phone);
 
-    $ipphone->update([
+    $ipphone = update([
       'macaddr' => $request->macaddr
     ]);
 
-    return 0;
+    return false;
   }
 
   /**
@@ -172,8 +172,5 @@ class IpPhoneController extends Controller
   public function destroy(IpPhone $ipphone)
   {
     //
-    $ipphone->delete();
-
-    return redirect('/ipphone');
   }
 }
