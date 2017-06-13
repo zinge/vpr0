@@ -47,17 +47,6 @@ class PhoneOwnerController extends Controller
     return $pageStructure;
   }
 
-  // private function createListModalParams()
-  // {
-  //   $modalParams = [
-  //     'phonetype' => [
-  //       ['type'=>'text', 'field' => 'name', 'desc' => 'тип'],
-  //     ]
-  //   ];
-  //
-  //   return $modalParams;
-  // }
-
   private function createPageParams($id)
   {
     $pageParams = [];
@@ -87,8 +76,6 @@ class PhoneOwnerController extends Controller
     ->with('pageParams', $this->createPageParams(''))
     ->with('pageTitle', 'телефон/владелец')
     ->with('pageHref', 'phoneowner');
-    // return dd($this->createPageStructure());
-    // return dd($this->createPageParams(''));
   }
 
   /**
