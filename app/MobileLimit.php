@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class MobileLimit extends Model
 {
   //
+
+  protected $fillable = ['limit_cost'];
+
   public function mobile_phones()
   {
     return $this->hasMany('App\MobilePhone');

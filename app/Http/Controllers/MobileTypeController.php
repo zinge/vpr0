@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\MobileLimit;
+use App\MobileType;
 use Illuminate\Http\Request;
 
-class MobileLimitController extends Controller
+class MobileTypeController extends Controller
 {
   public function __construct()
   {
@@ -19,14 +19,14 @@ class MobileLimitController extends Controller
   public function index()
   {
     //
-    $pageSruture = [
-      ['type' => 'text', 'field' => 'limit_cost', 'desc' => 'лимит'],
-    ];
-
-    return [
-      'pageParams' => MobileLimit::get(['id','limit_cost']),
-      'pageSruture' => $pageSruture
-    ];
+    // $pageSruture = [
+    //   ['type' => 'text', 'field' => 'name', 'desc' => 'тип'],
+    // ];
+    //
+    // return [
+    //   'pageParams' => MobileType::get(['id','name']),
+    //   'pageSruture' => $pageSruture
+    // ];
   }
 
   /**
@@ -48,15 +48,24 @@ class MobileLimitController extends Controller
   public function store(Request $request)
   {
     //
+    $this->validate($request, [
+      'name' => 'required|max:30'
+    ]);
+
+    $mobiletype = new MobileType([
+      'name' => $request->name
+    ]);
+
+    $mobiletype->save();
   }
 
   /**
   * Display the specified resource.
   *
-  * @param  \App\MobileLimit  $mobileLimit
+  * @param  \App\MobileType  $mobiletype
   * @return \Illuminate\Http\Response
   */
-  public function show(MobileLimit $mobileLimit)
+  public function show(MobileType $mobiletype)
   {
     //
   }
@@ -64,10 +73,10 @@ class MobileLimitController extends Controller
   /**
   * Show the form for editing the specified resource.
   *
-  * @param  \App\MobileLimit  $mobileLimit
+  * @param  \App\MobileType  $mobiletype
   * @return \Illuminate\Http\Response
   */
-  public function edit(MobileLimit $mobileLimit)
+  public function edit(MobileType $mobiletype)
   {
     //
   }
@@ -76,10 +85,10 @@ class MobileLimitController extends Controller
   * Update the specified resource in storage.
   *
   * @param  \Illuminate\Http\Request  $request
-  * @param  \App\MobileLimit  $mobileLimit
+  * @param  \App\MobileType  $mobiletype
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, MobileLimit $mobileLimit)
+  public function update(Request $request, MobileType $mobiletype)
   {
     //
   }
@@ -87,10 +96,10 @@ class MobileLimitController extends Controller
   /**
   * Remove the specified resource from storage.
   *
-  * @param  \App\MobileLimit  $mobileLimit
+  * @param  \App\MobileType  $mobiletype
   * @return \Illuminate\Http\Response
   */
-  public function destroy(MobileLimit $mobileLimit)
+  public function destroy(MobileType $mobiletype)
   {
     //
   }
