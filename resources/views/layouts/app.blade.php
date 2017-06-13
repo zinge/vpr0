@@ -73,6 +73,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Договора <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="{{url('/service')}}">Сервисы</a></li>
+                  <li><a href="{{url('/agreement')}}">Договора</a></li>
                 </ul>
               </li>
 

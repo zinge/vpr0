@@ -40,3 +40,5 @@ Route::resource('/workplace', 'WorkplaceController');
 // Route::resource('/modal', 'ModalController');
 Route::resource('/finposition', 'FinpositionController');
 Route::resource('/service', 'ServiceController');
+Route::resource('/agreement', 'AgreementController');
+Route::resource('/contractor', 'ContractorController');
