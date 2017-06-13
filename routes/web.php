@@ -28,7 +28,7 @@ Route::resource('/equip', 'EquipController');
 Route::resource('/equipmodel', 'EquipModelController');
 Route::resource('/equiptype', 'EquipTypeController');
 Route::resource('/manufacturer', 'ManufacturerController');
-// Route::resource('/ipphone', 'IpPhoneController');
+Route::resource('/ipphone', 'IpPhoneController');
 // Route::resource('/mobilelimit', 'MobileLimitController');
 // Route::resource('/mobilephone', 'MobilePhoneController');
 // Route::resource('/mobiletype', 'MobileTypeController');
