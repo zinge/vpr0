@@ -9,7 +9,7 @@ cd /home/lara
 composer create-project --prefer-dist laravel/laravel .
 ```
 ## Make auth
-Simple, auth. Laravel said, this easy, use:
+Simple authorization. Laravel suggests using the following command:
 ```
 php artisan make:auth
 ```
