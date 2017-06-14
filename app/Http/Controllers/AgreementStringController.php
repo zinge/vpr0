@@ -146,10 +146,10 @@ class AgreementStringController extends Controller
   /**
   * Display the specified resource.
   *
-  * @param  \App\AgreementString  $agreementString
+  * @param  \App\AgreementString  $agreementstring
   * @return \Illuminate\Http\Response
   */
-  public function show(AgreementString $agreementString)
+  public function show(AgreementString $agreementstring)
   {
     //
   }
@@ -157,34 +157,62 @@ class AgreementStringController extends Controller
   /**
   * Show the form for editing the specified resource.
   *
-  * @param  \App\AgreementString  $agreementString
+  * @param  \App\AgreementString  $agreementstring
   * @return \Illuminate\Http\Response
   */
-  public function edit(AgreementString $agreementString)
+  public function edit(AgreementString $agreementstring)
   {
     //
+    return view('spravochnik.edit')
+    ->with('pageStructure', $this->createPageStructure())
+    ->with('pageParams', $this->createPageParams($agreementstring->id))
+    ->with('pageTitle', 'строка договора')
+    ->with('pageHref', 'agreementstring');
   }
 
   /**
   * Update the specified resource in storage.
   *
   * @param  \Illuminate\Http\Request  $request
-  * @param  \App\AgreementString  $agreementString
+  * @param  \App\AgreementString  $agreementstring
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, AgreementString $agreementString)
+  public function update(Request $request, AgreementString $agreementstring)
   {
     //
+    $this->validate($request, [
+      'agreement' => 'required|numeric',
+      'service' => 'required|numeric',
+      'physical' => 'required|numeric',
+      'months' => 'required|numeric',
+      'summ_cost' => ['required', 'regex:/^\d{1,10}((,|.)\d{2})?$/'],
+      'department' => 'required|numeric'
+    ]);
+
+    $agreementstring->agreement()->associate($request->agreement);
+    $agreementstring->service()->associate($request->service);
+    $agreementstring->department()->associate($request->department);
+
+    $agreementstring->update([
+      'physical' => $request->physical,
+      'months' => $request->months,
+      'summ_cost' => $this->replCommas($request->summ_cost)
+    ]);
+
+    return 0;
   }
 
   /**
   * Remove the specified resource from storage.
   *
-  * @param  \App\AgreementString  $agreementString
+  * @param  \App\AgreementString  $agreementstring
   * @return \Illuminate\Http\Response
   */
-  public function destroy(AgreementString $agreementString)
+  public function destroy(AgreementString $agreementstring)
   {
     //
+    $agreementstring->delete();
+
+    return redirect('/agreementstring');
   }
 }
