@@ -43,3 +43,6 @@ Route::resource('/service', 'ServiceController');
 Route::resource('/agreement', 'AgreementController');
 Route::resource('/contractor', 'ContractorController');
 Route::resource('/agreementstring', 'AgreementStringController');
+
+Route::resource('/akt', 'AktController');
+Route::resource('/aktstring', 'AktstringController');

@@ -18,4 +18,9 @@ class Service extends Model
     {
       return $this->hasMany('App\AgreementString');
     }
+
+    public function aktstrings()
+    {
+      return $this->hasMany('App\Aktstring');
+    }
 }
