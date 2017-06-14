@@ -74,9 +74,17 @@
                 <ul class="dropdown-menu">
                   <li><a href="{{url('/service')}}">Сервисы</a></li>
                   <li><a href="{{url('/agreement')}}">Договора</a></li>
+                  <li><a href="{{url('/agreementstring')}}">Cтроки договора</a></li>
                 </ul>
               </li>
 
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Актирование <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{url('/akt')}}">Акты</a></li>
+                  <li><a href="{{url('/aktstring')}}">Cтроки актов</a></li>
+                </ul>
+              </li>
             </ul>
 
             <!-- Right Side Of Navbar -->
