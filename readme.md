@@ -1,7 +1,7 @@
 # vpr0
 laravel 5.4 build
 
-My simle project, private, for work and laravel skill train
+My simple private project, for work, and for training development skills on laravel
 ## Install steps
 first install via [composer](http://getcomposer.org/), [laravel](https://laravel.com)
 ```
