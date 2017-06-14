@@ -42,3 +42,4 @@ Route::resource('/finposition', 'FinpositionController');
 Route::resource('/service', 'ServiceController');
 Route::resource('/agreement', 'AgreementController');
 Route::resource('/contractor', 'ContractorController');
+Route::resource('/agreementstring', 'AgreementStringController');

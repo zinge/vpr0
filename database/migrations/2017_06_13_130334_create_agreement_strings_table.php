@@ -18,6 +18,7 @@ class CreateAgreementStringsTable extends Migration
 
             $table->integer('physical')->nullable();
             $table->decimal('summ_cost', 10, 2)->nullable();
+            $table->integer('months');
 
             // agreement_id
             if (Schema::hasColumn('agreements', 'id')) {
