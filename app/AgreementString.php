@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AgreementString extends Model
 {
     //
-    protected $fillable = ['physical', 'summ_cost'];
+    protected $fillable = ['physical', 'months', 'summ_cost'];
 
     public function service()
     {

@@ -72,6 +72,19 @@ class AgreementStringController extends Controller
     return $pageParams;
   }
 
+  private function replCommas($decimalValue)
+  {
+    $pattern='/(^\d+)(?:,(\d{2}))$/';
+    $pattern_empt='/(^\d+)$/';
+    if (preg_match($pattern, $decimalValue)) {
+      return preg_replace($pattern, '$1.$2', $decimalValue);
+    } else {
+      if (preg_match($pattern_empt, $decimalValue)) {
+        return preg_replace($pattern, '$1.00', $decimalValue);
+      }
+      return $decimalValue;
+    }
+  }
   /**
   * Display a listing of the resource.
   *
@@ -106,6 +119,28 @@ class AgreementStringController extends Controller
   public function store(Request $request)
   {
     //
+    $this->validate($request, [
+      'agreement' => 'required|numeric',
+      'service' => 'required|numeric',
+      'physical' => 'required|numeric',
+      'months' => 'required|numeric',
+      'summ_cost' => ['required', 'regex:/^\d{1,10}((,|.)\d{2})?$/'],
+      'department' => 'required|numeric'
+    ]);
+
+    $agreementstring = new AgreementString([
+      'physical' => $request->physical,
+      'months' => $request->months,
+      'summ_cost' => $this->replCommas($request->summ_cost)
+    ]);
+
+    $agreementstring->agreement()->associate($request->agreement);
+    $agreementstring->service()->associate($request->service);
+    $agreementstring->department()->associate($request->department);
+
+    $agreementstring->save();
+
+    return 0;
   }
 
   /**
