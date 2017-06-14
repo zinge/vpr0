@@ -3,7 +3,7 @@ laravel 5.4 build
 
 My simple private project, for work, and for training development skills on laravel
 ## Install steps
-first install via [composer](http://getcomposer.org/), [laravel](https://laravel.com)
+first install [laravel](https://laravel.com) via [composer](http://getcomposer.org/)
 ```
 cd /home/lara
 composer create-project --prefer-dist laravel/laravel .
