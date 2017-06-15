@@ -24,7 +24,7 @@ git checkout origin/master -ft
 and run `composer update`
 
 ## Seed default admin
-Look files database/seeds/roleSeed.php, edit if need, and seed in the database
+Look files database/seeds/DefaultUser.php, edit if need, and seed in the database
 ```
 composer dump-autoload
 php artisan migrate:refresh
