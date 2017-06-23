@@ -152,6 +152,7 @@
         this.form.post('{{url($value['field'])}}')
         .then(response =>
           location.reload()
+          // $('#{{$value['field']}}Modal').modal('hide')
         );
       }
     }

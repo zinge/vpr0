@@ -48,43 +48,45 @@
           <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
             <ul class="nav navbar-nav">
-              &nbsp;
+              @if (Auth::guest())
+                &nbsp;
+              @else
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Справочники <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    {{--
+                    <li><a href="{{ url('/spravochnik/?q=ostr') }}">Орг. структура</a></li>
+                    <li><a href="{{ url('/spravochnik/?q=equip') }}">Оборудование</a></li>
+                    <li><a href="{{ url('/spravochnik/?q=tg') }}">Телефоны(городские)</a></li>
+                    <li><a href="{{ url('/spravochnik/?q=tm') }}">Телефоны(сотовые)</a></li>
+                    <li><a href="{{ url('/spravochnik/?q=wpls') }}">Рабочие места</a></li>
+                    --}}
+                    <li><a href="{{url('/employee')}}">Сотрудники</a></li>
+                    <li><a href="{{url('/equip')}}">Оборудование</a></li>
+                    <li><a href="{{url('/phone')}}">Телефоны</a></li>
+                    <li><a href="{{url('/phoneowner')}}">Телефон/владелец</a></li>
+                    <li><a href="{{url('/ipphone')}}">МАКи</a></li>
+                    <li><a href="{{url('/mobilephone')}}">Моб. телефоны</a></li>
+                  </ul>
+                </li>
 
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Справочники <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  {{--
-                  <li><a href="{{ url('/spravochnik/?q=ostr') }}">Орг. структура</a></li>
-                  <li><a href="{{ url('/spravochnik/?q=equip') }}">Оборудование</a></li>
-                  <li><a href="{{ url('/spravochnik/?q=tg') }}">Телефоны(городские)</a></li>
-                  <li><a href="{{ url('/spravochnik/?q=tm') }}">Телефоны(сотовые)</a></li>
-                  <li><a href="{{ url('/spravochnik/?q=wpls') }}">Рабочие места</a></li>
-                  --}}
-                  <li><a href="{{url('/employee')}}">Сотрудники</a></li>
-                  <li><a href="{{url('/equip')}}">Оборудование</a></li>
-                  <li><a href="{{url('/phone')}}">Телефоны</a></li>
-                  <li><a href="{{url('/phoneowner')}}">Телефон/владелец</a></li>
-                  <li><a href="{{url('/ipphone')}}">МАКи</a></li>
-                  <li><a href="{{url('/mobilephone')}}">Моб. телефоны</a></li>
-                </ul>
-              </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Договора <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{{url('/service')}}">Сервисы</a></li>
+                    <li><a href="{{url('/agreement')}}">Договора</a></li>
+                    <li><a href="{{url('/agreementstring')}}">Cтроки договора</a></li>
+                  </ul>
+                </li>
 
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Договора <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="{{url('/service')}}">Сервисы</a></li>
-                  <li><a href="{{url('/agreement')}}">Договора</a></li>
-                  <li><a href="{{url('/agreementstring')}}">Cтроки договора</a></li>
-                </ul>
-              </li>
-
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Актирование <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="{{url('/akt')}}">Акты</a></li>
-                  <li><a href="{{url('/aktstring')}}">Cтроки актов</a></li>
-                </ul>
-              </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Актирование <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{{url('/akt')}}">Акты</a></li>
+                    <li><a href="{{url('/aktstring')}}">Cтроки актов</a></li>
+                  </ul>
+                </li>
+              @endif
             </ul>
 
             <!-- Right Side Of Navbar -->
