@@ -3,13 +3,8 @@
   <div class="col-sm-7">
     <select class="form-control" id="{{$field}}" name="{{$field}}" v-model="form.{{$field}}">
       <option disabled value="">выбери одно</option>
-      {{--
-      @foreach ($data as $data)
-        <option value="{{$data['id']}}">{{$data['val']}}</option>
-      @endforeach
-      --}}
-      <template v-for="item in select{{$field}}">
-        <option :value="item['id']" v-text="item['val']"></option>
+      <template v-for="option in {{$field}}">
+        <option :value="option['id']" v-text="option['val']"></option>
       </template>
     </select>
 

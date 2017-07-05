@@ -124,7 +124,7 @@
 
       @foreach ($pageStructure as $value)
         @if ($value['type'] == 'list')
-          select{{$value['field']}}:[
+          {{$value['field']}}:[
             @foreach ($value['data'] as $a)
               { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
             @endforeach
