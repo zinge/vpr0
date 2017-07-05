@@ -6,7 +6,7 @@
       <div class="panel panel-default">
         <div class="panel-heading">{{$pageTitle}}</div>
         <div class="panel-body">
-          <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="collapse" href="#{{$pageHref}}AddForm" aria-expanded="false" aria-controls="{{$pageHref}}AddForm">добавить {{$pageTitle}}</button>
+          <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="collapse" href="#{{$pageHref}}AddForm" aria-expanded="false" aria-controls="{{$pageHref}}AddForm">{{$pageTitle}} добавить ?</button>
           <div class="collapse" id="{{$pageHref}}AddForm">
             <div class="well">
               <div class="panel">
@@ -17,9 +17,6 @@
                     {{ csrf_field() }}
 
                     @foreach ($pageStructure as $pageElement)
-                      {{--
-                      ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
-                      --}}
                       @include("modal._".$pageElement['type'], $pageElement)
                     @endforeach
 
@@ -123,7 +120,17 @@
         @foreach ($pageStructure as $value)
         {{$value['field']}}: ''{{$loop->last ? '' : ','}}
         @endforeach
-      })
+      }),
+
+      @foreach ($pageStructure as $value)
+        @if ($value['type'] == 'list')
+          select{{$value['field']}}:[
+            @foreach ($value['data'] as $a)
+              { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
+            @endforeach
+          ]{{$loop->last ? '' : ','}}
+        @endif
+      @endforeach
     },
 
     methods: {
@@ -144,7 +151,7 @@
         @foreach ($modalParams[$value['field']] as $pageElement)
         {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
         @endforeach
-      }),
+      })
     },
 
     methods: {
@@ -159,7 +166,5 @@
   });
   @endif
   @endforeach
-
-  </script>
-
+</script>
 @endsection
