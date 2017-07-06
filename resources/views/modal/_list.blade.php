@@ -4,7 +4,7 @@
     <select class="form-control" id="{{$field}}" name="{{$field}}" v-model="form.{{$field}}">
       <option disabled value="">выбери одно</option>
       <template v-for="option in {{$field}}">
-        <option :value="option['id']" v-text="option['val']"></option>
+        <option :value="option.id" v-text="option.val"></option>
       </template>
     </select>
 

@@ -112,23 +112,37 @@
   <script src="js/form.js" charset="utf-8"></script>
   <script>
 
+  var optionStorage ={
+    get: {
+      @foreach ($pageStructure as $value)
+        @if ($value['type'] == 'list')
+        {{$value['field']}}:[
+          @foreach ($value['data'] as $a)
+            { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
+          @endforeach
+        ]{{$loop->last ? '' : ','}}
+        @endif
+      @endforeach
+    },
+
+    save: function (newValue) {
+
+    }
+  }
+
   new Vue({
     el: '#{{$pageHref}}AddForm',
 
     data: {
       form: new Form({
         @foreach ($pageStructure as $value)
-        {{$value['field']}}: ''{{$loop->last ? '' : ','}}
+          {{$value['field']}}: ''{{$loop->last ? '' : ','}}
         @endforeach
       }),
 
       @foreach ($pageStructure as $value)
         @if ($value['type'] == 'list')
-          {{$value['field']}}:[
-            @foreach ($value['data'] as $a)
-              { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
-            @endforeach
-          ]{{$loop->last ? '' : ','}}
+          {{$value['field']}}: optionStorage.get.{{$value['field']}}{{$loop->last ? '' : ','}}
         @endif
       @endforeach
     },
@@ -142,29 +156,29 @@
   });
 
   @foreach ($pageStructure as $value)
-  @if ($value['type'] == 'list')
-  new Vue({
-    el: '#{{$value['field']}}Modal',
+    @if ($value['type'] == 'list')
+      new Vue({
+        el: '#{{$value['field']}}Modal',
 
-    data: {
-      form: new Form({
-        @foreach ($modalParams[$value['field']] as $pageElement)
-        {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
-        @endforeach
-      })
-    },
+        data: {
+          form: new Form({
+            @foreach ($modalParams[$value['field']] as $pageElement)
+              {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
+            @endforeach
+          })
+        },
 
-    methods: {
-      onSubmit() {
-        this.form.post('{{url($value['field'])}}')
-        .then(response =>
-          location.reload()
-          {{-- $('#{{$value['field']}}Modal').modal('hide')--}}
-        );
-      }
-    }
-  });
-  @endif
+        methods: {
+          onSubmit() {
+            this.form.post('{{url($value['field'])}}')
+            .then(response =>
+              location.reload()
+              {{-- $('#{{$value['field']}}Modal').modal('hide')--}}
+            );
+          }
+        }
+      });
+    @endif
   @endforeach
-</script>
+  </script>
 @endsection
