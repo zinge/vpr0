@@ -112,23 +112,17 @@
   <script src="js/form.js" charset="utf-8"></script>
   <script>
 
-  var optionStorage ={
-    get: {
+  var optionStorage = {
       @foreach ($pageStructure as $value)
         @if ($value['type'] == 'list')
-        {{$value['field']}}:[
+         {{$value['field']}}:[
           @foreach ($value['data'] as $a)
             { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
           @endforeach
         ]{{$loop->last ? '' : ','}}
         @endif
       @endforeach
-    },
-
-    save: function (newValue) {
-
-    }
-  }
+  };
 
   new Vue({
     el: '#{{$pageHref}}AddForm',
@@ -142,7 +136,7 @@
 
       @foreach ($pageStructure as $value)
         @if ($value['type'] == 'list')
-          {{$value['field']}}: optionStorage.get.{{$value['field']}}{{$loop->last ? '' : ','}}
+          {{$value['field']}}: optionStorage.{{$value['field']}}{{$loop->last ? '' : ','}}
         @endif
       @endforeach
     },

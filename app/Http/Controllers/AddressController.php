@@ -13,6 +13,31 @@ class AddressController extends Controller
   {
     $this->middleware('auth');
   }
+
+  private function createListData($className, $elementKeys)
+  {
+
+    $elementData = [];
+    $elementValues = '';
+
+    $className = 'App\\'.$className;
+    $className = new $className();
+
+    foreach ($className->get() as $element) {
+
+      foreach ($elementKeys as $key => $value) {
+        $elementValues = ($key ? $elementValues = $elementValues . ", " . $element->$value : $elementValues = $element->$value);
+      }
+
+      array_push($elementData, [
+        'id' => $element->id,
+        'val' => $elementValues
+      ]);
+    }
+
+    return $elementData;
+  }
+
   /**
   * Display a listing of the resource.
   *
@@ -21,17 +46,19 @@ class AddressController extends Controller
   public function index()
   {
     //
-    $pageSruture = [
-      ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
-      ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
-      ['type' => 'text', 'field' => 'house', 'desc' => 'дом'],
-      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
-    ];
+    // $pageSruture = [
+    //   ['type' => 'text', 'field' => 'city', 'desc' => 'город'],
+    //   ['type' => 'text', 'field' => 'street', 'desc' => 'улица'],
+    //   ['type' => 'text', 'field' => 'house', 'desc' => 'дом'],
+    //   ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный ?']
+    // ];
+    //
+    // return [
+    //   'pageParams' => Address::get(['id','city','street','house', 'active']),
+    //   'pageSruture' => $pageSruture
+    // ];
+    return $this->createListData('Address', ['city', 'street', 'house']);
 
-    return [
-      'pageParams' => Address::get(['id','city','street','house', 'active']),
-      'pageSruture' => $pageSruture
-    ];
   }
 
   /**

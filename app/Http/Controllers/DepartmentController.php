@@ -12,6 +12,31 @@ class DepartmentController extends Controller
   {
     $this->middleware('auth');
   }
+
+  private function createListData($className, $elementKeys)
+  {
+
+    $elementData = [];
+    $elementValues = '';
+
+    $className = 'App\\'.$className;
+    $className = new $className();
+
+    foreach ($className->get() as $element) {
+
+      foreach ($elementKeys as $key => $value) {
+        $elementValues = ($key ? $elementValues = $elementValues . ", " . $element->$value : $elementValues = $element->$value);
+      }
+
+      array_push($elementData, [
+        'id' => $element->id,
+        'val' => $elementValues
+      ]);
+    }
+
+    return $elementData;
+  }
+
   /**
   * Display a listing of the resource.
   *
@@ -20,16 +45,17 @@ class DepartmentController extends Controller
   public function index()
   {
     //
-    $pageSruture = [
-      ['type' => 'text', 'field' => 'name', 'desc' => 'наименование' ],
-      ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
-    ];
+    // $pageSruture = [
+    //   ['type' => 'text', 'field' => 'name', 'desc' => 'наименование' ],
+    //   ['type' => 'checkbox', 'field' => 'active', 'desc' => 'активный?']
+    // ];
+    //
+    // return [
+    //   'pageParams' => Department::get(['id','name','active']),
+    //   'pageSruture' => $pageSruture
+    // ];
 
-    return [
-      'pageParams' => Department::get(['id','name','active']),
-      'pageSruture' => $pageSruture
-    ];
-
+    return $this->createListData('Department', ['name']);  
   }
 
 
