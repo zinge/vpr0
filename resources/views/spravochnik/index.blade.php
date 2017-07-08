@@ -124,6 +124,37 @@
       @endforeach
   };
 
+  var store = {
+    debug: true,
+
+    data: {
+      address: this.getAddress,
+      department: {}
+    },
+
+    getAddress(){
+      if (this.debug){
+        console.log('getAddress вызвано')
+      }
+
+      var zz = axios.get('/address').then(function (response) {
+         return response.data
+      })
+
+      return zz;
+    },
+
+    getDepartment(){
+      if (this.debug) {
+        console.log('getDepartment вызвано');
+      }
+
+      axios.get('/department').then(function (response) {
+        console.log(response.data)
+      })
+    }
+  }
+
   new Vue({
     el: '#{{$pageHref}}AddForm',
 
