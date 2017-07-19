@@ -112,63 +112,24 @@
   <script src="js/form.js" charset="utf-8"></script>
   <script>
 
-  var optionStorage = {
-      @foreach ($pageStructure as $value)
-        @if ($value['type'] == 'list')
-         {{$value['field']}}:[
-          @foreach ($value['data'] as $a)
-            { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
-          @endforeach
-        ]{{$loop->last ? '' : ','}}
-        @endif
-      @endforeach
-  };
-
-  var store = {
-    debug: true,
-
-    data: {
-      address: this.getAddress,
-      department: {}
-    },
-
-    getAddress(){
-      if (this.debug){
-        console.log('getAddress вызвано')
-      }
-
-      var zz = axios.get('/address').then(function (response) {
-         return response.data
-      })
-
-      return zz;
-    },
-
-    getDepartment(){
-      if (this.debug) {
-        console.log('getDepartment вызвано');
-      }
-
-      axios.get('/department').then(function (response) {
-        console.log(response.data)
-      })
-    }
-  }
-
-  new Vue({
+  var mv = new Vue({
     el: '#{{$pageHref}}AddForm',
 
     data: {
       form: new Form({
         @foreach ($pageStructure as $value)
-          {{$value['field']}}: ''{{$loop->last ? '' : ','}}
+        {{$value['field']}}: ''{{$loop->last ? '' : ','}}
         @endforeach
       }),
 
       @foreach ($pageStructure as $value)
-        @if ($value['type'] == 'list')
-          {{$value['field']}}: optionStorage.{{$value['field']}}{{$loop->last ? '' : ','}}
-        @endif
+      @if ($value['type'] == 'list')
+      {{$value['field']}}:[
+        @foreach ($value['data'] as $a)
+        { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
+        @endforeach
+      ]{{$loop->last ? '' : ','}}
+      @endif
       @endforeach
     },
 
@@ -176,34 +137,42 @@
       onSubmit() {
         this.form.post('{{url($pageHref)}}')
         .then(response => location.reload());
+      },
+
+      getDepartment() {
+        axios.get('/department').then( response => this.department = response.data );
+      },
+
+      getAddress(){
+        axios.get('/address').then( response => this.address = response.data );
       }
     }
   });
 
   @foreach ($pageStructure as $value)
-    @if ($value['type'] == 'list')
-      new Vue({
-        el: '#{{$value['field']}}Modal',
+  @if ($value['type'] == 'list')
+  new Vue({
+    el: '#{{$value['field']}}Modal',
 
-        data: {
-          form: new Form({
-            @foreach ($modalParams[$value['field']] as $pageElement)
-              {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
-            @endforeach
-          })
-        },
+    data: {
+      form: new Form({
+        @foreach ($modalParams[$value['field']] as $pageElement)
+        {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
+        @endforeach
+      })
+    },
 
-        methods: {
-          onSubmit() {
-            this.form.post('{{url($value['field'])}}')
-            .then(response =>
-              location.reload()
-              {{-- $('#{{$value['field']}}Modal').modal('hide')--}}
-            );
-          }
-        }
-      });
-    @endif
+    methods: {
+      onSubmit() {
+        this.form.post('{{url($value['field'])}}')
+        .then(response =>
+          location.reload()
+          {{-- $('#{{$value['field']}}Modal').modal('hide')--}}
+        );
+      }
+    }
+  });
+  @endif
   @endforeach
   </script>
 @endsection
