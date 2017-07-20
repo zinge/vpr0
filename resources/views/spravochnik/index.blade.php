@@ -139,13 +139,13 @@
         .then(response => location.reload());
       },
 
-      getDepartment() {
-        axios.get('/department').then( response => this.department = response.data );
-      },
-
-      getAddress(){
-        axios.get('/address').then( response => this.address = response.data );
-      }
+      @foreach ($pageStructure as $value)
+        @if ($value['type'] == 'list')
+            get{{$value['field']}}(){
+              axios.get('{{url($value['field'])}}').then(response => this.{{$value['field']}} = response.data);
+            }{{$loop->last ? '' : ','}}
+        @endif
+      @endforeach
     }
   });
 
@@ -165,10 +165,8 @@
     methods: {
       onSubmit() {
         this.form.post('{{url($value['field'])}}')
-        .then(response =>
-          location.reload()
-          {{-- $('#{{$value['field']}}Modal').modal('hide')--}}
-        );
+        .then(response => mv.get{{$value['field']}}());
+        $('#{{$value['field']}}Modal').modal('hide');
       }
     }
   });

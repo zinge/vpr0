@@ -11,6 +11,29 @@ class EquipModelController extends Controller
   {
     $this->middleware('auth');
   }
+  private function createListData($className, $elementKeys, $separator)
+  {
+
+    $elementData = [];
+    $elementValues = '';
+
+    $className = 'App\\'.$className;
+    $className = new $className();
+
+    foreach ($className->get() as $element) {
+
+      foreach ($elementKeys as $key => $value) {
+        $elementValues = $key ? $elementValues = $elementValues . $separator . " " . $element->$value : $elementValues = $element->$value;
+      }
+
+      array_push($elementData, [
+        'id' => $element->id,
+        'val' => $elementValues
+      ]);
+    }
+
+    return $elementData;
+  }
   /**
   * Display a listing of the resource.
   *
@@ -19,14 +42,7 @@ class EquipModelController extends Controller
   public function index()
   {
     //
-    $pageSruture = [
-      ['model' => 'text', 'field' => 'name', 'desc' => 'наименование'],
-    ];
-
-    return [
-      'pageParams' => EquipModel::get(['id','name']),
-      'pageSruture' => $pageSruture
-    ];
+    return $this->createListData('EquipModel', ['name'], ',');
   }
 
   /**

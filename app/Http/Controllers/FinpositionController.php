@@ -12,6 +12,29 @@ class FinpositionController extends Controller
     $this->middleware('auth');
   }
 
+  private function createListData($className, $elementKeys)
+  {
+
+    $elementData = [];
+    $elementValues = '';
+
+    $className = 'App\\'.$className;
+    $className = new $className();
+
+    foreach ($className->get() as $element) {
+
+      foreach ($elementKeys as $key => $value) {
+        $elementValues = ($key ? $elementValues = $elementValues . ", " . $element->$value : $elementValues = $element->$value);
+      }
+
+      array_push($elementData, [
+        'id' => $element->id,
+        'val' => $elementValues
+      ]);
+    }
+
+    return $elementData;
+  }
   /**
   * Display a listing of the resource.
   *
@@ -20,6 +43,7 @@ class FinpositionController extends Controller
   public function index()
   {
     //
+    return $this->createListData('Finposition', ['code', 'name']);
   }
 
   /**

@@ -11,6 +11,29 @@ class MobileTypeController extends Controller
   {
     $this->middleware('auth');
   }
+  private function createListData($className, $elementKeys, $separator)
+  {
+
+    $elementData = [];
+    $elementValues = '';
+
+    $className = 'App\\'.$className;
+    $className = new $className();
+
+    foreach ($className->get() as $element) {
+
+      foreach ($elementKeys as $key => $value) {
+        $elementValues = $key ? $elementValues = $elementValues . $separator . " " . $element->$value : $elementValues = $element->$value;
+      }
+
+      array_push($elementData, [
+        'id' => $element->id,
+        'val' => $elementValues
+      ]);
+    }
+
+    return $elementData;
+  }
   /**
   * Display a listing of the resource.
   *
@@ -18,15 +41,7 @@ class MobileTypeController extends Controller
   */
   public function index()
   {
-    //
-    // $pageSruture = [
-    //   ['type' => 'text', 'field' => 'name', 'desc' => 'тип'],
-    // ];
-    //
-    // return [
-    //   'pageParams' => MobileType::get(['id','name']),
-    //   'pageSruture' => $pageSruture
-    // ];
+    return $this->createListData('MobileType', ['name'], '');
   }
 
   /**

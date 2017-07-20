@@ -74,7 +74,7 @@
 
   <script src="../../js/form.js" charset="utf-8"></script>
   <script>
-  new Vue({
+  var mv = new Vue({
     el: '#{{$pageHref}}EditForm',
 
     data: {
@@ -82,7 +82,18 @@
         @foreach ($pageStructure as $value)
         {{$value['field']}}: '{{$pageParams[0][$value['field']]}}'{{$loop->last ? '' : ','}}
         @endforeach
-      })
+      }),
+
+      @foreach ($pageStructure as $value)
+      @if ($value['type'] == 'list')
+      {{$value['field']}}:[
+        @foreach ($value['data'] as $a)
+        { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
+        @endforeach
+      ]{{$loop->last ? '' : ','}}
+      @endif
+      @endforeach
+
     },
 
     methods: {
@@ -91,7 +102,16 @@
         .then(response => {
           location.replace('{{url($pageHref)}}')
         });
-      }
+      },
+
+      @foreach ($pageStructure as $value)
+        @if ($value['type'] == 'list')
+            get{{$value['field']}}(){
+              axios.get('{{url($value['field'])}}').then(response => this.{{$value['field']}} = response.data);
+            }{{$loop->last ? '' : ','}}
+        @endif
+      @endforeach
+
     }
   });
 
@@ -110,11 +130,9 @@
 
     methods: {
       onSubmit() {
-
         this.form.post('{{url($value['field'])}}')
-        .then(response => {
-          location.reload()
-        });
+        .then(response => mv.get{{$value['field']}}());
+        $('#{{$value['field']}}Modal').modal('hide');
       }
     }
   });
