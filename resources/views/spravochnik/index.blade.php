@@ -118,7 +118,9 @@
     data: {
       form: new Form({
         @foreach ($pageStructure as $value)
-        {{$value['field']}}: ''{{$loop->last ? '' : ','}}
+          @if (($value['type'] != 'none') and ($value['type'] != 'file'))
+            {{$value['field']}}: ''{{$loop->last ? '' : ','}}
+          @endif
         @endforeach
       }),
 

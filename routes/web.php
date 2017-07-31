@@ -46,3 +46,5 @@ Route::resource('/agreementstring', 'AgreementStringController');
 
 Route::resource('/akt', 'AktController');
 Route::resource('/aktstring', 'AktstringController');
+
+Route::resource('/fu', 'UploadFilesController');
