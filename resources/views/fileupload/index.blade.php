@@ -13,7 +13,7 @@
                 {{--<div class="panel panel-heading">заполните форму</div>--}}
                 <div class="panel-body">
 
-                  <form method="post" action="{{url($pageHref)}}" class="form-horizontal">
+                  <form method="post" action="{{url($pageHref)}}" class="form-horizontal" enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     @foreach ($pageStructure as $pageElement)
@@ -42,6 +42,7 @@
                     @foreach ($pageStructure as $value)
                       <th>{{ $value['desc'] }}</th>
                     @endforeach
+                    <th>&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -50,6 +51,14 @@
                       @foreach ($tableContent as $key => $value)
                         <td>{{ $value }}</td>
                       @endforeach
+                      <td>
+                        <form action="{{url($pageHref."/".$tableContent['id'])}}" method="post">
+                          {{ csrf_field() }}
+                          {{ method_field('delete')}}
+
+                          <button type="submit" class="btn btn-xs btn-danger" name="del">del</button>
+                        </form>
+                      </td>
                     </tr>
                   @endforeach
                 </tbody>

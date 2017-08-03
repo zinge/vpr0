@@ -5,11 +5,7 @@ namespace App\Http\Controllers;
 use App\UploadFiles;
 use Illuminate\Http\Request;
 
-use Illuminate\Routing\Controller;
-
-// use Storage;
 use Illuminate\Support\Facades\Storage;
-//use Symphony\Component\HttpFundantion\File\UplodedFile;
 
 class UploadFilesController extends Controller
 {
@@ -84,23 +80,22 @@ class UploadFilesController extends Controller
   {
     //
 
-    $file = $request->file_name;
-    dd($file);
-    // $file_info = [
-    //   'file_mime' => Storage::getMimetype($request->file('file_name'))
-    // ];
-    // return $file_info;
-    // $fileExt = ""; #$file->getClientOriginalExtension();
-    // Storage::disk('local')->put(
-    //     'files/'.$file->getFilename().'.'.$fileExt,
-    //     file_get_contents($file->getRealPath())
-    // );
-    // UploadFiles::create([
-    //     'mime_type' => $file->getClientMimeType(),
-    //     'original_filename' => $file->getClientOriginalName(),
-    //     'file_name' => 'files/'.$file->getFilename().'.'.$fileExt,
-    // ]);
-    // return redirect('/fu');
+    $this->validate($request,[
+      'file_name' => ['file', 'mimetypes:text/plain,text/csv', 'mimes:txt,csv']
+    ]);
+
+    $file = $request->file('file_name');
+    $fileExt = $file->getClientOriginalExtension();
+    Storage::disk('local')->put(
+        'files/'.$file->getFilename().'.'.$fileExt,
+        file_get_contents($file->getRealPath())
+    );
+    UploadFiles::create([
+        'mime_type' => $file->getClientMimeType(),
+        'original_filename' => $file->getClientOriginalName(),
+        'file_name' => 'files/'.$file->getFilename().'.'.$fileExt,
+    ]);
+    return redirect('/fu');
   }
 
   /**
@@ -146,5 +141,11 @@ class UploadFilesController extends Controller
   public function destroy(UploadFiles $uploadFiles)
   {
     //
+    Storage::delete($uploadFiles->file_name);
+
+    $uploadFiles->delete();
+
+    return redirect('/fu');
+
   }
 }
