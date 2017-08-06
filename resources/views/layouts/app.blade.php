@@ -86,6 +86,14 @@
                     <li><a href="{{url('/aktstring')}}">Cтроки актов</a></li>
                   </ul>
                 </li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Файлы <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{{url('/fu')}}">Загрузки</a></li>
+                  </ul>
+                </li>
+
               @endif
             </ul>
 

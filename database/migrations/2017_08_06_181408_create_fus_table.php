@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUploadFilesTable extends Migration
+class CreateFusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUploadFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('upload_files', function (Blueprint $table) {
+        Schema::create('fus', function (Blueprint $table) {
             $table->increments('id');
             $table->string('file_name');
             $table->string('mime_type');
@@ -29,6 +29,6 @@ class CreateUploadFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('upload_files');
+        Schema::dropIfExists('fus');
     }
 }

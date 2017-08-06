@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\UploadFiles;
+use App\Fu;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Storage;
+use Storage;
 
-class UploadFilesController extends Controller
+class FuController extends Controller
 {
   public function __construct()
   {
@@ -29,7 +29,7 @@ class UploadFilesController extends Controller
   {
     $pageParams = [];
 
-    $files = $id ? UploadFiles::find([$id]) : UploadFiles::get();
+    $files = $id ? Fu::find([$id]) : Fu::get();
 
     foreach ($files as $file) {
       array_push($pageParams, [
@@ -42,8 +42,6 @@ class UploadFilesController extends Controller
 
     return $pageParams;
   }
-
-
   /**
   * Display a listing of the resource.
   *
@@ -57,7 +55,6 @@ class UploadFilesController extends Controller
     ->with('pageParams', $this->createPageParams(''))
     ->with('pageTitle', 'файл')
     ->with('pageHref', 'fu');
-
   }
 
   /**
@@ -79,7 +76,6 @@ class UploadFilesController extends Controller
   public function store(Request $request)
   {
     //
-
     $this->validate($request,[
       'file_name' => ['file', 'mimetypes:text/plain,text/csv', 'mimes:txt,csv']
     ]);
@@ -90,7 +86,7 @@ class UploadFilesController extends Controller
         'files/'.$file->getFilename().'.'.$fileExt,
         file_get_contents($file->getRealPath())
     );
-    UploadFiles::create([
+    Fu::create([
         'mime_type' => $file->getClientMimeType(),
         'original_filename' => $file->getClientOriginalName(),
         'file_name' => 'files/'.$file->getFilename().'.'.$fileExt,
@@ -101,10 +97,10 @@ class UploadFilesController extends Controller
   /**
   * Display the specified resource.
   *
-  * @param  \App\UploadFiles  $uploadFiles
+  * @param  \App\Fu  $fu
   * @return \Illuminate\Http\Response
   */
-  public function show(UploadFiles $uploadFiles)
+  public function show(Fu $fu)
   {
     //
   }
@@ -112,10 +108,10 @@ class UploadFilesController extends Controller
   /**
   * Show the form for editing the specified resource.
   *
-  * @param  \App\UploadFiles  $uploadFiles
+  * @param  \App\Fu  $fu
   * @return \Illuminate\Http\Response
   */
-  public function edit(UploadFiles $uploadFiles)
+  public function edit(Fu $fu)
   {
     //
   }
@@ -124,10 +120,10 @@ class UploadFilesController extends Controller
   * Update the specified resource in storage.
   *
   * @param  \Illuminate\Http\Request  $request
-  * @param  \App\UploadFiles  $uploadFiles
+  * @param  \App\Fu  $fu
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, UploadFiles $uploadFiles)
+  public function update(Request $request, Fu $fu)
   {
     //
   }
@@ -135,15 +131,15 @@ class UploadFilesController extends Controller
   /**
   * Remove the specified resource from storage.
   *
-  * @param  \App\UploadFiles  $uploadFiles
+  * @param  \App\Fu  $fu
   * @return \Illuminate\Http\Response
   */
-  public function destroy(UploadFiles $uploadFiles)
+  public function destroy(Fu $fu)
   {
     //
-    Storage::delete($uploadFiles->file_name);
+    Storage::delete($fu->file_name);
 
-    $uploadFiles->delete();
+    $fu->delete();
 
     return redirect('/fu');
 
