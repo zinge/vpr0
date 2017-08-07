@@ -83,13 +83,13 @@ class FuController extends Controller
     $file = $request->file('file_name');
     $fileExt = $file->getClientOriginalExtension();
     Storage::disk('local')->put(
-        'files/'.$file->getFilename().'.'.$fileExt,
-        file_get_contents($file->getRealPath())
+      'files/'.$file->getFilename().'.'.$fileExt,
+      file_get_contents($file->getRealPath())
     );
     Fu::create([
-        'mime_type' => $file->getClientMimeType(),
-        'original_filename' => $file->getClientOriginalName(),
-        'file_name' => 'files/'.$file->getFilename().'.'.$fileExt,
+      'mime_type' => $file->getClientMimeType(),
+      'original_filename' => $file->getClientOriginalName(),
+      'file_name' => 'files/'.$file->getFilename().'.'.$fileExt,
     ]);
     return redirect('/fu');
   }
