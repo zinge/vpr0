@@ -77,7 +77,7 @@ class FuController extends Controller
   {
     //
     $this->validate($request,[
-      'file_name' => ['file', 'mimetypes:text/plain,text/csv', 'mimes:txt,csv']
+      'file_name' => ['file', 'mimes:txt,csv', 'mimetypes:text/plain,text/csv']
     ]);
 
     $file = $request->file('file_name');
