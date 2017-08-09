@@ -43,6 +43,7 @@
                       <th>{{ $value['desc'] }}</th>
                     @endforeach
                     <th>&nbsp;</th>
+                    <th>&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -57,6 +58,13 @@
                           {{ method_field('delete')}}
 
                           <button type="submit" class="btn btn-xs btn-danger" name="del">del</button>
+                        </form>
+                      </td>
+                      <td>
+                        <form action="{{url($pageHref."/".$tableContent['id'])}}" method="get">
+                          {{ csrf_field() }}
+
+                          <button type="submit" class="btn btn-xs btn-default" name="load">load</button>
                         </form>
                       </td>
                     </tr>

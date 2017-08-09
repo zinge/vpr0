@@ -77,7 +77,7 @@ class FuController extends Controller
   {
     //
     $this->validate($request,[
-      'file_name' => ['file', 'mimes:txt,csv', 'mimetypes:text/plain,text/csv']
+      'file_name' => ['file', 'mimes:csv,txt', 'mimetypes:text/csv,text/plain']
     ]);
 
     $file = $request->file('file_name');
@@ -103,6 +103,7 @@ class FuController extends Controller
   public function show(Fu $fu)
   {
     //
+    dd($fu);
   }
 
   /**
