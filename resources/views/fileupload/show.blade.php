@@ -35,7 +35,7 @@
             @foreach ($uploadTables as $element)
               {{$element['name']}}: {desc: '{{$element['desc']}}', fields: {
                 @foreach ($element['fields'] as $key => $value)
-                  {{$key}}: '{{$value}}'{{$loop->last ? '' : ','}}
+                  '{{$value}}': {pos: '{{$key}}', val: ''}{{$loop->last ? '' : ','}}
                 @endforeach
               }}{{$loop->last ? '' : ','}}
             @endforeach
