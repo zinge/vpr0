@@ -25,6 +25,66 @@ class FuController extends Controller
         return $pageStructure;
     }
 
+    private function uploadTables()
+    {
+        $tableStructure = [
+            ['name' => 'employee', 'desc' => 'сотрудник', 'fields' => [
+                'firstname' => 'имя',
+                'patronymic' => 'отчество',
+                'surname' => 'фамилия',
+                'department' => 'отдел',
+                'address' => 'адрес'
+            ]],
+            ['name' => 'equip', 'desc' => 'оборудование','fields' => [
+                'name' => 'наименование',
+                'manufacturer' => 'производитель',
+                'equip_type' => 'тип',
+                'equip_model' => 'модель',
+                'employee' => 'сотрудник',
+                'initial_date' => 'дата ввода',
+                'initial_cost' => 'балансовая стоимость',
+                'serial_number' => 'серийный',
+                'sap_number' => 'SAP',
+                'manufacturer_number' => 'заводской'
+            ]],
+            ['name' => 'phone', 'desc' => 'телефон', 'fields' => [
+                'number' => 'номер',
+                'phone_type' => 'тип',
+                'employee' => 'сотрудник',
+                'macaddr' => 'MAC'
+            ]],
+            ['name' => 'mobile_phone', 'desc' => 'мобильный телефон', 'fields' => [
+                'number' => 'номер',
+                'mobile_type' => 'тип',
+                'mobile_limit' => 'лимит',
+                'employee' => 'сотрудник'
+            ]],
+            ['name' => 'service', 'desc' => 'сервис', 'fields' => [
+                'name' => 'наименование',
+                'agreement' => 'договор',
+                'initial_date' => 'дата ввода',
+                'end_date' => 'дата окончания',
+                'contractor' => 'подрядчик',
+                'cost' => 'расценка сервиса',
+                'finposition' => 'финпозиция сервиса',
+                'physical' => 'физ. обьем',
+                'summ_cost' => 'итого по сервису',
+                'department' => 'МВЗ'
+            ]],
+            ['name' => 'aktstring', 'desc' => 'актирование', 'fields' => [
+                'akt' => 'наименование акта',
+                'billing_date' => 'дата акта',
+                'billing_month' => 'расчетный месяц',
+                'agreement' => 'договор',
+                'service' => 'сервис',
+                'physical' => 'физ. обьем',
+                'summ_cost' => 'итого по сервису'
+            ]]
+        ];
+
+        return $tableStructure;
+    }
+
     /**
      * Create main table in page params
      *
@@ -113,7 +173,9 @@ class FuController extends Controller
             $csvData = array_map('str_getcsv', str_getcsv($handle, "\n"));
         }
         return view('fileupload.show')
-        ->with('tableData', count($csvData) > 3 ? array_slice($csvData, 0, 3) : $csvData);
+        ->with('tableData', count($csvData) > 3 ? array_slice($csvData, 0, 3) : $csvData)
+        ->with('uploadTables', $this->uploadTables());
+        // dd($this->uploadTables());
     }
 
     /**

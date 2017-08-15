@@ -17,9 +17,30 @@
                           </tr>
                           @endforeach
                        </tbody>
-                   </table> 
+                   </table>
+                </div>
+
+                <div id="tab">
+                  {{-- {{ dd($uploadTables) }} --}}
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+      new Vue({
+        el: '#tab',
+        data: {
+           uploadTables: {
+            @foreach ($uploadTables as $element)
+              {{$element['name']}}: {desc: '{{$element['desc']}}', fields: {
+                @foreach ($element['fields'] as $key => $value)
+                  {{$key}}: '{{$value}}'{{$loop->last ? '' : ','}}
+                @endforeach
+              }}{{$loop->last ? '' : ','}}
+            @endforeach
+          }
+        }
+      });
+    </script>
 @endsection
