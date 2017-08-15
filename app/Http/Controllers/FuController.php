@@ -109,17 +109,18 @@ class FuController extends Controller
     public function show(Fu $fu)
     {
         //
-        $csvData = [];
         if (($handle = Storage::disk('local')->get($fu->file_name)) !== false) {
             $csvData = array_map('str_getcsv', str_getcsv($handle, "\n"));
         }
-        return $csvData;
+        return view('fileupload.show')
+        ->with('tableData', count($csvData) > 3 ? array_slice($csvData, 0, 3) : $csvData);
     }
 
     /**
     * Show the form for editing the specified resource.
     *
     * @param  \App\Fu  $fu
+    * @return \Illuminate\Http\Response
     * @return \Illuminate\Http\Response
     */
     public function edit(Fu $fu)
