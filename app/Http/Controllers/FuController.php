@@ -109,7 +109,11 @@ class FuController extends Controller
     public function show(Fu $fu)
     {
         //
-        dd($fu);
+        $csvData = [];
+        if (($handle = Storage::disk('local')->get($fu->file_name)) !== false) {
+            $csvData = array_map('str_getcsv', str_getcsv($handle, "\n"));
+        }
+        return $csvData;
     }
 
     /**
