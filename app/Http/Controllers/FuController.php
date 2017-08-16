@@ -6,6 +6,7 @@ use App\Fu;
 use Illuminate\Http\Request;
 
 use Storage;
+use Schema;
 
 class FuController extends Controller
 {
@@ -153,9 +154,9 @@ class FuController extends Controller
             file_get_contents($file->getRealPath())
         );
         Fu::create([
-        'mime_type' => $file->getClientMimeType(),
-        'original_filename' => $file->getClientOriginalName(),
-        'file_name' => 'files/'.$file->getFilename().'.'.$fileExt,
+          'mime_type' => $file->getClientMimeType(),
+          'original_filename' => $file->getClientOriginalName(),
+          'file_name' => 'files/'.$file->getFilename().'.'.$fileExt,
         ]);
         return redirect('/fu');
     }
@@ -202,8 +203,13 @@ class FuController extends Controller
     {
         //
         $input = $request->except('_token', '_method');
+          if (array_key_exists('tabName', $input)) {
+            $tabName = $input['tabName'];
 
-        dd($input);
+            unset($input['tabName']);
+
+            dd($input);
+          }
     }
 
     /**
