@@ -26,7 +26,7 @@
 
           <div id="tab">
             {{-- {{ dd($uploadTables) }} --}}
-            <form action="{{url($pageHref."/".$pageParams[0]['id'])}}" method="post">
+            <form action="{{url($pageHref."/".$pageParams[0]['id'])}}" method="post" name="tst">
               {{ csrf_field() }}
               {{ method_field('put') }}
               <div class="form-group">
@@ -50,11 +50,7 @@
                       <tr>
                         <td v-for="(item, index) in uploadTables[tabName]">
                           <select v-model="item.val" :name="item.pos">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>0</option>
-                            <option>3</option>
-                            <option>4</option>
+                            <option v-for="n in Object.keys(uploadTables[tabName]).length">@{{n}}</option>
                           </select>
                       </tr>
                     </tbody>
