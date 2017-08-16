@@ -9,7 +9,6 @@
         <div class="panel-heading">{{$pageTitle}}</div>
         <div class="panel-body">
 
-          {{-- {{ dd($tableData) }} --}}
           <div class="table-responsive">
             <table  class="table table-hover table-bordered">
               <tbody>
@@ -24,34 +23,32 @@
             </table>
           </div>
 
-          <div id="tab">
-            {{-- {{ dd($uploadTables) }} --}}
-            <form action="{{url($pageHref."/".$pageParams[0]['id'])}}" method="post" name="tst">
-              {{ csrf_field() }}
-              {{ method_field('put') }}
-              <div class="form-group">
-                <select v-model="tabName" name="tabName" @change="onChange">
-                  <option disabled value="">Выбери таблицу для загрузки файла</option>
-                  <option v-for="(item, index) in uploadTables" >@{{ index }}</option>
-                </select>
+          <div id="tab">           <form action="{{url($pageHref."/".$pageParams[0]['id'])}}" method="post" name="tst">
+            {{ csrf_field() }}
+            {{ method_field('put') }}
+            <div class="form-group">
+              <select v-model="tabName" name="tabName" @change="onChange">
+                <option disabled value="">Выбери таблицу для загрузки файла</option>
+                <option v-for="(item, index) in uploadTables" >@{{ index }}</option>
+              </select>
 
-                <span>Загружаем в таблицу: @{{ tabName }}</span>
-              </div>
+              <span>Загружаем в таблицу: @{{ tabName }}</span>
+            </div>
 
-              <div v-if="showFields" class="form-group">
-                <div class="table-responsive">
-                  <table class="table table-hover table-bordered">
-                    <thead>
-                      <tr>
-                        <th v-for="(item, index) in uploadTables[tabName]">@{{index}}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td v-for="(item, index) in uploadTables[tabName]">
-                          <select v-model="item.val" :name="item.pos">
-                            <option v-for="n in Object.keys(uploadTables[tabName]).length">@{{n}}</option>
-                          </select>
+            <div v-if="showFields" class="form-group">
+              <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th v-for="(item, index) in uploadTables[tabName]">@{{index}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td v-for="(item, index) in uploadTables[tabName]">
+                        <select v-model="item.val" :name="item.pos">
+                          <option v-for="n in Object.keys(uploadTables[tabName]).length">@{{ n }}</option>
+                        </select>
                       </tr>
                     </tbody>
                   </table>
@@ -68,9 +65,6 @@
   </div>
 
   <script>
-  Vue.component('fields', {
-    template: '',
-  });
 
   new Vue({
     el: '#tab',
