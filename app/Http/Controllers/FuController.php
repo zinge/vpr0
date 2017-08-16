@@ -176,8 +176,7 @@ class FuController extends Controller
         ->with('tableData', count($csvData) > 3 ? array_slice($csvData, 0, 3) : $csvData)
         ->with('uploadTables', $this->uploadTables())
         ->with('pageHref', 'fu')
-        ->with('pageTitle', $fu->file_name)
-        ->with('pageParams', $this->createPageParams($fu->id));
+        ->with('pageParams', ['id' => $fu->id, 'file_name' => $fu->file_name]);
     }
 
     /**
@@ -202,7 +201,8 @@ class FuController extends Controller
     public function update(Request $request, Fu $fu)
     {
         //
-        $input = $request->except('_token', '_method', 'load');
+        $input = $request->except('_token', '_method');
+
         dd($input);
     }
 
