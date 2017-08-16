@@ -178,7 +178,6 @@ class FuController extends Controller
         ->with('pageHref', 'fu')
         ->with('pageTitle', $fu->file_name)
         ->with('pageParams', $this->createPageParams($fu->id));
-        // dd($this->uploadTables());
     }
 
     /**
@@ -203,7 +202,8 @@ class FuController extends Controller
     public function update(Request $request, Fu $fu)
     {
         //
-        dd($request);
+        $input = $request->except('_token', '_method', 'load');
+        dd($input);
     }
 
     /**
