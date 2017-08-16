@@ -229,7 +229,10 @@ class FuController extends Controller
         }
         return view('fileupload.show')
         ->with('tableData', count($csvData) > 3 ? array_slice($csvData, 0, 3) : $csvData)
-        ->with('uploadTables', $this->uploadTables());
+        ->with('uploadTables', $this->uploadTables())
+        ->with('pageHref', 'fu')
+        ->with('pageTitle', $fu->file_name)
+        ->with('pageParams', $this->createPageParams($fu->id));
         // dd($this->uploadTables());
     }
 
@@ -255,6 +258,7 @@ class FuController extends Controller
     public function update(Request $request, Fu $fu)
     {
         //
+        dd($fu);
     }
 
     /**
