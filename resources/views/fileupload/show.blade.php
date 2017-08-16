@@ -26,7 +26,7 @@
 
           <div id="tab">
             {{-- {{ dd($uploadTables) }} --}}
-            <form class="" action="{{url($pageHref."/".$pageParams[0]['id'])}}" method="post">
+            <form action="{{url($pageHref."/".$pageParams[0]['id'])}}" method="post">
               {{ csrf_field() }}
               {{ method_field('put') }}
               <div class="form-group">
@@ -43,14 +43,19 @@
                   <table class="table table-hover table-bordered">
                     <thead>
                       <tr>
-                        <th v-for="(val, key, index) in uploadTables[tabName]">@{{index}}</th>
+                        <th v-for="(item, index) in uploadTables[tabName]">@{{index}}</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
+                        <td v-for="(item, index) in uploadTables[tabName]">
+                          <select v-model="item.val" :name="item.pos">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>0</option>
+                            <option>3</option>
+                            <option>4</option>
+                          </select>
                       </tr>
                     </tbody>
                   </table>

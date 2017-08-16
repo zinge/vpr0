@@ -258,7 +258,7 @@ class FuController extends Controller
     public function update(Request $request, Fu $fu)
     {
         //
-        dd($fu);
+        dd($request);
     }
 
     /**
