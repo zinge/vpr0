@@ -6,11 +6,16 @@ use App\Fu;
 use Illuminate\Http\Request;
 
 use Storage;
-use Schema;
+// use Schema;
 
 use App\Employee;
 use App\Department;
 use App\Address;
+
+use App\Phone;
+use App\PhoneType;
+use App\IpPhone;
+
 
 class FuController extends Controller
 {
@@ -113,11 +118,17 @@ class FuController extends Controller
         return $pageParams;
     }
 
-    private function loadInEmployees($file, $params)
+    private function csvToArray($file)
     {
       if (($handle = Storage::disk('local')->get($file->file_name)) !== false) {
-          $csvData = array_map('str_getcsv', str_getcsv($handle, "\n"));
+        $data = array_map('str_getcsv', str_getcsv($handle, "\n"));
       }
+      return $data;
+    }
+
+    private function loadInEmployees($file, $params)
+    {
+      $csvData = $this->csvToArray($file);
 
       $stringsInFile = count($csvData);
 
@@ -125,7 +136,6 @@ class FuController extends Controller
         $employee = new Employee;
 
         foreach ($params as $key => $value) {
-          // echo "'".$key."' => " .$csvData[$i][($value-1)];
           switch ($key) {
             case 'department':
               if (is_numeric($csvData[$i][$value-1])) {
@@ -164,6 +174,78 @@ class FuController extends Controller
       }
     }
 
+    private function loadInPhones($file, $params)
+    {
+      $csvData = $this->csvToArray($file);
+
+      $stringsInFile = count($csvData);
+
+      for ($i=0; $i < $stringsInFile; $i++) {
+        $phone = new Phone;
+
+        foreach ($params as $key => $value) {
+          $cellValue = $csvData[$i][$value-1];
+
+          switch ($key) {
+            case 'phone_type':
+              if (is_numeric($cellValue)) {
+                $phone_type = $cellValue;
+              }else{
+                $phone_type = PhoneType::firstOrCreate(
+                  ['name' => $cellValue]
+                );
+              }
+
+              $phone->phone_type()->associate($phone_type);
+              break;
+
+            case 'employee':
+              if(!empty($cellValue)){
+                $haveEmployee = $cellValue;
+              }
+              break;
+
+            case 'macaddr':
+                if (!empty($cellValue)) {
+                  $haveMacaddr = $cellValue;
+                }
+              break;
+
+            default:
+                $phone->$key = $cellValue;
+              break;
+          }
+        }
+
+        $phone->save();
+
+        if ($haveMacaddr) {
+          $ipphone = new IpPhone([
+            'macaddr' => $haveMacaddr
+          ]);
+
+          $ipphone->phone()->associate($phone);
+
+          $ipphone->save();
+        }
+
+        if ($haveEmployee) {
+          if (is_numeric($haveEmployee)) {
+            $employee = $haveEmployee;
+          }else{
+
+            $employeeValues = explode(",", $haveEmployee);
+
+            $employee = Employee::where('firstname', trim($employeeValues[0]))
+            ->where('patronymic', trim($employeeValues[1]))
+            ->where('surname', trim($employeeValues[2]))
+            ->first();
+          }
+
+          $phone->employees()->attach($employee);
+        }
+      }
+    }
     /**
     * Display a listing of the resource.
     *
@@ -225,9 +307,8 @@ class FuController extends Controller
     public function show(Fu $fu)
     {
         //
-        if (($handle = Storage::disk('local')->get($fu->file_name)) !== false) {
-            $csvData = array_map('str_getcsv', str_getcsv($handle, "\n"));
-        }
+        $csvData = $this->csvToArray($fu);
+
         return view('fileupload.show')
         ->with('tableData', count($csvData) > 3 ? array_slice($csvData, 0, 3) : $csvData)
         ->with('uploadTables', $this->uploadTables())
@@ -257,15 +338,19 @@ class FuController extends Controller
     public function update(Request $request, Fu $fu)
     {
         //
-        $params = $request->except('_token', '_method');
-          if (array_key_exists('tabName', $params)) {
-            $tabName = $params['tabName'];
+        $loadAssociativeParams = $request->except('_token', '_method');
+          if (array_key_exists('tabName', $loadAssociativeParams)) {
+            $tabName = $loadAssociativeParams['tabName'];
 
-            unset($params['tabName']);
+            unset($loadAssociativeParams['tabName']);
 
             switch ($tabName) {
               case 'employee':
-                  $this->loadInEmployees($fu, $params);
+                  $this->loadInEmployees($fu, $loadAssociativeParams);
+                break;
+
+              case 'phone':
+                  $this->loadInPhones($fu, $loadAssociativeParams);
                 break;
 
               default:
