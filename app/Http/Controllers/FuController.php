@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Storage;
 use Schema;
 
+use App\Employee;
+
 class FuController extends Controller
 {
     public function __construct()
@@ -109,6 +111,33 @@ class FuController extends Controller
         return $pageParams;
     }
 
+    private function loadInEmployees($file, $params)
+    {
+      if (($handle = Storage::disk('local')->get($file->file_name)) !== false) {
+          $csvData = array_map('str_getcsv', str_getcsv($handle, "\n"));
+      }
+
+      $stringsInFile = count($csvData);
+
+      for ($i=0; $i < $stringsInFile; $i++) {
+        $elementsInString = count($csvData[$i]);
+
+        for ($j=0; $j < $elementsInString; $j++) {
+          // print "j= ".$j.", val = ".$csvData[$i][$j];
+
+
+        }
+      }
+
+      // foreach ($csvData as $fileString) {
+      //   print $n;
+      //   foreach ($fileString as $key => $value) {
+      //     print $key . " = " . $value;
+      //   }
+      //   $n++;
+      // }
+    }
+
     /**
     * Display a listing of the resource.
     *
@@ -202,14 +231,24 @@ class FuController extends Controller
     public function update(Request $request, Fu $fu)
     {
         //
-        $input = $request->except('_token', '_method');
-          if (array_key_exists('tabName', $input)) {
-            $tabName = $input['tabName'];
+        $params = $request->except('_token', '_method');
+          if (array_key_exists('tabName', $params)) {
+            $tabName = $params['tabName'];
 
-            unset($input['tabName']);
+            unset($params['tabName']);
 
-            dd($input);
+            switch ($tabName) {
+              case 'employee':
+                  $this->loadInEmployees($fu, $params);
+                break;
+
+              default:
+                # code...
+                break;
+            }
           }
+
+          // return redirect('/fu');
     }
 
     /**
