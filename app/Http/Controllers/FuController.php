@@ -9,6 +9,8 @@ use Storage;
 use Schema;
 
 use App\Employee;
+use App\Department;
+use App\Address;
 
 class FuController extends Controller
 {
@@ -120,22 +122,46 @@ class FuController extends Controller
       $stringsInFile = count($csvData);
 
       for ($i=0; $i < $stringsInFile; $i++) {
-        $elementsInString = count($csvData[$i]);
+        $employee = new Employee;
 
-        for ($j=0; $j < $elementsInString; $j++) {
-          // print "j= ".$j.", val = ".$csvData[$i][$j];
+        foreach ($params as $key => $value) {
+          // echo "'".$key."' => " .$csvData[$i][($value-1)];
+          switch ($key) {
+            case 'department':
+              if (is_numeric($csvData[$i][$value-1])) {
+                $department = $csvData[$i][$value-1];
+              }else{
+                $department = Department::firstOrCreate(
+                  ['name' => $csvData[$i][$value-1]]
+                );
+              }
 
+              $employee->department()->associate($department);
+              break;
 
+            case 'address':
+              if(is_numeric($csvData[$i][$value-1])){
+                $address = $csvData[$i][$value-1];
+              }else{
+                $addressValues = explode(",", $csvData[$i][$value-1]);
+                $address = Address::firstOrCreate([
+                    'city' => trim($addressValues[0]),
+                    'street' => trim($addressValues[1]),
+                    'house' => trim($addressValues[2])
+                ]);
+              }
+
+              $employee->address()->associate($address);
+              break;
+
+            default:
+                $employee->$key = $csvData[$i][$value-1];
+              break;
+          }
         }
-      }
 
-      // foreach ($csvData as $fileString) {
-      //   print $n;
-      //   foreach ($fileString as $key => $value) {
-      //     print $key . " = " . $value;
-      //   }
-      //   $n++;
-      // }
+        $employee->save();
+      }
     }
 
     /**
@@ -248,7 +274,7 @@ class FuController extends Controller
             }
           }
 
-          // return redirect('/fu');
+          return redirect('/fu');
     }
 
     /**
