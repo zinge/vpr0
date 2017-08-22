@@ -20,6 +20,11 @@ use App\MobilePhone;
 use App\MobileType;
 use App\MobileLimit;
 
+use App\Equip;
+use App\Manufacturer;
+use App\EquipType;
+use App\EquipModel;
+
 class FuController extends Controller
 {
     public function __construct()
@@ -153,13 +158,15 @@ class FuController extends Controller
             $employee = new Employee;
 
             foreach ($params as $key => $value) {
+                $cellValue = $csvData[$i][$value-1];
+
                 switch ($key) {
                     case 'department':
-                        if (is_numeric($csvData[$i][$value-1])) {
-                            $department = $csvData[$i][$value-1];
+                        if (is_int($cellValue)) {
+                            $department = $cellValue;
                         } else {
                             $department = Department::firstOrCreate(
-                                ['name' => $csvData[$i][$value-1]]
+                                ['name' => $cellValue]
                             );
                         }
 
@@ -167,10 +174,11 @@ class FuController extends Controller
                         break;
 
                     case 'address':
-                        if (is_numeric($csvData[$i][$value-1])) {
-                            $address = $csvData[$i][$value-1];
+                        if (is_int($cellValue)) {
+                            $address = $cellValue;
                         } else {
-                            $addressValues = explode(",", $csvData[$i][$value-1]);
+                            $addressValues = explode(",", $cellValue);
+
                             $address = Address::firstOrCreate([
                             'city' => trim($addressValues[0]),
                             'street' => trim($addressValues[1]),
@@ -182,7 +190,7 @@ class FuController extends Controller
                         break;
 
                     default:
-                        $employee->$key = $csvData[$i][$value-1];
+                        $employee->$key = $cellValue;
                         break;
                 }
             }
@@ -206,7 +214,7 @@ class FuController extends Controller
 
                 switch ($key) {
                     case 'phone_type':
-                        if (is_numeric($cellValue)) {
+                        if (is_int($cellValue)) {
                             $phone_type = $cellValue;
                         } else {
                             $phone_type = PhoneType::firstOrCreate(
@@ -248,7 +256,7 @@ class FuController extends Controller
             }
 
             if ($haveEmployee) {
-                if (is_numeric($haveEmployee)) {
+                if (is_int($haveEmployee)) {
                     $employee = $haveEmployee;
                 } else {
                     $employeeValues = explode(" ", $haveEmployee);
@@ -278,7 +286,7 @@ class FuController extends Controller
 
                 switch ($key) {
                     case 'mobile_type':
-                        if (is_numeric($cellValue)) {
+                        if (is_int($cellValue)) {
                             $mobile_type = $cellValue;
                         } else {
                             $mobile_type = MobileType::firstOrCreate(
@@ -302,7 +310,7 @@ class FuController extends Controller
                         break;
 
                     case 'employee':
-                        if (is_numeric($cellValue)) {
+                        if (is_int($cellValue)) {
                             $employee = $cellValue;
                         } else {
                             $employeeValues = explode(" ", $cellValue);
@@ -323,6 +331,84 @@ class FuController extends Controller
             }
 
             $mobilephone->save();
+        }
+    }
+
+    private function loadInEquips($file, $params)
+    {
+        $csvData = $this->csvToArray($file);
+
+        $stringsInFile = count($csvData);
+
+        for ($i=0; $i < $stringsInFile; $i++) {
+            $equip = new Equip;
+
+            foreach ($params as $key => $value) {
+                $cellValue = $csvData[$i][$value-1];
+
+                switch ($key) {
+                    case 'manufacturer':
+                        if (is_int($cellValue)) {
+                            $manufacturer = $cellValue;
+                        } else {
+                            $manufacturer = Manufacturer::firstOrCreate(
+                                ['name' => $cellValue]
+                            );
+                        }
+
+                        $equip->manufacturer()->associate($manufacturer);
+                        break;
+                    
+                    case 'equip_type':
+                        if (is_int($cellValue)) {
+                            $equip_type = $cellValue;
+                        } else {
+                            $equip_type = EquipType::firstOrCreate(
+                                ['name' => $cellValue]
+                            );
+                        }
+
+                        $equip->equip_type()->associate($equip_type);
+                        break;
+
+                    case 'equip_model':
+                        if (is_int($cellValue)) {
+                            $equip_model = $cellValue;
+                        } else {
+                            $equip_model = EquipModel::firstOrCreate(
+                                ['name' => $cellValue]
+                            );
+                        }
+
+                        $equip->equip_model()->associate($equip_model);
+                        break;
+
+                    case 'employee':
+                        if (is_int($cellValue)) {
+                            $employee = $cellValue;
+                        } else {
+                            $employeeValues = explode(" ", $cellValue);
+
+                            $employee = Employee::where('firstname', trim($employeeValues[0]))
+                            ->where('patronymic', trim($employeeValues[1]))
+                            ->where('surname', trim($employeeValues[2]))
+                            ->first();
+                        }
+                        
+                        $equip->employee()->associate($employee);
+                        break;
+
+                    default:
+                        if ($key = 'initial_cost') {
+                            $cellValue = $this->replCommas($cellValue);
+                        }
+                        
+                        $equip->$key = $cellValue;
+                        break;
+                }
+            }
+
+            $equip->save();
         }
     }
     /**
@@ -436,13 +522,17 @@ class FuController extends Controller
                     $this->loadInMobilePhones($fu, $loadAssociativeParams);
                     break;
 
+                case 'equip':
+                    $this->loadInEquips($fu, $loadAssociativeParams);
+                    break;
+
                 default:
                   # code...
                     break;
             }
         }
 
-          return redirect('/fu');
+        return redirect('/fu');
     }
 
     /**
