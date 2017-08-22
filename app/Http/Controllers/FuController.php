@@ -16,6 +16,9 @@ use App\Phone;
 use App\PhoneType;
 use App\IpPhone;
 
+use App\MobilePhone;
+use App\MobileType;
+use App\MobileLimit;
 
 class FuController extends Controller
 {
@@ -120,132 +123,207 @@ class FuController extends Controller
 
     private function csvToArray($file)
     {
-      if (($handle = Storage::disk('local')->get($file->file_name)) !== false) {
-        $data = array_map('str_getcsv', str_getcsv($handle, "\n"));
-      }
-      return $data;
+        if (($handle = Storage::disk('local')->get($file->file_name)) !== false) {
+            $data = array_map('str_getcsv', str_getcsv($handle, "\n"));
+        }
+        return $data;
+    }
+
+    private function replCommas($decimalValue)
+    {
+        $pattern='/(^\d+)(?:,(\d{2}))$/';
+        $pattern_empt='/(^\d+)$/';
+        if (preg_match($pattern, $decimalValue)) {
+            return preg_replace($pattern, '$1.$2', $decimalValue);
+        } else {
+            if (preg_match($pattern_empt, $decimalValue)) {
+                return preg_replace($pattern, '$1.00', $decimalValue);
+            }
+            return $decimalValue;
+        }
     }
 
     private function loadInEmployees($file, $params)
     {
-      $csvData = $this->csvToArray($file);
+        $csvData = $this->csvToArray($file);
 
-      $stringsInFile = count($csvData);
+        $stringsInFile = count($csvData);
 
-      for ($i=0; $i < $stringsInFile; $i++) {
-        $employee = new Employee;
+        for ($i=0; $i < $stringsInFile; $i++) {
+            $employee = new Employee;
 
-        foreach ($params as $key => $value) {
-          switch ($key) {
-            case 'department':
-              if (is_numeric($csvData[$i][$value-1])) {
-                $department = $csvData[$i][$value-1];
-              }else{
-                $department = Department::firstOrCreate(
-                  ['name' => $csvData[$i][$value-1]]
-                );
-              }
+            foreach ($params as $key => $value) {
+                switch ($key) {
+                    case 'department':
+                        if (is_numeric($csvData[$i][$value-1])) {
+                            $department = $csvData[$i][$value-1];
+                        } else {
+                            $department = Department::firstOrCreate(
+                                ['name' => $csvData[$i][$value-1]]
+                            );
+                        }
 
-              $employee->department()->associate($department);
-              break;
+                        $employee->department()->associate($department);
+                        break;
 
-            case 'address':
-              if(is_numeric($csvData[$i][$value-1])){
-                $address = $csvData[$i][$value-1];
-              }else{
-                $addressValues = explode(",", $csvData[$i][$value-1]);
-                $address = Address::firstOrCreate([
-                    'city' => trim($addressValues[0]),
-                    'street' => trim($addressValues[1]),
-                    'house' => trim($addressValues[2])
-                ]);
-              }
+                    case 'address':
+                        if (is_numeric($csvData[$i][$value-1])) {
+                            $address = $csvData[$i][$value-1];
+                        } else {
+                            $addressValues = explode(",", $csvData[$i][$value-1]);
+                            $address = Address::firstOrCreate([
+                            'city' => trim($addressValues[0]),
+                            'street' => trim($addressValues[1]),
+                            'house' => trim($addressValues[2])
+                            ]);
+                        }
 
-              $employee->address()->associate($address);
-              break;
+                        $employee->address()->associate($address);
+                        break;
 
-            default:
-                $employee->$key = $csvData[$i][$value-1];
-              break;
-          }
+                    default:
+                        $employee->$key = $csvData[$i][$value-1];
+                        break;
+                }
+            }
+
+            $employee->save();
         }
-
-        $employee->save();
-      }
     }
 
     private function loadInPhones($file, $params)
     {
-      $csvData = $this->csvToArray($file);
+        $csvData = $this->csvToArray($file);
 
-      $stringsInFile = count($csvData);
+        $stringsInFile = count($csvData);
 
-      for ($i=0; $i < $stringsInFile; $i++) {
-        $phone = new Phone;
-        $haveEmployee = $haveMacaddr = "";
+        for ($i=0; $i < $stringsInFile; $i++) {
+            $phone = new Phone;
+            $haveEmployee = $haveMacaddr = "";
 
-        foreach ($params as $key => $value) {
-          $cellValue = $csvData[$i][$value-1];
+            foreach ($params as $key => $value) {
+                $cellValue = $csvData[$i][$value-1];
 
-          switch ($key) {
-            case 'phone_type':
-              if (is_numeric($cellValue)) {
-                $phone_type = $cellValue;
-              }else{
-                $phone_type = PhoneType::firstOrCreate(
-                  ['name' => $cellValue]
-                );
-              }
+                switch ($key) {
+                    case 'phone_type':
+                        if (is_numeric($cellValue)) {
+                            $phone_type = $cellValue;
+                        } else {
+                            $phone_type = PhoneType::firstOrCreate(
+                                ['name' => $cellValue]
+                            );
+                        }
 
-              $phone->phone_type()->associate($phone_type);
-              break;
+                        $phone->phone_type()->associate($phone_type);
+                        break;
 
-            case 'employee':
-              if(!empty($cellValue)){
-                $haveEmployee = $cellValue;
-              }
-              break;
+                    case 'employee':
+                        if (!empty($cellValue)) {
+                            $haveEmployee = $cellValue;
+                        }
+                        break;
 
-            case 'macaddr':
-                if (!empty($cellValue)) {
-                  $haveMacaddr = $cellValue;
+                    case 'macaddr':
+                        if (!empty($cellValue)) {
+                            $haveMacaddr = $cellValue;
+                        }
+                        break;
+
+                    default:
+                        $phone->$key = $cellValue;
+                        break;
                 }
-              break;
+            }
 
-            default:
-                $phone->$key = $cellValue;
-              break;
-          }
+            $phone->save();
+
+            if ($haveMacaddr) {
+                $ipphone = new IpPhone([
+                'macaddr' => $haveMacaddr
+                ]);
+
+                $ipphone->phone()->associate($phone);
+
+                $ipphone->save();
+            }
+
+            if ($haveEmployee) {
+                if (is_numeric($haveEmployee)) {
+                    $employee = $haveEmployee;
+                } else {
+                    $employeeValues = explode(" ", $haveEmployee);
+
+                    $employee = Employee::where('firstname', trim($employeeValues[0]))
+                    ->where('patronymic', trim($employeeValues[1]))
+                    ->where('surname', trim($employeeValues[2]))
+                    ->first();
+                }
+
+                $phone->employees()->attach($employee);
+            }
         }
+    }
 
-        $phone->save();
+    private function loadInMobilePhones($file, $params)
+    {
+        $csvData = $this->csvToArray($file);
 
-        if ($haveMacaddr) {
-          $ipphone = new IpPhone([
-            'macaddr' => $haveMacaddr
-          ]);
+        $stringsInFile = count($csvData);
 
-          $ipphone->phone()->associate($phone);
+        for ($i=0; $i < $stringsInFile; $i++) {
+            $mobilephone = new MobilePhone;
 
-          $ipphone->save();
+            foreach ($params as $key => $value) {
+                $cellValue = $csvData[$i][$value-1];
+
+                switch ($key) {
+                    case 'mobile_type':
+                        if (is_numeric($cellValue)) {
+                            $mobile_type = $cellValue;
+                        } else {
+                            $mobile_type = MobileType::firstOrCreate(
+                                ['name' => $cellValue]
+                            );
+                        }
+
+                        $mobilephone->mobile_type()->associate($mobile_type);
+                        break;
+
+                    case 'mobile_limit':
+                        if (is_int($cellValue)) {
+                            $mobile_limit = $cellValue;
+                        } else {
+                            $mobile_limit = MobileLimit::firstOrCreate(
+                                ['limit_cost' => $this->replCommas($cellValue)]
+                            );
+                        }
+                        
+                        $mobilephone->mobile_limit()->associate($mobile_limit);
+                        break;
+
+                    case 'employee':
+                        if (is_numeric($cellValue)) {
+                            $employee = $cellValue;
+                        } else {
+                            $employeeValues = explode(" ", $cellValue);
+
+                            $employee = Employee::where('firstname', trim($employeeValues[0]))
+                            ->where('patronymic', trim($employeeValues[1]))
+                            ->where('surname', trim($employeeValues[2]))
+                            ->first();
+                        }
+                        
+                        $mobilephone->employee()->associate($employee);
+                        break;
+                    
+                    default:
+                        $mobilephone->$key = $cellValue;
+                        break;
+                }
+            }
+
+            $mobilephone->save();
         }
-
-        if ($haveEmployee) {
-          if (is_numeric($haveEmployee)) {
-            $employee = $haveEmployee;
-          }else{
-
-            $employeeValues = explode(" ", $haveEmployee);
-
-            $employee = Employee::where('firstname', trim($employeeValues[0]))
-            ->where('patronymic', trim($employeeValues[1]))
-            ->where('surname', trim($employeeValues[2]))
-            ->first();
-          }
-
-          $phone->employees()->attach($employee);
-        }
-      }
     }
     /**
     * Display a listing of the resource.
@@ -340,25 +418,29 @@ class FuController extends Controller
     {
         //
         $loadAssociativeParams = $request->except('_token', '_method');
-          if (array_key_exists('tabName', $loadAssociativeParams)) {
+        if (array_key_exists('tabName', $loadAssociativeParams)) {
             $tabName = $loadAssociativeParams['tabName'];
 
             unset($loadAssociativeParams['tabName']);
 
             switch ($tabName) {
-              case 'employee':
-                  $this->loadInEmployees($fu, $loadAssociativeParams);
-                break;
+                case 'employee':
+                    $this->loadInEmployees($fu, $loadAssociativeParams);
+                    break;
 
-              case 'phone':
-                  $this->loadInPhones($fu, $loadAssociativeParams);
-                break;
+                case 'phone':
+                    $this->loadInPhones($fu, $loadAssociativeParams);
+                    break;
 
-              default:
-                # code...
-                break;
+                case 'mobile_phone':
+                    $this->loadInMobilePhones($fu, $loadAssociativeParams);
+                    break;
+
+                default:
+                  # code...
+                    break;
             }
-          }
+        }
 
           return redirect('/fu');
     }
