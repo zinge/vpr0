@@ -182,6 +182,7 @@ class FuController extends Controller
 
       for ($i=0; $i < $stringsInFile; $i++) {
         $phone = new Phone;
+        $haveEmployee = $haveMacaddr = "";
 
         foreach ($params as $key => $value) {
           $cellValue = $csvData[$i][$value-1];
@@ -234,7 +235,7 @@ class FuController extends Controller
             $employee = $haveEmployee;
           }else{
 
-            $employeeValues = explode(",", $haveEmployee);
+            $employeeValues = explode(" ", $haveEmployee);
 
             $employee = Employee::where('firstname', trim($employeeValues[0]))
             ->where('patronymic', trim($employeeValues[1]))

@@ -172,5 +172,8 @@ class IpPhoneController extends Controller
   public function destroy(IpPhone $ipphone)
   {
     //
+    $ipphone->delete();
+
+    return redirect('/ipphone');
   }
 }
