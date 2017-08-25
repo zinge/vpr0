@@ -25,6 +25,12 @@ use App\Manufacturer;
 use App\EquipType;
 use App\EquipModel;
 
+use App\Service;
+use App\Finposition;
+use App\Contractor;
+use App\AgreementString;
+use App\Agreement;
+
 class FuController extends Controller
 {
     public function __construct()
@@ -145,6 +151,55 @@ class FuController extends Controller
                 return preg_replace($pattern, '$1.00', $decimalValue);
             }
             return $decimalValue;
+        }
+    }
+
+    private function loadInServices($file, $params)
+    {
+        $csvData = $this->csvToArray($file);
+
+        $stringsInFile = count($csvData);
+
+        for ($i=0; $i < $stringsInFile; $i++) {
+            $agreementstring = new AgreementString;
+
+            foreach ($params as $key => $value) {
+                switch ($key) {
+                    case 'service':
+                        // if (is_int($cellValue)) {
+                        //     $finposition = $cellValue;
+                        // } else {
+                        //     $finpositionValues = explode(",", $cellValue);
+
+                        //     $finposition = Finposition::firstOrCreate([
+                        //         'name' => trim($finpositionValues[0]),
+                        //         'code' => trim($finpositionValues[1])
+                        //     ]);
+                        // }
+
+                        // $service->finposition()->associate($finposition);
+                        break;
+
+                    case 'agreement':
+                        # code...
+                        break;
+
+                    case 'department':
+                        # code...
+                        break;
+
+                    case 'physical':
+                    case 'months':
+                    case 'summ_cost':
+                        $service->$key = $cellValue;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            $agreementstring->save();
         }
     }
 
@@ -398,11 +453,11 @@ class FuController extends Controller
                         $equip->employee()->associate($employee);
                         break;
 
+                    case 'initial_cost':
+                        $equip->$key = $this->replCommas($cellValue);
+                        break;
+
                     default:
-                        if ($key = 'initial_cost') {
-                            $cellValue = $this->replCommas($cellValue);
-                        }
-                        
                         $equip->$key = $cellValue;
                         break;
                 }
@@ -524,6 +579,10 @@ class FuController extends Controller
 
                 case 'equip':
                     $this->loadInEquips($fu, $loadAssociativeParams);
+                    break;
+
+                case 'service':
+                    $this->loadInServices($fu, $loadAssociativeParams);
                     break;
 
                 default:
