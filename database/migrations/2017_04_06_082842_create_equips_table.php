@@ -26,6 +26,13 @@ class CreateEquipsTable extends Migration
         ->on('manufacturers');
       }
 
+      if (Schema::hasColumn('holders', 'id')) {
+        $table->integer('holder_id');
+        $table->foreign('holder_id')
+        ->references('id')
+        ->on('holders');
+      }
+
       if (Schema::hasColumn('equip_types', 'id')) {
         $table->integer('equip_type_id');
         $table->foreign('equip_type_id')

@@ -36,4 +36,9 @@ class Equip extends Model
   {
     return $this->morphToMany('App\Workplace', 'workplaceable');
   }
+
+  public function holder()
+  {
+    return $this->belongsTo('App\Holder');
+  }
 }

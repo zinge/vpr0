@@ -39,6 +39,7 @@ class ServiceController extends Controller
   private function createPageStructure()
   {
     $pageStructure = [
+      ['type' => 'text', 'field' => 'code', 'desc' => 'код'],
       ['type' => 'text', 'field' => 'name', 'desc' => 'наименование'],
       ['type' => 'text', 'field' => 'cost', 'desc' => 'расценка'],
       ['type' => 'list', 'field' => 'finposition', 'desc' => 'фин. позиция', 'data' => $this->createListData('Finposition', ['code', 'name'])]
@@ -68,6 +69,7 @@ class ServiceController extends Controller
     foreach ($pageItems as $item) {
       array_push($pageParams, [
         'id' => $item->id,
+        'code' => $item->code,
         'name' => $item->name,
         'cost' => $item->cost,
         'finposition' => $id ? $item->finposition_id : $item->finposition->code." (".$item->finposition->name.")",
@@ -127,12 +129,14 @@ class ServiceController extends Controller
   {
     //
     $this->validate($request, [
+      'code' => 'required|max:10',
       'name' => 'required|max:30',
       'cost' => ['required', 'regex:/^\d{1,10}((,|.)\d{2})?$/'],
       'finposition' => 'required|numeric',
     ]);
 
     $service = new Service([
+      'code' => $request->code,
       'name' => $request->name,
       'cost' => $this->replCommas($request->cost),
     ]);
@@ -183,6 +187,7 @@ class ServiceController extends Controller
   {
     //
     $this->validate($request, [
+      'code' => 'required|max:10',
       'name' => 'required|max:30',
       'cost' => ['required', 'regex:/^\d{1,10}((,|.)\d{2})?$/'],
       'finposition' => 'required|numeric',
@@ -191,6 +196,7 @@ class ServiceController extends Controller
     $service->finposition()->associate($request->finposition);
 
     $service->update([
+      'code' => $request->code,
       'name' => $request->name,
       'cost' => $this->replCommas($request->cost),
     ]);

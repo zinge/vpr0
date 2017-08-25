@@ -83,17 +83,25 @@ class FuController extends Controller
                 'mobile_limit' => 'лимит',
                 'employee' => 'сотрудник'
             ]],
-            ['name' => 'service', 'desc' => 'сервис', 'fields' => [
-                'name' => 'наименование',
+            ['name' => 'agreement', 'desc' => 'договор', 'fields' => [
+              'name' => 'наименование',
+              'initial_date' => 'дата ввода',
+              'end_date' => 'дата окончания',
+              'contractor' => 'подрядчик'
+            ]],
+            ['name' => 'agreementstring', 'desc' => '', 'fields' => [
+                'service' => 'сервис',
                 'agreement' => 'договор',
-                'initial_date' => 'дата ввода',
-                'end_date' => 'дата окончания',
-                'contractor' => 'подрядчик',
+                'department' => 'МВЗ',
+                'physical' => 'физ. обьем',
+                'months' => 'период, месяцев',
+                'summ_cost' => 'итого по сервису',
+            ]],
+            ['name' => 'service', 'desc' => 'сервис', 'fields' => [
+                'code' => 'код',
+                'name' => 'наименование',
                 'cost' => 'расценка сервиса',
                 'finposition' => 'финпозиция сервиса',
-                'physical' => 'физ. обьем',
-                'summ_cost' => 'итого по сервису',
-                'department' => 'МВЗ'
             ]],
             ['name' => 'aktstring', 'desc' => 'актирование', 'fields' => [
                 'akt' => 'наименование акта',
@@ -161,45 +169,38 @@ class FuController extends Controller
         $stringsInFile = count($csvData);
 
         for ($i=0; $i < $stringsInFile; $i++) {
-            $agreementstring = new AgreementString;
+            $service = new Service;
 
             foreach ($params as $key => $value) {
-                switch ($key) {
-                    case 'service':
-                        // if (is_int($cellValue)) {
-                        //     $finposition = $cellValue;
-                        // } else {
-                        //     $finpositionValues = explode(",", $cellValue);
+                $cellValue = $csvData[$i][$key];
 
-                        //     $finposition = Finposition::firstOrCreate([
-                        //         'name' => trim($finpositionValues[0]),
-                        //         'code' => trim($finpositionValues[1])
-                        //     ]);
-                        // }
+                switch ($value) {
+                    case 'finposition':
+                        if (is_int($cellValue)) {
+                            $finposition = $cellValue;
+                        } else {
+                            $finpositionValues = explode(",", $cellValue);
 
-                        // $service->finposition()->associate($finposition);
+                            $finposition = Finposition::firstOrCreate([
+                                'name' => trim($finpositionValues[0]),
+                                'code' => trim($finpositionValues[1])
+                            ]);
+                        }
+
+                        $service->finposition()->associate($finposition);
                         break;
 
-                    case 'agreement':
-                        # code...
-                        break;
-
-                    case 'department':
-                        # code...
-                        break;
-
-                    case 'physical':
-                    case 'months':
-                    case 'summ_cost':
-                        $service->$key = $cellValue;
+                    case 'cost':
+                        $service->$value = $this->replCommas($cellValue);
                         break;
 
                     default:
+                        $service->$value = $cellValue;
                         break;
                 }
             }
 
-            $agreementstring->save();
+            $service->save();
         }
     }
 

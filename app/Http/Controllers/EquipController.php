@@ -46,6 +46,7 @@ class EquipController extends Controller
       ['type' => 'list', 'field' => 'equiptype', 'desc' => 'тип', 'data' => $this->createListData('EquipType', ['name'], ',')],
       ['type' => 'list', 'field' => 'equipmodel', 'desc' => 'модель', 'data' => $this->createListData('EquipModel', ['name'], ',')],
       ['type' => 'endlist', 'field' => 'employee', 'desc' => 'сотрудник', 'data' => $this->createListData('Employee', ['firstname', 'patronymic', 'surname'], '')],
+      ['type' => 'list', 'field' => 'holder', 'desc' => 'балансодержатель', 'data' => $this->createListData('Holder', ['name'], ',')],
       ['type' => 'date', 'field' => 'initial_date', 'desc' => 'дата ввода'],
       ['type' => 'text', 'field' => 'initial_cost', 'desc' => 'балансовая стоимость'],
       ['type' => 'text', 'field' => 'serial_number', 'desc' => 'серийный'],
