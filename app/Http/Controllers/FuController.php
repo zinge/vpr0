@@ -360,7 +360,7 @@ class FuController extends Controller
                                 ['limit_cost' => $this->replCommas($cellValue)]
                             );
                         }
-                        
+
                         $mobilephone->mobile_limit()->associate($mobile_limit);
                         break;
 
@@ -375,10 +375,10 @@ class FuController extends Controller
                             ->where('surname', trim($employeeValues[2]))
                             ->first();
                         }
-                        
+
                         $mobilephone->employee()->associate($employee);
                         break;
-                    
+
                     default:
                         $mobilephone->$key = $cellValue;
                         break;
@@ -413,7 +413,7 @@ class FuController extends Controller
 
                         $equip->manufacturer()->associate($manufacturer);
                         break;
-                    
+
                     case 'equip_type':
                         if (is_int($cellValue)) {
                             $equip_type = $cellValue;
@@ -449,7 +449,7 @@ class FuController extends Controller
                             ->where('surname', trim($employeeValues[2]))
                             ->first();
                         }
-                        
+
                         $equip->employee()->associate($employee);
                         break;
 
@@ -564,34 +564,35 @@ class FuController extends Controller
 
             unset($loadAssociativeParams['tabName']);
 
-            switch ($tabName) {
-                case 'employee':
-                    $this->loadInEmployees($fu, $loadAssociativeParams);
-                    break;
-
-                case 'phone':
-                    $this->loadInPhones($fu, $loadAssociativeParams);
-                    break;
-
-                case 'mobile_phone':
-                    $this->loadInMobilePhones($fu, $loadAssociativeParams);
-                    break;
-
-                case 'equip':
-                    $this->loadInEquips($fu, $loadAssociativeParams);
-                    break;
-
-                case 'service':
-                    $this->loadInServices($fu, $loadAssociativeParams);
-                    break;
-
-                default:
-                  # code...
-                    break;
-            }
+            dd($loadAssociativeParams);
+            // switch ($tabName) {
+            //     case 'employee':
+            //         $this->loadInEmployees($fu, $loadAssociativeParams);
+            //         break;
+            //
+            //     case 'phone':
+            //         $this->loadInPhones($fu, $loadAssociativeParams);
+            //         break;
+            //
+            //     case 'mobile_phone':
+            //         $this->loadInMobilePhones($fu, $loadAssociativeParams);
+            //         break;
+            //
+            //     case 'equip':
+            //         $this->loadInEquips($fu, $loadAssociativeParams);
+            //         break;
+            //
+            //     case 'service':
+            //         $this->loadInServices($fu, $loadAssociativeParams);
+            //         break;
+            //
+            //     default:
+            //       # code...
+            //         break;
+            // }
         }
 
-        return redirect('/fu');
+        // return redirect('/fu');
     }
 
     /**

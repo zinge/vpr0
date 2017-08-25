@@ -2,7 +2,7 @@
 
 @section('content')
 
-  <div class="container">
+  <div class="container" id="tab">
     <div class="row">
       <div class="panel panel-default">
 
@@ -10,31 +10,14 @@
         <div class="panel-body">
 
           @if ($tableData)
-          <div class="table-responsive">
-            <table  class="table table-hover table-bordered">
-              <thead>
-                <tr>
-                  @for ($i=0; $i < count($tableData[0]); $i++)
-                    <th>Столбец: {{$i+1}}</th>
-                  @endfor
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($tableData as $tableContent)
-                  <tr>
-                    @foreach($tableContent as $key => $value)
-                      <td>{{$value}}</td>
-                    @endforeach
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
 
-          <div id="tab">
+
+          <div>
             <form action="{{url($pageHref."/".$pageParams['id'])}}" method="post">
             {{ csrf_field() }}
             {{ method_field('put') }}
+
+            {{-- Меню выбора таблицы --}}
             <div class="form-group">Загружаем в таблицу:
               <select v-model="tabName" name="tabName" @change="onChange('showFields')">
                 <option disabled value="">Выбери таблицу для загрузки файла</option>
@@ -42,7 +25,37 @@
               </select>
             </div>
 
-            <div v-if="showFields" class="form-group">
+            {{-- Таблица с предварительными данными(3 строки) --}}
+            <div class="table-responsive">
+              <table  class="table table-hover table-bordered">
+                <thead v-if="showFields">
+                  <tr>
+                    @for ($i=0; $i < count($tableData[0]); $i++)
+                      <th>
+                        <div class="form-group">
+                          <select :name="{{$i}}" @change="onChange('showButton')">
+                            <option disabled value="">выбери поле</option>
+                            <option v-for="(item, index) in uploadTables[tabName].fields" :value="index">@{{ item }}</option>
+                          </select>
+                        </div>
+                      </th>
+                    @endfor
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($tableData as $tableContent)
+                    <tr>
+                      @foreach($tableContent as $key => $value)
+                        <td>{{$value}}</td>
+                      @endforeach
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+            {{--  --}}
+
+            {{-- <div v-if="showFields" class="form-group">
               <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                   <thead>
@@ -57,11 +70,14 @@
                           <option disabled value="">столбец</option>
                           <option v-for="n in Object.keys(uploadTables[tabName].fields).length">@{{ n }}</option>
                         </select>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
+            </div> --}}
+
+
               <div v-if="showButton" class="form-group">
                 <button type="submit" class="btn btn-success">Load</button>
               </div>
@@ -82,7 +98,7 @@
         @foreach ($uploadTables as $element)
         '{{$element['name']}}': { desc: '{{$element['desc']}}', fields: {
           @foreach ($element['fields'] as $key => $value)
-          '{{$value}}': {pos: '{{$key}}', val: ''}{{$loop->last ? '' : ','}}
+          '{{$key}}': '{{$value}}'{{$loop->last ? '' : ','}}
           @endforeach
         }}{{$loop->last ? '' : ','}}
         @endforeach
