@@ -213,9 +213,9 @@ class FuController extends Controller
             $employee = new Employee;
 
             foreach ($params as $key => $value) {
-                $cellValue = $csvData[$i][$value-1];
+                $cellValue = $csvData[$i][$key];
 
-                switch ($key) {
+                switch ($value) {
                     case 'department':
                         if (is_int($cellValue)) {
                             $department = $cellValue;
@@ -245,7 +245,7 @@ class FuController extends Controller
                         break;
 
                     default:
-                        $employee->$key = $cellValue;
+                        $employee->$value = $cellValue;
                         break;
                 }
             }
@@ -265,9 +265,9 @@ class FuController extends Controller
             $haveEmployee = $haveMacaddr = "";
 
             foreach ($params as $key => $value) {
-                $cellValue = $csvData[$i][$value-1];
+                $cellValue = $csvData[$i][$key];
 
-                switch ($key) {
+                switch ($value) {
                     case 'phone_type':
                         if (is_int($cellValue)) {
                             $phone_type = $cellValue;
@@ -293,7 +293,7 @@ class FuController extends Controller
                         break;
 
                     default:
-                        $phone->$key = $cellValue;
+                        $phone->$value = $cellValue;
                         break;
                 }
             }
@@ -337,9 +337,9 @@ class FuController extends Controller
             $mobilephone = new MobilePhone;
 
             foreach ($params as $key => $value) {
-                $cellValue = $csvData[$i][$value-1];
+                $cellValue = $csvData[$i][$key];
 
-                switch ($key) {
+                switch ($value) {
                     case 'mobile_type':
                         if (is_int($cellValue)) {
                             $mobile_type = $cellValue;
@@ -380,7 +380,7 @@ class FuController extends Controller
                         break;
 
                     default:
-                        $mobilephone->$key = $cellValue;
+                        $mobilephone->$value = $cellValue;
                         break;
                 }
             }
@@ -399,9 +399,9 @@ class FuController extends Controller
             $equip = new Equip;
 
             foreach ($params as $key => $value) {
-                $cellValue = $csvData[$i][$value-1];
+                $cellValue = $csvData[$i][$key];
 
-                switch ($key) {
+                switch ($value) {
                     case 'manufacturer':
                         if (is_int($cellValue)) {
                             $manufacturer = $cellValue;
@@ -454,11 +454,11 @@ class FuController extends Controller
                         break;
 
                     case 'initial_cost':
-                        $equip->$key = $this->replCommas($cellValue);
+                        $equip->$value = $this->replCommas($cellValue);
                         break;
 
                     default:
-                        $equip->$key = $cellValue;
+                        $equip->$value = $cellValue;
                         break;
                 }
             }
@@ -564,35 +564,35 @@ class FuController extends Controller
 
             unset($loadAssociativeParams['tabName']);
 
-            dd($loadAssociativeParams);
-            // switch ($tabName) {
-            //     case 'employee':
-            //         $this->loadInEmployees($fu, $loadAssociativeParams);
-            //         break;
-            //
-            //     case 'phone':
-            //         $this->loadInPhones($fu, $loadAssociativeParams);
-            //         break;
-            //
-            //     case 'mobile_phone':
-            //         $this->loadInMobilePhones($fu, $loadAssociativeParams);
-            //         break;
-            //
-            //     case 'equip':
-            //         $this->loadInEquips($fu, $loadAssociativeParams);
-            //         break;
-            //
-            //     case 'service':
-            //         $this->loadInServices($fu, $loadAssociativeParams);
-            //         break;
-            //
-            //     default:
-            //       # code...
-            //         break;
-            // }
+            // dd($loadAssociativeParams);
+            switch ($tabName) {
+                case 'employee':
+                    $this->loadInEmployees($fu, $loadAssociativeParams);
+                    break;
+
+                case 'phone':
+                    $this->loadInPhones($fu, $loadAssociativeParams);
+                    break;
+
+                case 'mobile_phone':
+                    $this->loadInMobilePhones($fu, $loadAssociativeParams);
+                    break;
+
+                case 'equip':
+                    $this->loadInEquips($fu, $loadAssociativeParams);
+                    break;
+
+                case 'service':
+                    $this->loadInServices($fu, $loadAssociativeParams);
+                    break;
+
+                default:
+                  # code...
+                    break;
+            }
         }
 
-        // return redirect('/fu');
+        return redirect('/fu');
     }
 
     /**
