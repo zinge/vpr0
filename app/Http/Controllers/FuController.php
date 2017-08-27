@@ -164,6 +164,68 @@ class FuController extends Controller
         }
     }
 
+    private function returnExistindID($className, $fileCellValue, $classParams, $sepatator)
+    {
+        if (is_int($fileCellValue)) {
+            return $fileCellValue;
+        } else {
+            $classValues = explode($sepatator, $fileCellValue);
+        }
+    }
+
+    private function loadInAgreementStrings($file, $params)
+    {
+        $csvData = $this->csvToArray($file);
+
+        $stringsInFile = count($csvData);
+
+        for ($i=0; $i < $stringsInFile; $i++) {
+            $agreementstring = new AgreementString;
+
+            foreach ($params as $key => $value) {
+                $cellValue = $csvData[$i][$key];
+
+                switch ($value) {
+                    case 'service':
+                        if (is_int($cellValue)) {
+                            $service = $cellValue;
+                        } else {
+                            $serviceValues = explode(",", $cellValue);
+
+                            $service = Service::where('code', trim($serviceValues[0]))
+                            ->where('name', trim($serviceValues[1]))
+                            ->first();
+                        }
+                        
+                        $agreementstring->service()->associate($service);
+                        break;
+
+                    case 'agreement':
+                        if (is_int($cellValue)) {
+                            $service = $cellValue;
+                        } else {
+                            # code...
+                        }
+                        
+                        break;
+
+                    case 'department':
+                        # code...
+                        break;
+
+                    case 'summ_cost':
+                        $agreementstring->$value = $this->replCommas($cellValue);
+                        break;
+
+                    default:
+                        $agreementstring->$value = $cellValue;
+                        break;
+                }
+            }
+
+            $agreementstring->save();
+        }
+    }
     private function loadInServices($file, $params)
     {
         $csvData = $this->csvToArray($file);
@@ -203,6 +265,41 @@ class FuController extends Controller
             }
 
             $service->save();
+        }
+    }
+
+    private function loadInAgreements($file, $params)
+    {
+        $csvData = $this->csvToArray($file);
+
+        $stringsInFile = count($csvData);
+
+        for ($i=0; $i < $stringsInFile; $i++) {
+            $agreement = new Agreement;
+
+            foreach ($params as $key => $value) {
+                $cellValue = $csvData[$i][$key];
+
+                switch ($value) {
+                    case 'contractor':
+                        if (is_int($cellValue)) {
+                            $contractor = $cellValue;
+                        } else {
+                            $contractor = Contractor::firstOrCreate(
+                                ['name' => $cellValue]
+                            );
+                        }
+                        
+                        $agreement->contractor()->associate($contractor);
+                        break;
+
+                    default:
+                        $agreement->$value = $cellValue;
+                        break;
+                }
+            }
+
+            $agreement->save();
         }
     }
 
@@ -442,16 +539,16 @@ class FuController extends Controller
                         break;
 
                     case 'holder':
-                      if (is_int($cellValue)) {
-                        $holder = $cellValue;
-                      } else {
-                        $holder = Holder::firstOrCreate(
-                          ['name' => $cellValue]
-                        );
-                      }
+                        if (is_int($cellValue)) {
+                            $holder = $cellValue;
+                        } else {
+                            $holder = Holder::firstOrCreate(
+                                ['name' => $cellValue]
+                            );
+                        }
 
-                      $equip->holder()->associate($holder);
-                      break;
+                        $equip->holder()->associate($holder);
+                        break;
 
                     case 'employee':
                         if (is_int($cellValue)) {
@@ -599,6 +696,10 @@ class FuController extends Controller
 
                 case 'service':
                     $this->loadInServices($fu, $loadAssociativeParams);
+                    break;
+
+                case 'agreement':
+                    $this->loadInAgreements($fu, $loadAssociativeParams);
                     break;
 
                 default:
