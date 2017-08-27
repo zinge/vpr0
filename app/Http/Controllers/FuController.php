@@ -69,7 +69,7 @@ class FuController extends Controller
                 'holder' => 'балансодержатель',
                 'initial_date' => 'дата ввода',
                 'initial_cost' => 'балансовая стоимость',
-                'serial_number' => 'серийный',
+                'serial_number' => 'инвентарный',
                 'sap_number' => 'SAP',
                 'manufacturer_number' => 'заводской'
             ]],
@@ -91,7 +91,7 @@ class FuController extends Controller
               'end_date' => 'дата окончания',
               'contractor' => 'подрядчик'
             ]],
-            ['name' => 'agreementstring', 'desc' => '', 'fields' => [
+            ['name' => 'agreementstring', 'desc' => 'строки договора', 'fields' => [
                 'service' => 'сервис',
                 'agreement' => 'договор',
                 'department' => 'МВЗ',
