@@ -24,6 +24,7 @@ use App\Equip;
 use App\Manufacturer;
 use App\EquipType;
 use App\EquipModel;
+use App\Holder;
 
 use App\Service;
 use App\Finposition;
@@ -65,6 +66,7 @@ class FuController extends Controller
                 'equip_type' => 'тип',
                 'equip_model' => 'модель',
                 'employee' => 'сотрудник',
+                'holder' => 'балансодержатель',
                 'initial_date' => 'дата ввода',
                 'initial_cost' => 'балансовая стоимость',
                 'serial_number' => 'серийный',
@@ -438,6 +440,18 @@ class FuController extends Controller
 
                         $equip->equip_model()->associate($equip_model);
                         break;
+
+                    case 'holder':
+                      if (is_int($cellValue)) {
+                        $holder = $cellValue;
+                      } else {
+                        $holder = Holder::firstOrCreate(
+                          ['name' => $cellValue]
+                        );
+                      }
+
+                      $equip->holder()->associate($holder);
+                      break;
 
                     case 'employee':
                         if (is_int($cellValue)) {

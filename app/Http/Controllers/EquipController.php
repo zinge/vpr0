@@ -70,6 +70,9 @@ class EquipController extends Controller
       'equipmodel' => [
         ['type'=>'text', 'field'=>'name', 'desc'=>'модель']
       ],
+      'holder' => [
+        ['type' => 'text', 'field' => 'name', 'desc' => 'балансодержатель']
+      ]
     ];
 
     return $modalParams;
@@ -90,6 +93,7 @@ class EquipController extends Controller
         'equiptype' => $id ? $equip->equip_type_id : $equip->equip_type->name,
         'equipmodel' => $id ? $equip->equip_model_id : $equip->equip_model->name,
         'employee' => $id ? $equip->employee_id : $equip->employee->firstname." ".$equip->employee->patronymic." ".$equip->employee->surname,
+        'holder' => $id ? $equip->holder_id : $equip->holder->name,
         'initial_date' => $equip->initial_date,
         'initial_cost' => $equip->initial_cost,
         'serial_number' => $equip->serial_number,
@@ -163,7 +167,8 @@ class EquipController extends Controller
       'manufacturer' => 'required|numeric',
       'equiptype' => 'required|numeric',
       'equipmodel' => 'required|numeric',
-      'employee' => 'required|numeric'
+      'employee' => 'required|numeric',
+      'holder' => 'required|numeric'
     ]);
 
     $equip = new Equip([
@@ -176,6 +181,7 @@ class EquipController extends Controller
       'active' => $request->active
     ]);
 
+    $equip->holder()->associate($require->holder);
     $equip->manufacturer()->associate($request->manufacturer);
     $equip->equip_type()->associate($request->equiptype);
     $equip->equip_model()->associate($request->equipmodel);
@@ -236,9 +242,11 @@ class EquipController extends Controller
       'manufacturer' => 'required|numeric',
       'equiptype' => 'required|numeric',
       'equipmodel' => 'required|numeric',
-      'employee' => 'required|numeric'
+      'employee' => 'required|numeric',
+      'holder' => 'required|numeric'
     ]);
 
+    $equip->holder()->associate($request->holder);
     $equip->manufacturer()->associate($request->manufacturer);
     $equip->equip_type()->associate($request->equiptype);
     $equip->equip_model()->associate($request->equipmodel);

@@ -7,6 +7,35 @@ use Illuminate\Http\Request;
 
 class HolderController extends Controller
 {
+    public function __construct()
+    {
+      $this->middleware('auth');
+    }
+
+    private function createListData($className, $elementKeys, $separator)
+    {
+
+      $elementData = [];
+      $elementValues = '';
+
+      $className = 'App\\'.$className;
+      $className = new $className();
+
+      foreach ($className->get() as $element) {
+
+        foreach ($elementKeys as $key => $value) {
+          $elementValues = $key ? $elementValues = $elementValues . $separator . " " . $element->$value : $elementValues = $element->$value;
+        }
+
+        array_push($elementData, [
+          'id' => $element->id,
+          'val' => $elementValues
+        ]);
+      }
+
+      return $elementData;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +43,7 @@ class HolderController extends Controller
      */
     public function index()
     {
-        //
+        return $this->createListData('Holder', ['name'], ',');
     }
 
     /**
@@ -35,7 +64,15 @@ class HolderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+          'name' => 'request|max:30'
+        ]);
+
+        $holder = new Holder([
+          'name' => $request->name
+        ]);
+
+        $holder->save();
     }
 
     /**
