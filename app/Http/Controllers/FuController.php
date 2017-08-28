@@ -32,6 +32,9 @@ use App\Contractor;
 use App\AgreementString;
 use App\Agreement;
 
+use App\Akt;
+use App\Aktstring;
+
 class FuController extends Controller
 {
     public function __construct()
@@ -107,12 +110,15 @@ class FuController extends Controller
             ]],
             ['name' => 'aktstring', 'desc' => 'актирование', 'fields' => [
                 'akt' => 'наименование акта',
-                'billing_date' => 'дата акта',
-                'billing_month' => 'расчетный месяц',
                 'agreement' => 'договор',
                 'service' => 'сервис',
                 'physical' => 'физ. обьем',
                 'summ_cost' => 'итого по сервису'
+            ]],
+            ['name' => 'akt', 'desc' => 'акт', 'fields' => [
+                'name' => 'наименование акта',
+                'billing_date' => 'дата акта',
+                'billing_month' => 'расчетный месяц'
             ]]
         ];
 
@@ -164,28 +170,7 @@ class FuController extends Controller
         }
     }
 
-    private function returnWhereId($className, $fileCellValue, $classFieldNames, $sepatator)
-    {
-        if (is_int($fileCellValue)) {
-            return $fileCellValue;
-        } else {
-            $classFieldValues = explode($sepatator, $fileCellValue);
-
-            $classFieldsCount = count($classFieldNames);
-
-            $existingId = new $className;
-
-            for ($i=0; $i < $classFieldsCount; $i++) {
-              $existingId->where($classFieldNames[$i], trim($classFieldValues[$i]));
-            }
-
-            $existingId->first();
-
-            return $existingId;
-        }
-    }
-
-    private function returnOrCreateId($className, $fileCellValue, $classFieldName, $sepatator)
+    private function returnId($action, $className, $fileCellValue, $classFieldName, $sepatator)
     {
         if (is_int($fileCellValue)) {
             return $fileCellValue;
@@ -193,19 +178,41 @@ class FuController extends Controller
             $existingId = new $className;
 
             if (!is_array($classFieldName)) {
-              return $existingId->firstOrCreate(
-                  [$classFieldName => trim($fileCellValue)]
-              );
+                if ($action == 'create') {
+                    return $existingId->firstOrCreate(
+                        [$classFieldName => trim($fileCellValue)]
+                    );
+                } else {
+                    return $existingId->where(
+                        [$classFieldName => trim($fileCellValue)]
+                    )->first();
+                }
             } else {
-              $queryArray = [];
-              $classFieldsCount = count($classFieldName);
-              $classFieldValues = explode($sepatator, $fileCellValue);
+                $queryArray = [];
+                $classFieldsCount = count($classFieldName);
+                $classFieldValues = explode($sepatator, $fileCellValue);
 
-              for ($i=0; $i < $classFieldsCount; $i++) {
-                $queryArray = array_merge($queryArray, [$classFieldName[$i] => trim($classFieldValues[$i])]);
-              }
+                if ($action == 'create') {
+                    for ($i=0; $i < $classFieldsCount; $i++) {
+                        if (preg_match('/cost/', $classFieldName[$i])) {
+                            $queryArray = array_merge($queryArray, [$classFieldName[$i] => $this->replCommas(trim($classFieldValues[$i]))]);
+                        } else {
+                            $queryArray = array_merge($queryArray, [$classFieldName[$i] => trim($classFieldValues[$i])]);
+                        }
+                    }
 
-              return $existingId->firstOrCreate($queryArray);
+                    return $existingId->firstOrCreate($queryArray);
+                } else {
+                    for ($i=0; $i < $classFieldsCount; $i++) {
+                        if (preg_match('/cost/', $classFieldName[$i])) {
+                            $queryArray = array_merge($queryArray, [$classFieldName[$i] => $this->replCommas(trim($classFieldValues[$i]))]);
+                        } else {
+                            $queryArray = array_merge($queryArray, [$classFieldName[$i] => trim($classFieldValues[$i])]);
+                        }
+                    }
+
+                    return $existingId->where($queryArray)->first();
+                }
             }
         }
     }
@@ -224,30 +231,21 @@ class FuController extends Controller
 
                 switch ($value) {
                     case 'service':
-                        if (is_int($cellValue)) {
-                            $service = $cellValue;
-                        } else {
-                            $serviceValues = explode(",", $cellValue);
-
-                            $service = Service::where('code', trim($serviceValues[0]))
-                            ->where('name', trim($serviceValues[1]))
-                            ->first();
-                        }
+                        $service = $this->returnId('where', 'App\Service', $cellValue, ['code', 'name'], ',');
 
                         $agreementstring->service()->associate($service);
                         break;
 
                     case 'agreement':
-                        if (is_int($cellValue)) {
-                            $service = $cellValue;
-                        } else {
-                            # code...
-                        }
+                        $agreement = $this->returnId('where', 'App\Agreement', $cellValue, 'name', '');
 
+                        $agreementstring->agreement()->associate($agreement);
                         break;
 
                     case 'department':
-                        # code...
+                        $department = $this->returnId('where', 'App\Department', $cellValue, 'name', '');
+
+                        $agreementstring->department()->associate($department);
                         break;
 
                     case 'summ_cost':
@@ -277,16 +275,7 @@ class FuController extends Controller
 
                 switch ($value) {
                     case 'finposition':
-                        if (is_int($cellValue)) {
-                            $finposition = $cellValue;
-                        } else {
-                            $finpositionValues = explode(",", $cellValue);
-
-                            $finposition = Finposition::firstOrCreate([
-                                'name' => trim($finpositionValues[0]),
-                                'code' => trim($finpositionValues[1])
-                            ]);
-                        }
+                        $finposition = $this->returnId('create', 'App\Finposition', $cellValue, ['name', 'code'], ',');
 
                         $service->finposition()->associate($finposition);
                         break;
@@ -319,13 +308,7 @@ class FuController extends Controller
 
                 switch ($value) {
                     case 'contractor':
-                        if (is_int($cellValue)) {
-                            $contractor = $cellValue;
-                        } else {
-                            $contractor = Contractor::firstOrCreate(
-                                ['name' => $cellValue]
-                            );
-                        }
+                        $contractor = $this->returnId('create', 'App\Contractor', $cellValue, 'name', '');
 
                         $agreement->contractor()->associate($contractor);
                         break;
@@ -354,25 +337,13 @@ class FuController extends Controller
 
                 switch ($value) {
                     case 'department':
-                        $department = $this->returnOrCreateId('App\Department', $cellValue, 'name',',');
+                        $department = $this->returnId('create', 'App\Department', $cellValue, 'name', ',');
 
                         $employee->department()->associate($department);
                         break;
 
                     case 'address':
-                        // if (is_int($cellValue)) {
-                        //     $address = $cellValue;
-                        // } else {
-                        //     $addressValues = explode(",", $cellValue);
-                        //
-                        //     $address = Address::firstOrCreate([
-                        //     'city' => trim($addressValues[0]),
-                        //     'street' => trim($addressValues[1]),
-                        //     'house' => trim($addressValues[2])
-                        //     ]);
-                        // }
-
-                        $address = $this->returnOrCreateId('App\Address', $cellValue, ['city', 'street', 'house'], ',');
+                        $address = $this->returnId('create', 'App\Address', $cellValue, ['city', 'street', 'house'], ',');
 
                         $employee->address()->associate($address);
                         break;
@@ -402,13 +373,7 @@ class FuController extends Controller
 
                 switch ($value) {
                     case 'phone_type':
-                        if (is_int($cellValue)) {
-                            $phone_type = $cellValue;
-                        } else {
-                            $phone_type = PhoneType::firstOrCreate(
-                                ['name' => $cellValue]
-                            );
-                        }
+                        $phone_type = $this->returnId('create', 'App\PhoneType', $cellValue, 'name', '');
 
                         $phone->phone_type()->associate($phone_type);
                         break;
@@ -444,16 +409,7 @@ class FuController extends Controller
             }
 
             if ($haveEmployee) {
-                if (is_int($haveEmployee)) {
-                    $employee = $haveEmployee;
-                } else {
-                    $employeeValues = explode(" ", $haveEmployee);
-
-                    $employee = Employee::where('firstname', trim($employeeValues[0]))
-                    ->where('patronymic', trim($employeeValues[1]))
-                    ->where('surname', trim($employeeValues[2]))
-                    ->first();
-                }
+                $employee = $this->returnId('where', 'App\Employee', $haveEmployee, ['firstname', 'patronymic', 'surname'], ' ');
 
                 $phone->employees()->attach($employee);
             }
@@ -474,40 +430,19 @@ class FuController extends Controller
 
                 switch ($value) {
                     case 'mobile_type':
-                        if (is_int($cellValue)) {
-                            $mobile_type = $cellValue;
-                        } else {
-                            $mobile_type = MobileType::firstOrCreate(
-                                ['name' => $cellValue]
-                            );
-                        }
+                        $mobile_type = $this->returnId('create', 'App\MobileType', $cellValue, 'name', '');
 
                         $mobilephone->mobile_type()->associate($mobile_type);
                         break;
 
                     case 'mobile_limit':
-                        if (is_int($cellValue)) {
-                            $mobile_limit = $cellValue;
-                        } else {
-                            $mobile_limit = MobileLimit::firstOrCreate(
-                                ['limit_cost' => $this->replCommas($cellValue)]
-                            );
-                        }
+                        $mobile_limit = $this->returnId('create', 'App\MobileLimit', $cellValue, 'limit_cost', '');
 
                         $mobilephone->mobile_limit()->associate($mobile_limit);
                         break;
 
                     case 'employee':
-                        if (is_int($cellValue)) {
-                            $employee = $cellValue;
-                        } else {
-                            $employeeValues = explode(" ", $cellValue);
-
-                            $employee = Employee::where('firstname', trim($employeeValues[0]))
-                            ->where('patronymic', trim($employeeValues[1]))
-                            ->where('surname', trim($employeeValues[2]))
-                            ->first();
-                        }
+                        $employee = $this->returnId('where', 'App\Employee', $cellValue, ['firstname', 'patronymic', 'surname'], ' ');
 
                         $mobilephone->employee()->associate($employee);
                         break;
@@ -536,64 +471,31 @@ class FuController extends Controller
 
                 switch ($value) {
                     case 'manufacturer':
-                        if (is_int($cellValue)) {
-                            $manufacturer = $cellValue;
-                        } else {
-                            $manufacturer = Manufacturer::firstOrCreate(
-                                ['name' => $cellValue]
-                            );
-                        }
+                        $manufacturer = $this->returnId('create', 'App\Manufacturer', $cellValue, 'name', '');
 
                         $equip->manufacturer()->associate($manufacturer);
                         break;
 
                     case 'equip_type':
-                        if (is_int($cellValue)) {
-                            $equip_type = $cellValue;
-                        } else {
-                            $equip_type = EquipType::firstOrCreate(
-                                ['name' => $cellValue]
-                            );
-                        }
+                        $equip_type = $this->returnId('create', 'App\EquipType', $cellValue, 'name', '');
 
                         $equip->equip_type()->associate($equip_type);
                         break;
 
                     case 'equip_model':
-                        if (is_int($cellValue)) {
-                            $equip_model = $cellValue;
-                        } else {
-                            $equip_model = EquipModel::firstOrCreate(
-                                ['name' => $cellValue]
-                            );
-                        }
+                        $equip_model = $this->returnId('create', 'App\EquipModel', $cellValue, 'name', '');
 
                         $equip->equip_model()->associate($equip_model);
                         break;
 
                     case 'holder':
-                        if (is_int($cellValue)) {
-                            $holder = $cellValue;
-                        } else {
-                            $holder = Holder::firstOrCreate(
-                                ['name' => $cellValue]
-                            );
-                        }
+                        $holder = $this->returnId('create', 'App\Holder', $cellValue, 'name', '');
 
                         $equip->holder()->associate($holder);
                         break;
 
                     case 'employee':
-                        if (is_int($cellValue)) {
-                            $employee = $cellValue;
-                        } else {
-                            $employeeValues = explode(" ", $cellValue);
-
-                            $employee = Employee::where('firstname', trim($employeeValues[0]))
-                            ->where('patronymic', trim($employeeValues[1]))
-                            ->where('surname', trim($employeeValues[2]))
-                            ->first();
-                        }
+                        $employee = $this->returnId('where', 'App\Employee', $cellValue, ['firstname', 'patronymic', 'surname'], ' ');
 
                         $equip->employee()->associate($employee);
                         break;
@@ -609,6 +511,72 @@ class FuController extends Controller
             }
 
             $equip->save();
+        }
+    }
+
+    private function loadInAkts($file, $params)
+    {
+        $csvData = $this->csvToArray($file);
+
+        $stringsInFile = count($csvData);
+
+        for ($i=0; $i < $stringsInFile; $i++) {
+            $akt = new Akt;
+
+            foreach ($params as $key => $value) {
+                $cellValue = $csvData[$i][$key];
+
+                switch ($value) {
+                    case 'agreement':
+                        $agreement = $this->returnId('where', 'App\Agreement', $cellValue, 'name', '');
+
+                        $akt->agreement()->associate($agreement);
+                        break;
+                    
+                    default:
+                        $akt->$value = $cellValue;
+                        break;
+                }
+            }
+
+            $akt->save();
+        }
+    }
+
+    private function loadInAktStrings($file, $params)
+    {
+        $csvData = $this->csvToArray($file);
+
+        $stringsInFile = count($csvData);
+
+        for ($i=0; $i < $stringsInFile; $i++) {
+            $aktstring = new Aktstring;
+
+            foreach ($params as $key => $value) {
+                switch (variable) {
+                    case 'service':
+                        $service = $this->returnId('where', 'App\Service', $cellValue, ['code', 'name'], ',');
+
+                        $aktstring->service()->associate($service);
+                        break;
+
+                    case 'akt':
+                        $akt = $this->returnId('where', 'App\Akt', $cellValue, 'name', '');
+
+                        $aktstring->akt()->associate($akt);
+                        break;
+
+                    case 'summ_cost':
+                        $aktstring->$value = $this->replCommas($cellValue);
+                        break;
+                        
+                    default:
+                        $aktstring->$value = $cellValue;
+                        break;
+                }
+            }
+
+            $aktstring->save();
         }
     }
     /**
@@ -733,6 +701,18 @@ class FuController extends Controller
 
                 case 'agreement':
                     $this->loadInAgreements($fu, $loadAssociativeParams);
+                    break;
+
+                case 'agreementstring':
+                    $this->loadInAgreementStrings($fu, $loadAssociativeParams);
+                    break;
+
+                case 'akt':
+                    $this->loadInAkts($fu, $loadAssociativeParams);
+                    break;
+
+                case 'aktstring':
+                    $this->loadInAktStrings($fu, $loadAssociativeParams);
                     break;
 
                 default:
