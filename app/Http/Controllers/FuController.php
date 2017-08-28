@@ -164,12 +164,49 @@ class FuController extends Controller
         }
     }
 
-    private function returnExistindID($className, $fileCellValue, $classParams, $sepatator)
+    private function returnWhereId($className, $fileCellValue, $classFieldNames, $sepatator)
     {
         if (is_int($fileCellValue)) {
             return $fileCellValue;
         } else {
-            $classValues = explode($sepatator, $fileCellValue);
+            $classFieldValues = explode($sepatator, $fileCellValue);
+
+            $classFieldsCount = count($classFieldNames);
+
+            $existingId = new $className;
+
+            for ($i=0; $i < $classFieldsCount; $i++) {
+              $existingId->where($classFieldNames[$i], trim($classFieldValues[$i]));
+            }
+
+            $existingId->first();
+
+            return $existingId;
+        }
+    }
+
+    private function returnOrCreateId($className, $fileCellValue, $classFieldName, $sepatator)
+    {
+        if (is_int($fileCellValue)) {
+            return $fileCellValue;
+        } else {
+            $existingId = new $className;
+
+            if (!is_array($classFieldName)) {
+              return $existingId->firstOrCreate(
+                  [$classFieldName => trim($fileCellValue)]
+              );
+            } else {
+              $queryArray = [];
+              $classFieldsCount = count($classFieldName);
+              $classFieldValues = explode($sepatator, $fileCellValue);
+
+              for ($i=0; $i < $classFieldsCount; $i++) {
+                $queryArray = array_merge($queryArray, [$classFieldName[$i] => trim($classFieldValues[$i])]);
+              }
+
+              return $existingId->firstOrCreate($queryArray);
+            }
         }
     }
 
@@ -196,7 +233,7 @@ class FuController extends Controller
                             ->where('name', trim($serviceValues[1]))
                             ->first();
                         }
-                        
+
                         $agreementstring->service()->associate($service);
                         break;
 
@@ -206,7 +243,7 @@ class FuController extends Controller
                         } else {
                             # code...
                         }
-                        
+
                         break;
 
                     case 'department':
@@ -289,7 +326,7 @@ class FuController extends Controller
                                 ['name' => $cellValue]
                             );
                         }
-                        
+
                         $agreement->contractor()->associate($contractor);
                         break;
 
@@ -317,29 +354,25 @@ class FuController extends Controller
 
                 switch ($value) {
                     case 'department':
-                        if (is_int($cellValue)) {
-                            $department = $cellValue;
-                        } else {
-                            $department = Department::firstOrCreate(
-                                ['name' => $cellValue]
-                            );
-                        }
+                        $department = $this->returnOrCreateId('App\Department', $cellValue, 'name',',');
 
                         $employee->department()->associate($department);
                         break;
 
                     case 'address':
-                        if (is_int($cellValue)) {
-                            $address = $cellValue;
-                        } else {
-                            $addressValues = explode(",", $cellValue);
+                        // if (is_int($cellValue)) {
+                        //     $address = $cellValue;
+                        // } else {
+                        //     $addressValues = explode(",", $cellValue);
+                        //
+                        //     $address = Address::firstOrCreate([
+                        //     'city' => trim($addressValues[0]),
+                        //     'street' => trim($addressValues[1]),
+                        //     'house' => trim($addressValues[2])
+                        //     ]);
+                        // }
 
-                            $address = Address::firstOrCreate([
-                            'city' => trim($addressValues[0]),
-                            'street' => trim($addressValues[1]),
-                            'house' => trim($addressValues[2])
-                            ]);
-                        }
+                        $address = $this->returnOrCreateId('App\Address', $cellValue, ['city', 'street', 'house'], ',');
 
                         $employee->address()->associate($address);
                         break;
