@@ -532,7 +532,7 @@ class FuController extends Controller
 
                         $akt->agreement()->associate($agreement);
                         break;
-                    
+
                     default:
                         $akt->$value = $cellValue;
                         break;
@@ -569,7 +569,7 @@ class FuController extends Controller
                     case 'summ_cost':
                         $aktstring->$value = $this->replCommas($cellValue);
                         break;
-                        
+
                     default:
                         $aktstring->$value = $cellValue;
                         break;

@@ -33,7 +33,7 @@
                     @for ($i=0; $i < count($tableData[0]); $i++)
                       <th>
                         <div class="form-group">
-                          <select :name="{{$i}}" @change="onChange('showButton')">
+                          <select v-model="columnValues[{{$i}}]" name="{{$i}}" @change="onChange('showButton')">
                             <option disabled value="">выбери поле</option>
                             <option v-for="(item, index) in uploadTables[tabName].fields" :value="index">@{{ item }}</option>
                           </select>
@@ -53,30 +53,6 @@
                 </tbody>
               </table>
             </div>
-            {{--  --}}
-
-            {{-- <div v-if="showFields" class="form-group">
-              <div class="table-responsive">
-                <table class="table table-hover table-bordered">
-                  <thead>
-                    <tr>
-                      <th v-for="(item, index) in uploadTables[tabName].fields">@{{index}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td v-for="(item, index) in uploadTables[tabName].fields">
-                        <select v-model="item.val" :name="item.pos" @change="onChange('showButton')">
-                          <option disabled value="">столбец</option>
-                          <option v-for="n in Object.keys(uploadTables[tabName].fields).length">@{{ n }}</option>
-                        </select>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div> --}}
-
 
               <div v-if="showButton" class="form-group">
                 <button type="submit" class="btn btn-success">Load</button>
@@ -105,7 +81,8 @@
       },
       tabName: '',
       showFields: false,
-      showButton: false
+      showButton: false,
+      columnValues: [@for ($i=0; $i < count($tableData[0]); $i++)''{{($i+1) < count($tableData[0]) ? ',': ''}}@endfor],
     },
 
     methods: {
