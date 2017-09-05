@@ -11,28 +11,28 @@ class CreateAddressesTable extends Migration
   *
   * @return void
   */
-  public function up()
-  {
-    Schema::create('addresses', function (Blueprint $table) {
-      $table->increments('id');
-      $table->string('city', 30);
-      $table->string('street', 100);
-      $table->string('house', 10);
+    public function up()
+    {
+        Schema::create('addresses', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('city', 30);
+            $table->string('street', 100)->nullable();
+            $table->string('house', 10)->nullable();
 
-      //по умолчанию адрес активный
-      $table->enum('active', ['1', '0'])->default('1');
+          //по умолчанию адрес активный
+            $table->enum('active', ['1', '0'])->default('1');
 
-      $table->timestamps();
-    });
-  }
+            $table->timestamps();
+        });
+    }
 
   /**
   * Reverse the migrations.
   *
   * @return void
   */
-  public function down()
-  {
-    Schema::dropIfExists('addresses');
-  }
+    public function down()
+    {
+        Schema::dropIfExists('addresses');
+    }
 }

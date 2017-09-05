@@ -77,7 +77,6 @@
       <div class="modal fade" id="{{$value['field']}}Modal" tabindex="-1" role="dialog" aria-labelledby="{{$value['field']}}ModalLabel">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            {{-- @include('modal.index', $pageElement)--}}
             <div class="modal-header">
 
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -118,18 +117,18 @@
     data: {
       form: new Form({
         @foreach ($pageStructure as $value)
-        {{$value['field']}}: ''{{$loop->last ? '' : ','}}
+          {{$value['field']}}: ''{{$loop->last ? '' : ','}}
         @endforeach
       }),
 
       @foreach ($pageStructure as $value)
-      @if ($value['type'] == 'list')
-      {{$value['field']}}:[
-        @foreach ($value['data'] as $a)
-        { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
-        @endforeach
-      ]{{$loop->last ? '' : ','}}
-      @endif
+        @if ($value['type'] == 'list')
+          {{$value['field']}}:[
+            @foreach ($value['data'] as $a)
+            { id: {{$a['id']}}, val: "{{$a['val']}}"}{{$loop->last ? '' : ','}}
+            @endforeach
+          ]{{$loop->last ? '' : ','}}
+        @endif
       @endforeach
     },
 
@@ -150,27 +149,27 @@
   });
 
   @foreach ($pageStructure as $value)
-  @if ($value['type'] == 'list')
-  new Vue({
-    el: '#{{$value['field']}}Modal',
+    @if ($value['type'] == 'list')
+    new Vue({
+      el: '#{{$value['field']}}Modal',
 
-    data: {
-      form: new Form({
-        @foreach ($modalParams[$value['field']] as $pageElement)
-        {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
-        @endforeach
-      })
-    },
+      data: {
+        form: new Form({
+          @foreach ($modalParams[$value['field']] as $pageElement)
+          {{$pageElement['field']}}: ''{{$loop->last ? '' : ','}}
+          @endforeach
+        })
+      },
 
-    methods: {
-      onSubmit() {
-        this.form.post('{{url($value['field'])}}')
-        .then(response => mv.get{{$value['field']}}());
-        $('#{{$value['field']}}Modal').modal('hide');
+      methods: {
+        onSubmit() {
+          this.form.post('{{url($value['field'])}}')
+          .then(response => mv.get{{$value['field']}}());
+          $('#{{$value['field']}}Modal').modal('hide');
+        }
       }
-    }
-  });
-  @endif
+    });
+    @endif
   @endforeach
   </script>
 @endsection

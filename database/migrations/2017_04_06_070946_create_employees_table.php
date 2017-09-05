@@ -11,42 +11,42 @@ class CreateEmployeesTable extends Migration
   *
   * @return void
   */
-  public function up()
-  {
-    Schema::create('employees', function (Blueprint $table) {
-      $table->increments('id');
+    public function up()
+    {
+        Schema::create('employees', function (Blueprint $table) {
+            $table->increments('id');
 
-      $table->string('firstname', 30);
-      $table->string('patronymic', 30)->nullable();
-      $table->string('surname', 30);
+            $table->string('firstname', 30);
+            $table->string('patronymic', 30)->nullable();
+            $table->string('surname', 30)->nullable();
 
-      if (Schema::hasColumn('departments', 'id')) {
-        $table->integer('department_id');
-        $table->foreign('department_id')
-        ->references('id')
-        ->on('departments');
-      }
+            if (Schema::hasColumn('departments', 'id')) {
+                $table->integer('department_id');
+                $table->foreign('department_id')
+                ->references('id')
+                ->on('departments');
+            }
       
-      if (Schema::hasColumn('addresses', 'id')) {
-        $table->integer('address_id');
-        $table->foreign('address_id')
-        ->references('id')
-        ->on('addresses');
-      }
+            if (Schema::hasColumn('addresses', 'id')) {
+                $table->integer('address_id');
+                $table->foreign('address_id')
+                ->references('id')
+                ->on('addresses');
+            }
 
-      $table->enum('active', ['1', '0'])->default('1');
+            $table->enum('active', ['1', '0'])->default('1');
 
-      $table->timestamps();
-    });
-  }
+            $table->timestamps();
+        });
+    }
 
   /**
   * Reverse the migrations.
   *
   * @return void
   */
-  public function down()
-  {
-    Schema::dropIfExists('employees');
-  }
+    public function down()
+    {
+        Schema::dropIfExists('employees');
+    }
 }

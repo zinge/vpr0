@@ -9,13 +9,13 @@ class DefaultUser extends Seeder
   *
   * @return void
   */
-  public function run()
-  {
-    //
-    DB::table('users')->insert([
-      'name' => 'zinge',
-      'email' => 'zinge@localhost',
-      'password' => bcrypt('P@ssw0rd')
-    ]);
-  }
+    public function run()
+    {
+      //
+        DB::table('users')->insert([
+        'name' => 'zinge',
+        'email' => 'zinge@localhost.net',
+        'password' => bcrypt('P@ssw0rd')
+        ]);
+    }
 }
