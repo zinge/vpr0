@@ -1,4 +1,6 @@
 # vpr0
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/zinge/vpr0.svg)](https://greenkeeper.io/)
 laravel 5.4 build
 
 My simple private project, for work, and for training development skills on laravel
